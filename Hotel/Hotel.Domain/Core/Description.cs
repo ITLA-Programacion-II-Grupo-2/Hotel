@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hotel.Domain.Core
 {
-    internal class Description: BaseEntity
+    public class Description: BaseEntity
     {
         public string? Descripcion { get; set; }
     }

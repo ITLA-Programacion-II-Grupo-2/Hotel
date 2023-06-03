@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Hotel.Domain.Entities
 {
-    public class Categoria:BaseEntity
+    public class Categoria: Description
     {
         public int IdCategoria { get; set; }
     }
