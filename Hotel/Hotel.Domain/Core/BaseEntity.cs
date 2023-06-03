@@ -18,6 +18,5 @@ namespace Hotel.Domain.Core
         public DateTime? FechaEliminacion { get; set; }
         public bool Estado { get; set; }
 
-
     }
 }
