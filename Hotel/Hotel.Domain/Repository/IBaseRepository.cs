@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
+
 
 namespace Hotel.Domain.Repository
 {
   public interface IBaseRepository<TEntity> where TEntity : class
     {
-        void Save(TEntity entity);
-        void Save(TEntity[] entity);
+        void Add(TEntity entity);
+        void Add(TEntity[] entity);
         void Update(TEntity entity);
         void Remove(TEntity entity);
         TEntity GetEntity(int entityid);

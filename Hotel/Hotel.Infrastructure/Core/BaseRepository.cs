@@ -8,54 +8,62 @@ using System.Linq.Expressions;
 
 namespace Hotel.Infrastructure.Core
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly HotelContext hotel;
-        private readonly DbSet<TEntity> entities;
+        private readonly HotelContext context;
+        private readonly DbSet<TEntity> myDbset;
 
-        public BaseRepository(HotelContext hotel)
+        public BaseRepository(HotelContext context)
         {
-            this.hotel = hotel;
-            this.entities = this.hotel.Set<TEntity>();
+            this.context = context;
+            this.myDbset = this.context.Set<TEntity>();
         }
 
-        public bool Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
         {
-            if (this.entities.Where(filter).Count() > 0)
+            if (this.myDbset.Where(filter).Count() > 0)
             {
                 return true;
             }
             return false;
         }
 
-        public IEnumerable<TEntity> GetEntities()
+        public virtual IEnumerable<TEntity> GetEntities()
         {
-            throw new NotImplementedException();
+             return myDbset.ToList();
         }
 
-        public TEntity GetEntity(int entityid)
+        public virtual TEntity GetEntity(int entityid)
         {
-            throw new NotImplementedException();
+            return myDbset.Find(entityid);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbset.Remove(entity);
         }
 
-        public void Save(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+          this.myDbset.Add(entity);
+            
         }
 
-        public void Save(TEntity[] entities)
+        public virtual void Add(TEntity[] entities)
         {
-            throw new NotImplementedException();
+           this.myDbset.AddRange(entities);
+
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbset.Update(entity);
+
+        }
+
+        public virtual void SaveChanges()
+        {
+            this.context.SaveChanges();
         }
     }
 }

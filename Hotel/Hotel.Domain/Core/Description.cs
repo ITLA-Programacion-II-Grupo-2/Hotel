@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System
 
 namespace Hotel.Domain.Core
 {
-    public class Description: BaseEntity
+    public abstract class Description: BaseEntity
     {
         public string? Descripcion { get; set; }
+
     }
 }
