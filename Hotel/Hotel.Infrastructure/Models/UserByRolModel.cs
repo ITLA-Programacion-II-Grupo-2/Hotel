@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Hotel.Infrastructure.Models
 {
-    internal class UserByRolModel
+    public class UserByRolModel
     {
+        public string? NombreCompleto { get; set; }
+        public string? Correo { get; set; }
+        public string? Rol { get; set; }
     }
 }

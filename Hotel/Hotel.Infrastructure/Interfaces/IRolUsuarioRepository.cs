@@ -7,6 +7,6 @@ namespace Hotel.Infrastructure.Interfaces
 {
     public interface IRolUsuarioRepository : IBaseRepository<RolUsuario>
     {
-        List<RolUsuarioModel> GetUsuariobyRoles();
+        List<RolUsuarioModel> getUsuariobyRoles();
     }
 }

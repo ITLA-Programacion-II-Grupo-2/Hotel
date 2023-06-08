@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Hotel.Infrastructure.Models
 {
-    internal class UsuarioModel
+    public class UsuarioModel
     {
+        public string? NombreCompleto { get; set; }
+        public string? Correo { get; set; }
     }
 }

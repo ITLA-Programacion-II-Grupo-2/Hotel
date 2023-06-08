@@ -3,9 +3,7 @@ namespace Hotel.Infrastructure.Models
 {
     public class RolUsuarioModel
     {
-        public string? NombreCompleto { get; set; }
-        public string? Correo { get; set; }
-        public string? Descripcion { get; set; }
-
+        public int IdRolUsuario { get; set; }
+        public string? Rol { get; set; }
     }
 }

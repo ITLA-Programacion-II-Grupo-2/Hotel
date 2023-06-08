@@ -20,7 +20,7 @@ namespace Hotel.Infrastructure.Repositories
             this.context = context;
         }
 
-        public List<RolUsuarioModel> GetUsuariobyRoles()
+        public List<RolUsuarioModel> getUsuariobyRoles()
         {
             throw new System.NotImplementedException();
         }
