@@ -1,7 +1,5 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using Hotel.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
 namespace Hotel.Infrastructure.Context
 {
     public class HotelContext : DbContext
@@ -10,9 +8,7 @@ namespace Hotel.Infrastructure.Context
         {
 
         }
-
-        public HotelContext(DbContextOptions<HotelContext> options)
-            : base(options)
+        public HotelContext(DbContextOptions<HotelContext> options): base(options)
         {
 
         }

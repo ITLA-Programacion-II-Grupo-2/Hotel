@@ -11,52 +11,55 @@ namespace Hotel.Infrastructure.Core
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly HotelContext hotel;
-        private readonly DbSet<TEntity> entities;
+        private readonly HotelContext context;
+        private readonly DbSet<TEntity> myDbSet;
 
-        public BaseRepository(HotelContext hotel)
+        public BaseRepository(HotelContext context)
         {
-            this.hotel = hotel;
-            this.entities = this.hotel.Set<TEntity>();
+            this.context = context;
+            this.myDbSet = this.context.Set<TEntity>();
         }
 
-        public bool Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
         {
-            if (this.entities.Where(filter).Count() > 0)
-            {
-                return true;
-            }
-            return false;
+            return this.myDbSet.Any(filter);
         }
-
-        public IEnumerable<TEntity> GetEntities()
+        public virtual List<TEntity> GetEntities()
         {
-            throw new NotImplementedException();
+            return this.myDbSet.ToList();
         }
-
-        public TEntity GetEntity(int entityid)
+        public virtual TEntity GetEntity(int id)
         {
-            throw new NotImplementedException();
+            return this.myDbSet.Find(id);
         }
-
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbSet.Remove(entity);
+
         }
-
-        public void Save(TEntity entity)
+        public virtual void Remove(TEntity[] entities)
         {
-            throw new NotImplementedException();
+            this.myDbSet.RemoveRange(entities);
         }
-
-        public void Save(TEntity[] entities)
+        public virtual void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbSet.Add(entity);
         }
-
-        public void Update(TEntity entity)
+        public virtual void Add(TEntity[] entities)
         {
-            throw new NotImplementedException();
+            this.myDbSet.AddRange(entities);
+        }
+        public virtual void Update(TEntity entity)
+        {
+            this.myDbSet.Update(entity);
+        }
+        public virtual void Update(TEntity[] entities)
+        {
+            this.myDbSet.UpdateRange(entities);
+        }
+        public virtual void SaveChanges()
+        {
+            this.context.SaveChanges();
         }
     }
 }
