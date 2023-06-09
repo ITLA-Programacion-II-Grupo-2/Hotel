@@ -6,6 +6,7 @@ namespace Hotel.Infrastructure.Exceptions
     {
         public UsuarioException(string message):base(message)
         {
+
         }
     }
 }

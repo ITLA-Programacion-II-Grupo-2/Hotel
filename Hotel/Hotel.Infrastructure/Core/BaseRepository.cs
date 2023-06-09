@@ -42,6 +42,7 @@ namespace Hotel.Infrastructure.Core
         {
             this.myDbSet.Remove(entity);
         }
+
         public virtual void Remove(TEntity[] entities)
         {
             this.myDbSet.RemoveRange(entities);
@@ -64,6 +65,6 @@ namespace Hotel.Infrastructure.Core
         public virtual void SaveChanges()
         {
             this.context.SaveChanges();
-        }
+        }        
     }
 }

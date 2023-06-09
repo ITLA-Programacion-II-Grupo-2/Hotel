@@ -7,7 +7,10 @@ using System.Collections.Generic;
 namespace Hotel.Infrastructure.Interfaces
 {
     public interface IUsuarioRepository : IBaseRepository<Usuario>
-    {
-        List<UserByRolModel> userByRolModels();
+    {   
+        public UsuarioModel GetUsuario(int id);
+        public List<UsuarioModel> GetUsuarios();
+        public UserWithRolModel GetUsuarioWithRol(int id);
+        public List<UserWithRolModel> GetUsuariosWithRol();
     }
 }
