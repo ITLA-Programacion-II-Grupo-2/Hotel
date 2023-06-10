@@ -8,56 +8,52 @@ using System.Linq.Expressions;
 
 namespace Hotel.Infrastructure.Core
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly HotelContext context;
-        private readonly DbSet<TEntity> myDbset;
+        private readonly DbSet<TEntity> myDbSet;
 
         public BaseRepository(HotelContext context)
         {
             this.context = context;
-            this.myDbset = this.context.Set<TEntity>();
+            this.myDbSet= this.context.Set<TEntity>();
         }
 
         public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
         {
-            if (this.myDbset.Where(filter).Count() > 0)
-            {
-                return true;
-            }
-            return false;
+            return this.myDbSet.Any(filter);
         }
 
         public virtual IEnumerable<TEntity> GetEntities()
         {
-             return myDbset.ToList();
+             return myDbSet.ToList();
         }
 
-        public virtual TEntity GetEntity(int entityid)
+        public virtual TEntity GetEntity(int id)
         {
-            return myDbset.Find(entityid);
+            return myDbSet.Find(id);
         }
 
         public virtual void Remove(TEntity entity)
         {
-            this.myDbset.Remove(entity);
+            this.myDbSet.Remove(entity);
         }
 
         public virtual void Add(TEntity entity)
         {
-          this.myDbset.Add(entity);
+          this.myDbSet.Add(entity);
             
         }
 
         public virtual void Add(TEntity[] entities)
         {
-           this.myDbset.AddRange(entities);
+           this.myDbSet.AddRange(entities);
 
         }
 
         public virtual void Update(TEntity entity)
         {
-            this.myDbset.Update(entity);
+            this.myDbSet.Update(entity);
 
         }
 
