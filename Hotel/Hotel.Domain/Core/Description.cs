@@ -1,5 +1,4 @@
-﻿
-namespace Hotel.Domain.Core
+﻿namespace Hotel.Domain.Core
 {
     public abstract class Description : BaseEntity
     {

@@ -1,5 +1,4 @@
-﻿
-using Hotel.Domain.Core;
+﻿using Hotel.Domain.Core;
 
 namespace Hotel.Domain.Entities
 {

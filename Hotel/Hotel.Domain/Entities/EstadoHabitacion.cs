@@ -1,10 +1,11 @@
-﻿
-using Hotel.Domain.Core;
+﻿using Hotel.Domain.Core;
 
 namespace Hotel.Domain.Entities
 {
     public class EstadoHabitacion : Description
     {
         public int IdEstadoHabitacion { get; set; }
+        public int IdHabitacion { get; set; }
+
     }
 }

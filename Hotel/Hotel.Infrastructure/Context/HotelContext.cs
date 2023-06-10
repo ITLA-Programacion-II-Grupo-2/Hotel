@@ -8,7 +8,7 @@ namespace Hotel.Infrastructure.Context
         {
 
         }
-        public HotelContext(DbContextOptions<HotelContext> options): base(options)
+        public HotelContext(DbContextOptions<HotelContext> options) : base(options)
         {
 
         }
