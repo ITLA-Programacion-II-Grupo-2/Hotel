@@ -14,7 +14,7 @@ namespace Hotel.Domain.Core
         public int UsuarioCreacion { get; set; }
         public DateTime FechaCreacion { get; set; }
         public int? UsuarioModificacion { get; set; }
-        public DateTime? FechaModificacionn { get; set; }
+        public DateTime? FechaModificacion { get; set; }
         public int? UsuarioEliminacion { get; set; }
         public DateTime? FechaEliminacion { get; set; }
         public bool Estado { get; set; }

@@ -1,4 +1,5 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Domain.Core;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Core;
 using Hotel.Infrastructure.Interfaces;
@@ -32,7 +33,7 @@ namespace Hotel.Infrastructure.Repositories
                               select new PisoModels
                               {
                                   IdPiso = piso.IdPiso,
-
+                                  Descripcion  = piso.Descripcion
 
                               }).ToList();
             }

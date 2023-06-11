@@ -14,7 +14,7 @@ namespace Hotel.Infrastructure.Context
         {
         }
 
-        public DbSet<Categoria> Categoria { get; set; }
-        public DbSet<Piso> Piso { get; set; }
+        public DbSet<Categoria>? Categoria { get; set; }
+        public DbSet<Piso>? Piso { get; set; }
     }
 }
