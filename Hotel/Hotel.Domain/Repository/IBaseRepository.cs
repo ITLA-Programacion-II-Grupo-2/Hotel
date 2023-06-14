@@ -10,7 +10,9 @@ namespace Hotel.Domain.Repository
         void Add(TEntity entity);
         void Add(TEntity[] entity);
         void Update(TEntity entity);
+        void Update(TEntity[] entities);
         void Remove(TEntity entity);
+        void Remove(TEntity[] entities);
         TEntity GetEntity(int entityid);
         bool Exists(Expression<Func<TEntity, bool>> filter);
         IEnumerable<TEntity> GetEntities();

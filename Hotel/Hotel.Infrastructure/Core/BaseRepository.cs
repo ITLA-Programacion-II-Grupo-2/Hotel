@@ -19,35 +19,16 @@ namespace Hotel.Infrastructure.Core
             this.myDbSet= this.context.Set<TEntity>();
         }
 
-        public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
-        {
-            return this.myDbSet.Any(filter);
-        }
-
-        public virtual IEnumerable<TEntity> GetEntities()
-        {
-             return myDbSet.ToList();
-        }
-
-        public virtual TEntity GetEntity(int id)
-        {
-            return myDbSet.Find(id);
-        }
-
-        public virtual void Remove(TEntity entity)
-        {
-            this.myDbSet.Remove(entity);
-        }
 
         public virtual void Add(TEntity entity)
         {
-          this.myDbSet.Add(entity);
-            
+            this.myDbSet.Add(entity);
+
         }
 
         public virtual void Add(TEntity[] entities)
         {
-           this.myDbSet.AddRange(entities);
+            this.myDbSet.AddRange(entities);
 
         }
 
@@ -55,6 +36,35 @@ namespace Hotel.Infrastructure.Core
         {
             this.myDbSet.Update(entity);
 
+        }
+
+        public virtual void Update(TEntity[] entities)
+        {
+            this.myDbSet.UpdateRange(entities);
+        }
+
+        public virtual void Remove(TEntity entity)
+        {
+            this.myDbSet.Remove(entity);
+        }
+        public virtual void Remove(TEntity[] entities)
+        {
+            this.myDbSet.RemoveRange(entities);
+        }
+
+        public virtual IEnumerable<TEntity> GetEntities()
+        {
+            return myDbSet.ToList();
+        }
+
+        public virtual TEntity GetEntity(int id)
+        {
+            return myDbSet.Find(id);
+        }
+
+        public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
+        {
+            return this.myDbSet.Any(filter);
         }
 
         public virtual void SaveChanges()

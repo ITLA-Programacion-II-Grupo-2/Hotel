@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Hotel.Infrastructure.Exceptions
 {
-    public class PisoExceptions : Exception
+    public class PisoException : Exception
     {
-        public PisoExceptions(string message) : base(message)
+        public PisoException(string message) : base(message)
         {
 
         }
