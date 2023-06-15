@@ -4,12 +4,11 @@ using Hotel.Infrastructure.Core;
 using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
 using Hotel.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+
 
 namespace Hotel.Infrastructure.Repositories
 {
@@ -150,8 +149,8 @@ namespace Hotel.Infrastructure.Repositories
             try
             {
                 logger.LogInformation($"Eliminando Categoria con ID: {categoria.IdCategoria}");
-                base.SaveChanges();
                 base.Remove(categoria);
+                base.SaveChanges();
             }
 
 
