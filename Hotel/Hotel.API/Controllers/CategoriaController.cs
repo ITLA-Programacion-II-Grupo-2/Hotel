@@ -1,6 +1,6 @@
-﻿using Hotel.Infrastructure.Context;
+﻿using Hotel.Domain.Entities;
+using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Interfaces;
-using Hotel.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,37 +20,38 @@ namespace Hotel.API.Controllers
             this.iCategoriaRepository = iCategoriaRepository;
         }
 
-        // GET: api/<CategoriaController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+       
+            
+        [HttpGet("GetCategoria")]
+        public IActionResult Get()
         {
-            var categorias = this.iCategoriaRepository.GetEntities();
+           var categorias = this.iCategoriaRepository.GetCategoria();
 
-            return new string[] { "value1", "value2" };
+            return Ok(categorias);
         }
 
-        // GET api/<CategoriaController>/5
+      
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var categoria = this.iCategoriaRepository.GetCategoria(id);
+            return Ok(categoria);
         }
 
-        // POST api/<CategoriaController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
 
-        // PUT api/<CategoriaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("SaveCategoria")]
+        public void Post([FromBody] Categoria categoria)
         {
         }
 
-        // DELETE api/<CategoriaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        
+        [HttpPost("UpdateCategoria")]
+        public void Put([FromBody] Categoria categoria)
+        {
+        }
+
+        [HttpPost("Remove ")]
+        public void Delete([FromBody] Categoria categori)
         {
         }
     }

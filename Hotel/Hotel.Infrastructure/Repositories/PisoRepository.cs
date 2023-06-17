@@ -188,8 +188,6 @@ namespace Hotel.Infrastructure.Repositories
             }
           
         }
-        
-
 
 
         public List<PisoModels> GetPiso(int id)
@@ -217,6 +215,32 @@ namespace Hotel.Infrastructure.Repositories
 
 
         }
+
+
+
+        public List<PisoModels> GetPiso()
+        {
+            List<PisoModels> pisos = new List<PisoModels>();
+
+            try
+            {
+                this.logger.LogInformation("Consultando pisos...");
+
+                pisos = (from piso in GetEntities()
+                         select new PisoModels
+                         {
+                             IdPiso = piso.IdPiso,
+                             Descripcion = piso.Descripcion
+                         }).ToList();
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError($"Error obteniendo los pisos: {ex.Message}", ex.ToString());
+            }
+
+            return pisos;
+        }
+
 
     }
 

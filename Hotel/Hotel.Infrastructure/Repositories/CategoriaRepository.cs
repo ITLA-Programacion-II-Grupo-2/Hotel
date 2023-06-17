@@ -24,7 +24,7 @@ namespace Hotel.Infrastructure.Repositories
         }
 
 
-        //añade y verifica si existe 
+        
         public override void Add(Categoria categorias)
         {
 
@@ -59,7 +59,6 @@ namespace Hotel.Infrastructure.Repositories
 
         }
 
-        //verifica si existe y elimina 
         public override void Add(Categoria[] categorias)
         {
 
@@ -94,24 +93,23 @@ namespace Hotel.Infrastructure.Repositories
 
         }
 
-
         public override void Update(Categoria categoria)
         {
 
-            try 
+            try
             {
-               logger.LogInformation($"Actualizando Categoria con ID: {categoria.IdCategoria}");
+                logger.LogInformation($"actualizando categoria con id: {categoria.IdCategoria}");
 
                 base.Update(categoria);
-                base.SaveChanges(); 
+                base.SaveChanges();
             }
-            catch (CategoriaException ex) 
+            catch (CategoriaException ex)
             {
-            
-               logger.LogError("Error al actualizar Categoria: " + ex.Message, ex.ToString());
-                
+
+                logger.LogError("error al actualizar categoria: " + ex.Message, ex.ToString());
+
             }
-         
+
         }
 
         public override void Update(Categoria[] categoria)
@@ -122,7 +120,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 foreach (var cat in categoria)
                 {
-                    try 
+                    try
                     {
                         logger.LogInformation($"Actualizando Categoria con ID: {cat.IdCategoria}");
                         base.Update(categoria);
@@ -134,14 +132,14 @@ namespace Hotel.Infrastructure.Repositories
                     }
                     base.SaveChanges();
                 }
-                 
+
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError("Error al actualizar Categoria..." + ex.Message, ex.ToString());
 
             }
-           
+
         }
 
         public override void Remove(Categoria categoria)
@@ -158,7 +156,7 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogError("Error al eliminar Categoria: " + ex.Message, ex.ToString());
             }
-           
+
         }
 
         public override void Remove(Categoria[] categoria)
@@ -184,13 +182,11 @@ namespace Hotel.Infrastructure.Repositories
             catch (Exception ex)
             {
                 logger.LogError("Error al eliminar una categoria: " + ex.Message, ex.ToString());
-            
-            }   
-           
+
+            }
+
         }
-
-
-        //lista de descripcion por id 
+       
         public List<CategoriaModels> GetCategoria(int id)
         {
             List<CategoriaModels> categorias = new List<CategoriaModels>();
@@ -218,6 +214,40 @@ namespace Hotel.Infrastructure.Repositories
             }
             return categorias;
         }
+
+        public List<CategoriaModels> GetCategoria()
+        {
+            List<CategoriaModels> categorias = new List<CategoriaModels>();
+
+            try 
+            {
+                this.logger.LogInformation($"Consultado categorias...");
+
+                categorias = (from categoria in GetEntities()
+                              select new CategoriaModels
+                              {
+                                  IdCategoria = categoria.IdCategoria,
+                                  Descripcion = categoria.Descripcion
+                              }).ToList();
+
+
+
+            }
+            catch (Exception ex) 
+            {
+                this.logger.LogError($"Error al obtener las categorías: {ex.Message}", ex.ToString());
+
+            }
+            return categorias;
+
+
+
+
+
+
+        }
+
+
 
 
     }

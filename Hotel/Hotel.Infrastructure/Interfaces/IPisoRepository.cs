@@ -9,5 +9,6 @@ namespace Hotel.Infrastructure.Interfaces
     public interface IPisoRepository : IBaseRepository<Piso>
     {
         List<PisoModels> GetPiso(int id);
+        List<PisoModels> GetPiso();
     }
 }
