@@ -26,7 +26,6 @@ namespace Hotel.API.Controllers
         public IActionResult Get()
         {
            var categorias = this.iCategoriaRepository.GetCategoria();
-
             return Ok(categorias);
         }
 
@@ -42,17 +41,22 @@ namespace Hotel.API.Controllers
         [HttpPost("SaveCategoria")]
         public void Post([FromBody] Categoria categoria)
         {
+            
+
         }
 
         
         [HttpPost("UpdateCategoria")]
         public void Put([FromBody] Categoria categoria)
         {
+
+
         }
 
         [HttpPost("Remove ")]
         public void Delete([FromBody] Categoria categori)
         {
+
         }
     }
 }
