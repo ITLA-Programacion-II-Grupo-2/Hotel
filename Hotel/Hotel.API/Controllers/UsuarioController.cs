@@ -12,7 +12,6 @@ namespace Hotel.API.Controllers
     {
         private readonly IUsuarioRepository iUsuarioRepository;
 
-
         public UsuarioController(IUsuarioRepository iUsuarioRepository)
         {
             this.iUsuarioRepository = iUsuarioRepository;
@@ -21,19 +20,11 @@ namespace Hotel.API.Controllers
 
 
         [HttpGet]
-        //public IActionResult Get()
-        //{
-        //    var usuario = this.iUsuarioRepository.GetUsuario(()
-        //    return Ok(usuario); 
-        //}
-
-      
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
+        public IActionResult get()
+        {
+            var usuario = this.iUsuarioRepository.GetUsuarios();
+            return Ok(usuario);
+        }
 
         [HttpPost("SaveUsuario")]
         public void Post([FromBody] Usuario usuario)

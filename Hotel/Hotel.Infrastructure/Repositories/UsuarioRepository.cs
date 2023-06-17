@@ -28,7 +28,7 @@ namespace Hotel.Infrastructure.Repositories
         public override void Add(Usuario usuario)
         {
             try
-            {
+            {12
                 string? correo = usuario.Correo;
                 string? nombre = usuario.NombreCompleto;
 

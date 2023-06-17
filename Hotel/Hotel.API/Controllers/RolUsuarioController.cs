@@ -27,13 +27,13 @@ namespace Hotel.API.Controllers
             return Ok(rolusuario);
         }
 
-      
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
+        [HttpGet("UserByRol")]
+        public IActionResult get(string rol)
+        {
+            var usuarios = this.iRolUsuarioRepository.GetUsuariosByRol(rol);
+            return Ok(usuarios);
+        }
 
         [HttpPost("SaveRolUsuario")]
         public void Post([FromBody] RolUsuario rolusuario)
