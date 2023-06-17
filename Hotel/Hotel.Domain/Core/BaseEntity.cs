@@ -12,14 +12,15 @@ namespace Hotel.Domain.Core
             this.Estado = true;
         }
 
-        public int UsuarioCreacion { get; set;}
+        public int ClienteCreacion { get; set;}
         public DateTime FechaCreacion { get; set; }
-        public int? UsuarioModificacion { get; set; }
-        public DateTime FechaModificacion { get; set; }
-        public int UsuarioEliminacion { get; set; }
-        public DateTime FechaEliminacion{ get; set; }
+        public int? ClienteModificacion { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public int? ClienteEliminacion { get; set; }
+        public DateTime? FechaEliminacion{ get; set; }
         public bool Estado { get; set; }
 
     }
+
     
 }

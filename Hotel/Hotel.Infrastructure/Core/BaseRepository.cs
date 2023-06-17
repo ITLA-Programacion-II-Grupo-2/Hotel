@@ -1,61 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
+﻿
 using Hotel.Domain.Repository;
 using Hotel.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Hotel.Infrastructure.Core
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly HotelContext hotel;
-        private readonly DbSet<TEntity> entities;
+        private readonly HotelContext context;
+        private readonly DbSet<TEntity> myDbSet;
 
-        public BaseRepository(HotelContext hotel) 
+        public BaseRepository(HotelContext context)
         {
-            this.hotel = hotel;
-            this.entities = this.hotel.Set<TEntity>();
-        }
-        public bool Exists(Expression<Func<TEntity, bool>> filter)
-        {
-            if (this.entities.Where(filter).Count() > 0)
-            {
-                return true;
-            }
-            return false;
+            this.context = context;
+            this.myDbSet = this.context.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> GetEntities()
+        public virtual void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbSet.Add(entity);
+        }
+        public virtual void Add(TEntity[] entities)
+        {
+            this.myDbSet.AddRange(entities);
         }
 
-        public TEntity GetEntity(int entityid)
+        public virtual void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbSet.Update(entity);
+        }
+        public virtual void Update(TEntity[] entities)
+        {
+            this.myDbSet.UpdateRange(entities);
         }
 
-        public void Remove(TEntity[] entity)
+        public virtual void Remove(TEntity entity)
         {
-            throw new NotImplementedException();
+            this.myDbSet.Remove(entity);
         }
 
-        public void Save(TEntity entity)
+        public virtual void Remove(TEntity[] entities)
         {
-            throw new NotImplementedException();
+            this.myDbSet.RemoveRange(entities);
         }
 
-        public void Save(TEntity[] entities)
+        public virtual List<TEntity> GetEntities()
         {
-            throw new NotImplementedException();
+            return this.myDbSet.ToList();
+        }
+        public virtual TEntity GetEntity(int id)
+        {
+            return this.myDbSet.Find(id);
         }
 
-        public void Update(TEntity entity)
+        public virtual bool Exists(Expression<Func<TEntity, bool>> filter)
         {
-            throw new NotImplementedException();
+            return this.myDbSet.Any(filter);
+        }
+
+        public virtual void SaveChanges()
+        {
+            this.context.SaveChanges();
         }
     }
 }
+
