@@ -1,13 +1,13 @@
 ﻿using Hotel.Domain.Entities;
 using Hotel.Domain.Repository;
-using System;
+using Hotel.Infrastructure.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Hotel.Infrastructure.Interfaces
 {
     public interface IEstadoHabitacionRepository : IBaseRepository<EstadoHabitacion>
     {
-       List<EstadoHabitacion> GetAll();
+        List<EstadohabitacionModel> GetEstadohabitacions();
+        EstadohabitacionModel GetEstadohabitacionBy (int id);
     }
 }

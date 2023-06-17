@@ -23,26 +23,65 @@ namespace Hotel.Infrastructure.Repositories
             this.context = context;
         }
 
-        public List<EstadoHabitacion> GetAll(int Id, List<EstadoHabitacion> estados)
+        public override void Add(EstadoHabitacion entity)
         {
-            List<EstadohabitacionModels> Estados = new List<EstadohabitacionModels>();
+            if (this.Exists(E => E.Descripcion == entity.Descripcion))
+            {
+                base.Add(entity);
+                base.SaveChanges();
+            }
+            else
+            {
+                throw new HabitacionException("La Habitacion Ya se Encuentra Reservada.");
+            }
+        }
+       
+        public override void Update(EstadoHabitacion entity)
+        {
+            try
+            {
+
+                base.Update(entity);
+                base.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error al Actualizar El Estado De Habitaciones: " + ex.Message, ex.ToString());
+            }
+        }
+        
+        public override void Remove(EstadoHabitacion entity)
+        {
+            try
+            {
+
+                base.Remove(entity);
+                base.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error al eliminar El estado De Habitacion: " + ex.Message, ex.ToString());
+            }
+        }
+        
+        public List<EstadohabitacionModel> GetEstadohabitacions()
+        {
+            List<EstadohabitacionModel> Estadohabitacions = new List<EstadohabitacionModel>();
 
             try
             {
 
                 this.logger.LogInformation($"Consultando.....");
 
-                Estados = (from Es in base.GetEntities()
-                                join Ha in context.EstadoHabitacion.ToList() on Es.IdEstadoHabitacion equals Ha.IdEstadoHabitacion
-                                where Es.IdEstadoHabitacion == Ha.IdEstadoHabitacion
-                                select new EstadohabitacionModels()
-                                {
-                                    IdHabitacion = Ha.IdHabitacion,
-                                    IdEstadoHabitacion = Ha.IdEstadoHabitacion,
-                                    Descripcion = Es.Descripcion,
+                Estadohabitacions = this.context.EstadoHabitacion
+                                 .Where(E => !E.Estado).Select(Es => new EstadohabitacionModel()
+                                 {
+                               IdHabitacion = Es.IdHabitacion,
+                               IdEstadoHabitacion = Es.IdEstadoHabitacion,
+                               Descripcion = Es.Descripcion,
 
 
-                                }).ToList();
+                           }).ToList();
 
 
             }
@@ -52,149 +91,31 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogError($"Error Al Mostrar Los Estados: {ex.Message}", ex.ToString());
             }
 
-            return estados;
+            return Estadohabitacions;
         }
-        public override void Add(EstadoHabitacion estadoHabitacion)
+
+        public EstadohabitacionModel GetEstadohabitacionBy(int id)
         {
+            EstadohabitacionModel estadohabitacionModel = new EstadohabitacionModel();
+
+
             try
             {
-                string? Descripcion = estadoHabitacion.Descripcion;
+                EstadoHabitacion estadoHabitacion = this.GetEntity(id);
 
-                this.logger.LogInformation($"Añadiendo Estado De habitacion Con ID: {estadoHabitacion.IdEstadoHabitacion}");
+                estadohabitacionModel.IdHabitacion = estadoHabitacion.IdHabitacion;
+                estadohabitacionModel.IdEstadoHabitacion = estadoHabitacion.IdEstadoHabitacion;
+                estadohabitacionModel.Descripcion = estadoHabitacion.Descripcion;
 
-                if (!this.Exists(E => E.Descripcion == Descripcion))
-                {
-                    base.Add(estadoHabitacion);
-                    base.SaveChanges();
-                }
-                else
-                {
-                    throw new EstadohabitacionExcepcion($"El Estado Habitacion Con Id : {estadoHabitacion.IdEstadoHabitacion} ya existe.");
-                }
-            }
-            catch (EstadohabitacionExcepcion ex)
-            {
-                this.logger.LogError(ex.Message);
+
             }
             catch (Exception ex)
             {
-                this.logger.LogError("Error al agregar El Estado Habitacion: " + ex.Message, ex.ToString());
-            }
-        }
-        public override void Add(EstadoHabitacion[] estadoHabitacions)
-        {
-            try
-            {
 
-                foreach (var estadoHabitacion in estadoHabitacions)
-                {
-                    string? Descripcion = estadoHabitacion.Descripcion;
+                this.logger.LogError("Error obteniendo el department", ex.ToString());
+            }
 
-                    this.logger.LogInformation($"Añadiendo Estado De habitacion con ID: {estadoHabitacion.IdEstadoHabitacion}");
-
-                    if (!this.Exists(E => E.Descripcion == Descripcion))
-                    {
-                        base.Add(estadoHabitacions);
-                        base.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new EstadohabitacionExcepcion($"El Estado Habitacion Con ID: {estadoHabitacion.IdEstadoHabitacion} ya existe.");
-                    }
-                }
-
-                base.SaveChanges();
-            }
-            catch (EstadohabitacionExcepcion ex)
-            {
-                this.logger.LogError(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                this.logger.LogError("Error al agregar El Estado Habitacion: " + ex.Message, ex.ToString());
-            }
-        }
-        public override void Update(EstadoHabitacion estadoHabitacion)
-        {
-            try
-            {
-                logger.LogInformation($"Actualizando el Estados De Habitacion con Id : {estadoHabitacion.IdEstadoHabitacion}");
-
-                base.Update(estadoHabitacion);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al Actualizar El Estado De Habitaciones: " + ex.Message, ex.ToString());
-            }
-        }
-        public override void Update(EstadoHabitacion[] estadoHabitacions)
-        {
-            logger.LogInformation($"Actualizando Los Estados De Habitaciones ");
-            try
-            {
-                foreach (var EstadoHabitacion in estadoHabitacions)
-                {
-                    try
-                    {
-                        logger.LogInformation($"Actualizando El Estados De Habitacion Con ID : {EstadoHabitacion.IdEstadoHabitacion}");
-                        base.Update(estadoHabitacions);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError("Error al Actualizar El Estado De Habitacion Con ID : " +EstadoHabitacion.IdEstadoHabitacion+ ex.Message, ex.ToString());
-                    }
-
-                    base.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al actualizar Los Estados..." + ex.Message, ex.ToString());
-            }
-        }
-        public override void Remove(EstadoHabitacion estadoHabitacion)
-        {
-            try
-            {
-                logger.LogInformation($"Eliminando Estado de Habitacion con ID: {estadoHabitacion.IdEstadoHabitacion}");
-
-                base.Remove(estadoHabitacion);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al eliminar El estado De Habitacion: " + ex.Message, ex.ToString());
-            }
-        }
-        public override void Remove(EstadoHabitacion[] estadoHabitacions)
-        {
-            logger.LogInformation("Eliminando RolesUsuarios");
-            try
-            {
-                foreach (var EstadoHabitacion in estadoHabitacions)
-                {
-                    try
-                    {
-                        logger.LogInformation($"Eliminando Estado de Habitacion con ID: {EstadoHabitacion.IdEstadoHabitacion}");
-                        base.Remove(estadoHabitacions);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError("Error al eliminar Estado de Habitacion con ID: " + EstadoHabitacion.IdEstadoHabitacion + ex.Message, ex.ToString());
-                    }
-                }
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al eliminar Estado De Habitacion: " + ex.Message, ex.ToString());
-            }
-        }
-
-        public List<EstadoHabitacion> GetAll()
-        {
-            throw new NotImplementedException();
+            return estadohabitacionModel;
         }
     }
 }

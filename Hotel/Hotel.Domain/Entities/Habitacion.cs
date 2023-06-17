@@ -1,9 +1,11 @@
 ﻿using Hotel.Domain.Core;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hotel.Domain.Entities
 {
     public class Habitacion : BaseEntity
     {
+        [Key]
         public int IdHabitacion { get; set; }
         public string? Numero { get; set; }
         public string? Detalle { get; set; }

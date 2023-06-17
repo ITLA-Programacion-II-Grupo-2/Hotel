@@ -8,6 +8,7 @@ namespace Hotel.Infrastructure.Interfaces
 {
     public interface IHabitacionRepository : IBaseRepository<Habitacion>
     {
-        List<Habitacion> GetHabitacions();
+        List<HabitacionModel> GetHabitacions();
+        HabitacionModel GetDepartmentById(int id);
     }
 }
