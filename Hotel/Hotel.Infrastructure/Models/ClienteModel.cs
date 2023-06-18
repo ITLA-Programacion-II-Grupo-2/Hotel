@@ -1,6 +1,7 @@
-﻿namespace Hotel.Infrastructure.Models
+﻿
+namespace Hotel.Infrastructure.Models
 {
-    public class ClienteModel
+    public class ClienteModel 
     {
         public int IdCliente { get; set; }
         public string? NombreCompleto { get; set; }

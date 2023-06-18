@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Linq.Expressions;
+
 namespace Hotel.Infrastructure.Repositories
 {
     public class ClienteRepository : BaseRepository<Cliente>, IClienteRepository
@@ -16,21 +18,22 @@ namespace Hotel.Infrastructure.Repositories
         private readonly ILogger<ClienteRepository> logger;
         private readonly HotelContext context;
 
-        public ClienteRepository(ILogger<ClienteRepository>logger,HotelContext context) : base(context)
+        public ClienteRepository(ILogger<ClienteRepository> logger, HotelContext context) : base(context)
         {
             this.logger = logger;
             this.context = context;
         }
 
-        // Agg cliente, datos y validar correo
+        // Agg cliente, y que no exista
+
         public override void Add(Cliente cliente)
         {
             try
             {
-                string? nombre = cliente.NombreCompleto;
-                string? correo = cliente.Correo;
-                string? TipoDocumento = cliente.TipoDocumento;
-                int Documento = cliente.Documento;
+        string? nombre = cliente.NombreCompleto;
+        string? correo = cliente.Correo;
+        string? TipoDocumento = cliente.TipoDocumento;
+        int Documento = cliente.Documento;
 
                 this.logger.LogInformation($"Cliente añadido: {nombre}, Correo: {correo}, Tipo de Documento: {TipoDocumento}, Documento: {Documento}...");
 
@@ -38,20 +41,20 @@ namespace Hotel.Infrastructure.Repositories
                 {
                     base.Add(cliente);
                     base.SaveChanges();
-                }
+    }
                 else
                 {
                     throw new ClienteException($"El correo: {correo} ya existe.");
-                }
+}
             }
             catch (ClienteException ex)
             {
-                this.logger.LogError(ex.Message);
-            }
+    this.logger.LogError(ex.Message);
+}
             catch (Exception ex)
             {
-                this.logger.LogError("Error al añadir Cliente " + ex.ToString());
-            }
+    this.logger.LogError("Error al añadir Cliente " + ex.ToString());
+}
         }
         public override void Add(Cliente[] clientes)
         {
@@ -88,7 +91,7 @@ namespace Hotel.Infrastructure.Repositories
                         {
                             throw new ClienteException($"El Docummento: {Documento} ya existe.");
                         }
-                    
+
                     }
                     catch (ClienteException ex)
                     {
@@ -108,59 +111,116 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogError("Error al agregar cliente" + ex.Message, ex.ToString());
             }
         }
-        public override void Update(Cliente cliente)
-        {
-            try
-            {
-                logger.LogInformation($"Actualizando cliente {cliente.IdCliente}");
 
-                base.Update(cliente);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
-            }
-        }
-        public override void Update(Cliente[] clientes)
+
+        //Actualizar el cliente//
+
+        public override void Update(Cliente cliente)
         {
             logger.LogInformation("Actualizando clientes");
             try
             {
-                foreach (var cliente in clientes)
-                {
-                    try
-                    {
-                        logger.LogInformation($"Actualizando Id del cliente {cliente.IdCliente}");
-                        base.Update(cliente);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError("Error al actualizar Id del cliente" + ex.Message, ex.ToString());
-                    }
-                }
-                base.SaveChanges();
-            }
+                Cliente clienteToUpdate = this.GetEntity(cliente.IdCliente);
+                clienteToUpdate.IdCliente = cliente.IdCliente;
+                clienteToUpdate.NombreCompleto = cliente.NombreCompleto;
+                clienteToUpdate.FechaModificacion= cliente.FechaModificacion;
+                clienteToUpdate.TipoDocumento = cliente.TipoDocumento;
+                clienteToUpdate.Documento = cliente.Documento;
+                clienteToUpdate.Correo = cliente.Correo;
+                clienteToUpdate.Estado = cliente.Estado;
 
+                this.context.Cliente.Update(clienteToUpdate);
+            }
             catch (Exception ex)
             {
-                logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
+                this.logger.LogError("Error actualizando el cliente", ex.ToString());
+                this.context.SaveChanges();
             }
         }
+
+        ////Actualizar el cliente//
+        //public override void Update(Cliente cliente)
+        //{
+        //    try
+        //    {
+        //        logger.LogInformation($"Actualizando cliente {cliente.IdCliente}");
+
+        //        base.Update(cliente);
+        //        base.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
+        //    }
+        //}//
+
+        //Actualizar el cliente//
+        //// public override void Update(Cliente[] clientes)
+        //{
+        //    logger.LogInformation("Actualizando clientes");
+        //    try
+        //    {
+        //        foreach (var cliente in clientes)
+        //        {
+        //            try
+        //            {
+        //                logger.LogInformation($"Actualizando Id del cliente {cliente.IdCliente}");
+        //                base.Update(cliente);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                logger.LogError("Error al actualizar Id del cliente" + ex.Message, ex.ToString());
+        //            }
+        //        }
+        //        base.SaveChanges();
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
+        //    }
+        //}
+        ////
+
+
+
+        //Remover cliente//
+        // public override void Remove(Cliente cliente)
+        // {
+        // try
+        // {
+        //  logger.LogInformation($"Eliminando id cliente: {cliente.IdCliente}");
+
+        //  base.Remove(cliente);
+        //  base.SaveChanges();
+        // }
+        //  catch (Exception ex)
+        //  {
+        //      logger.LogError("Error al eliminar cliente: " + ex.Message, ex.ToString());
+        //  }
+        //  }
+
+
+        //Remover cliente//
         public override void Remove(Cliente cliente)
         {
             try
             {
-                logger.LogInformation($"Eliminando id cliente: {cliente.IdCliente}");
+                Cliente clienteToRemove = this.GetEntity(cliente.IdCliente);
 
-                base.Remove(cliente);
-                base.SaveChanges();
+                clienteToRemove.ClienteEliminacion = cliente.ClienteEliminacion;
+                clienteToRemove.FechaEliminacion = cliente.FechaEliminacion;
+
+                this.context.Cliente.Update(clienteToRemove);
+                this.context.SaveChanges();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                logger.LogError("Error al eliminar cliente: " + ex.Message, ex.ToString());
+                this.logger.LogError("Error eliminando el departamento", ex.ToString());
             }
         }
+
+
         public override void Remove(Cliente[] clientes)
         {
             try
@@ -204,31 +264,52 @@ namespace Hotel.Infrastructure.Repositories
                     Correo = user.Correo,
                     TipoDocumento = user.TipoDocumento,
                     Documento = user.Documento,
-            };
+                };
 
             }
             catch (Exception ex)
             {
-                this.logger.LogError("Error al consultar cliente '" + id + "': " + ex.Message, ex.ToString());
+                this.logger.LogError("Error al obtener cliente '" + id + "': " + ex.Message, ex.ToString());
             }
 
             return cliente;
         }
 
+
+        // Consultar lista de Cliente
         public List<ClienteModel> GetCliente()
         {
-            throw new NotImplementedException();
-        }
+            List<ClienteModel> clientes = new List<ClienteModel>();
 
-        ClienteModel IClienteRepository.GetCliente(int id)
-        {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                this.logger.LogInformation($"Consultado Clientes: ");
 
-        List<ClienteModel> IClienteRepository.GetCliente()
-        {
-            throw new NotImplementedException();
+                List<Cliente> users = base.GetEntities();
+
+                foreach (Cliente user in users)
+                {
+                    ClienteModel cliente = new ClienteModel()
+                    {
+                        IdCliente = user.IdCliente,
+                        NombreCompleto = user.NombreCompleto,
+                        Correo = user.Correo,
+                        TipoDocumento = user.TipoDocumento,
+                        Documento = user.Documento,
+                    };
+
+                    clientes.Add(cliente);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError("Error al consultar clientes " + ex.Message, ex.ToString());
+            }
+
+            return clientes;
         }
+        //mim 40.59//
+        
     }
-
 }

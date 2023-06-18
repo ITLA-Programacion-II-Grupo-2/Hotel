@@ -1,4 +1,5 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Dtos.Cliente;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace Hotel.API.Controllers
         {
             this.clienteRepository = clienteRepository;
         }
+
         // GET: api/<ClienteController>
         [HttpGet]
         public IActionResult Get()
@@ -32,24 +34,45 @@ namespace Hotel.API.Controllers
             return Ok(cliente);
         }
 
-        // POST api/<ClienteController>
-        [HttpPost("Save")]
-        public void Post([FromBody] Cliente cliente)
+        // POST api/<ClienteController/ min36.04>
+        [HttpPost("Save Cliente")]
+        public IActionResult Post([FromBody] ClienteAddDto clienteAdd)
         {
+            this.clienteRepository.Add(new Cliente() 
+            {
+             TipoDocumento = clienteAdd.TipoDocumento,
+             Documento = clienteAdd.Documento,
+             ClienteCreacion = clienteAdd.ClienteChange,
+             FechaCreacion = clienteAdd.FechaChange
+            });
+
+            return Ok();
         }
 
         // PUT api/<ClienteController>/5
-        [HttpPost("Update")]
-        public void Put(int id, [FromBody] Cliente cliente)
+        [HttpPost("Update Cliente")]
+        public IActionResult Put([FromBody] ClienteUpdateDto clienteUpdate)
         {
+            Cliente clienteToUpdate = new Cliente()
+            {
+                IdCliente = clienteUpdate.IdCliente,
+                TipoDocumento = clienteUpdate.TipoDocumento,
+                Documento = clienteUpdate.Documento,
+                ClienteModificacion = clienteUpdate.ClienteChange,
+                FechaModificacion = clienteUpdate.FechaChange
+            };
+            this.clienteRepository.Update(clienteToUpdate);
+            return Ok();
         }
 
         // DELETE api/<ClienteController>/5
         [HttpDelete("{Remove}")]
-        public void Delete([FromBody] Cliente cliente)
+        public void Delete([FromBody] ClienteRemoveDto clienteRemoveDto)
         {
+            
         }
     }
 }
 
-//crear metodos de extension en DCO..//
+
+//crear metodos de extension en DCO.MIN 31.37.//
