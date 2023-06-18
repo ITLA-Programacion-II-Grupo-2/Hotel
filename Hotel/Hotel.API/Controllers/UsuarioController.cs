@@ -19,7 +19,7 @@ namespace Hotel.API.Controllers
         }
 
         [HttpGet("GetUsuario")]
-        public IActionResult Get(int id)
+        public IActionResult GetUsuario(int id)
         {
             var usuario = this.iUsuarioRepository.GetUsuario(id);
             return Ok(usuario);
