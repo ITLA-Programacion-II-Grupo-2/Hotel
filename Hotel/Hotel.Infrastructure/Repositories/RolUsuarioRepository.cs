@@ -158,6 +158,36 @@ namespace Hotel.Infrastructure.Repositories
             }
         }
 
+        public List<RolUsuarioModel> GetRolUsuarios()
+        {
+            List<RolUsuarioModel> rolesusuario = new List<RolUsuarioModel>();
+
+            try
+            {
+                this.logger.LogInformation($"Consultado Roles...");
+
+                List<RolUsuario> roles = base.GetEntities();
+
+                foreach (RolUsuario rolusuario in roles)
+                {
+                    RolUsuarioModel rol = new RolUsuarioModel()
+                    {
+                        IdRolUsuario = rolusuario.IdRolUsuario,
+                        Rol = rolusuario.Descripcion
+                    };
+
+                    rolesusuario.Add(rol);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError("Error al consultar los roles: " + ex.Message, ex.ToString());
+            }
+
+            return rolesusuario;
+        }
+
         // Consulta de un rol y todos sus usuarios
         public List<UserWithRolModel> GetUsuariosByRol(string rol)
         {
@@ -215,5 +245,7 @@ namespace Hotel.Infrastructure.Repositories
 
             return usuarios;
         }
+
+        
     }
 }

@@ -18,28 +18,55 @@ namespace Hotel.API.Controllers
 
         }
 
-
-        [HttpGet]
-        public IActionResult get()
+        [HttpGet("GetUsuario")]
+        public IActionResult Get(int id)
         {
-            var usuario = this.iUsuarioRepository.GetUsuarios();
+            var usuario = this.iUsuarioRepository.GetUsuario(id);
             return Ok(usuario);
         }
 
-        [HttpPost("SaveUsuario")]
-        public void Post([FromBody] Usuario usuario)
+        [HttpGet("GetUsuarios")]
+        public IActionResult GetUsuarios()
         {
+            var usuarios = this.iUsuarioRepository.GetUsuarios();
+            return Ok(usuarios);
+        }
+
+        [HttpGet("GetUsuarioWithRol")]
+        public IActionResult GetUsuarioWithRol(int id)
+        {
+            var usuarios = this.iUsuarioRepository.GetUsuarioWithRol(id);
+            return Ok(usuarios);
+        }
+
+        [HttpGet("GetUsuariosWithRol")]
+        public IActionResult GetUsuariosWithRol()
+        {
+            var usuarios = this.iUsuarioRepository.GetUsuariosWithRol();
+            return Ok(usuarios);
+        }
+              
+        [HttpPost("SaveUsuario")]
+        public IActionResult Post([FromBody] Usuario usuario)
+        {
+            this.iUsuarioRepository.Add(usuario);
+            return Ok();
         }
 
 
         [HttpPost("UpdateUsuario")]
-        public void Put([FromBody] Usuario usuario)
+        public IActionResult Put([FromBody] Usuario usuario)
         {
+            this.iUsuarioRepository.Add(usuario);
+            return Ok();
         }
 
-        [HttpPost("Remove ")]
-        public void Delete([FromBody] Usuario usuario)
+        /*
+        [HttpPost("RemoveUsuario")]
+        public IActionResult Delete([FromBody] Usuario usuario)
         {
+            return Ok();
         }
+        */
     }
 }

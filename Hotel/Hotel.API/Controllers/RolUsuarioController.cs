@@ -12,43 +12,54 @@ namespace Hotel.API.Controllers
     {
         private readonly IRolUsuarioRepository iRolUsuarioRepository;
 
-
         public RolUsuarioController(IRolUsuarioRepository iRolUsuarioRepository)
         {
             this.iRolUsuarioRepository = iRolUsuarioRepository;
 
         }
 
-        [HttpGet("GetRolUsuario")]
-        public IActionResult Get()
+        [HttpGet("GetRolesUsuario")]
+        public IActionResult GetRolUsuarios()
         {
-            var rolusuario = this.iRolUsuarioRepository.GetUsuariosByRoles();
+            var rolusuario = this.iRolUsuarioRepository.GetRolUsuarios();
 
             return Ok(rolusuario);
         }
 
-
-        [HttpGet("UserByRol")]
-        public IActionResult get(string rol)
+        [HttpGet("GetUsuariosByRol")]
+        public IActionResult GetUsuariosByRol(string rol)
         {
             var usuarios = this.iRolUsuarioRepository.GetUsuariosByRol(rol);
             return Ok(usuarios);
         }
 
-        [HttpPost("SaveRolUsuario")]
-        public void Post([FromBody] RolUsuario rolusuario)
+        [HttpGet("GetUsuariosByRoles")]
+        public IActionResult GetUsuariosByRoles()
         {
+            var usuarios = this.iRolUsuarioRepository.GetUsuariosByRoles();
+            return Ok(usuarios);
         }
 
+        [HttpPost("Save")]
+        public IActionResult Post([FromBody] RolUsuario rolusuario)
+        {
+            this.iRolUsuarioRepository.Add(rolusuario);
+            return Ok();
+        }
 
         [HttpPost("UpdateRolUsuario")]
-        public void Put([FromBody] RolUsuario rolusuario)
+        public IActionResult Put([FromBody] RolUsuario rolusuario)
         {
+            this.iRolUsuarioRepository.Update(rolusuario);
+            return Ok();
         }
 
-        [HttpPost("Remove ")]
+        /*
+        [HttpPost("RemoveRolUsuario")]
         public void Delete([FromBody] RolUsuario rolusuario)
         {
+
         }
+        */
     }
 }

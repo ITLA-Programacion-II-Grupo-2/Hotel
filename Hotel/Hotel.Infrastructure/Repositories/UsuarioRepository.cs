@@ -28,7 +28,7 @@ namespace Hotel.Infrastructure.Repositories
         public override void Add(Usuario usuario)
         {
             try
-            {12
+            {
                 string? correo = usuario.Correo;
                 string? nombre = usuario.NombreCompleto;
 
@@ -166,25 +166,24 @@ namespace Hotel.Infrastructure.Repositories
         public UsuarioModel GetUsuario(int id)
         {
             UsuarioModel usuario = new UsuarioModel();
-
             
             try
             {
-                this.logger.LogInformation($"Consultado Usuario id: {id}...");
+               this.logger.LogInformation($"Consultado Usuario id: {id}...");
 
-                Usuario user = base.GetEntity(id);
+               Usuario user = base.GetEntity(id);
 
-                usuario = new UsuarioModel()
-                {
-                    IdUsuario = user.IdUsuario,
-                    NombreCompleto = user.NombreCompleto,
-                    Correo = user.Correo
-                };
+               usuario = new UsuarioModel()
+               {
+                  IdUsuario = user.IdUsuario,
+                  NombreCompleto = user.NombreCompleto,
+                  Correo = user.Correo  
+               };
 
             }
             catch (Exception ex)
             {
-                this.logger.LogError("Error al consultar el usuario id '" + id + "': " + ex.Message, ex.ToString());
+               this.logger.LogError("Error al consultar el usuario id '" + id + "': " + ex.Message, ex.ToString());
             }
 
             return usuario;
