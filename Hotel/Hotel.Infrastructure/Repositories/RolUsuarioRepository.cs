@@ -3,6 +3,7 @@ using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Core;
 using Hotel.Infrastructure.Exceptions;
+using Hotel.Infrastructure.Extentions;
 using Hotel.Infrastructure.Interfaces;
 using Hotel.Infrastructure.Models;
 using Microsoft.Extensions.Logging;
@@ -166,18 +167,22 @@ namespace Hotel.Infrastructure.Repositories
             {
                 this.logger.LogInformation($"Consultado Roles...");
 
-                List<RolUsuario> roles = base.GetEntities();
+                List<RolUsuario> roles = base.GetEntities().Where(r => r.Estado == true).ToList();
+
+                if (roles == null)
+                    throw new RolUsuarioException("No existen roles en la base de datos");
 
                 foreach (RolUsuario rolusuario in roles)
                 {
-                    RolUsuarioModel rol = new RolUsuarioModel()
-                    {
-                        IdRolUsuario = rolusuario.IdRolUsuario,
-                        Rol = rolusuario.Descripcion
-                    };
+                    RolUsuarioModel rol = rolusuario.ConvertRolUsuarioEntityToModel();
 
                     rolesusuario.Add(rol);
                 }
+
+            }
+            catch (RolUsuarioException ruex)
+            {
+                this.logger.LogError(ruex.Message);
 
             }
             catch (Exception ex)
@@ -199,19 +204,19 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from rl in base.GetEntities() where rl.Descripcion == rol
                             join user in context.Usuario.ToList() on rl.IdRolUsuario equals user.IdRolUsuario
-                            where rl.IdRolUsuario == user.IdRolUsuario
-                            select new UserWithRolModel()
-                            {
-                                IdUsuario = user.IdUsuario,
-                                NombreCompleto = user.NombreCompleto,
-                                Correo = user.Correo,
-                                Rol = rl.Descripcion
-                            }).ToList();
+                            where rl.Estado == true
+                            select user.ConvertUsuarioWithRolToModel(rl)).ToList();
 
+                if (usuarios == null)
+                    throw new RolUsuarioException($"Error al consultar los usuarios del rol: {rol}");
+            }
+            catch (RolUsuarioException ruex)
+            {
+                this.logger.LogError(ruex.Message);
             }
             catch (Exception ex)
             {
-                this.logger.LogError("Error al consultar usuarios" + ex.Message, ex.ToString());
+                this.logger.LogError("Error al consultar usuarios con rol " + ex.Message, ex.ToString());
             }
 
             return usuarios;
@@ -228,14 +233,16 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from rl in base.GetEntities()
                             join user in context.Usuario.ToList() on rl.IdRolUsuario equals user.IdRolUsuario
-                            where rl.IdRolUsuario == user.IdRolUsuario
-                            select new UserWithRolModel()
-                            {
-                                IdUsuario = user.IdUsuario,
-                                NombreCompleto = user.NombreCompleto,
-                                Correo = user.Correo,
-                                Rol = rl.Descripcion
-                            }).ToList();
+                            where rl.Estado == true
+                            select user.ConvertUsuarioWithRolToModel(rl)).ToList();
+
+                if (usuarios == null)
+                    throw new RolUsuarioException("No existen roles en la base de datos");
+
+            }
+            catch (RolUsuarioException ruex)
+            {
+                this.logger.LogError(ruex.Message);
 
             }
             catch (Exception ex)

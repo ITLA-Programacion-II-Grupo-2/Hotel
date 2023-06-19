@@ -35,8 +35,8 @@ namespace Hotel.API.Controllers
         [HttpGet("GetUsuarioWithRol")]
         public IActionResult GetUsuarioWithRol(int id)
         {
-            var usuarios = this.iUsuarioRepository.GetUsuarioWithRol(id);
-            return Ok(usuarios);
+            var usuario = this.iUsuarioRepository.GetUsuarioWithRol(id);
+            return Ok(usuario);
         }
 
         [HttpGet("GetUsuariosWithRol")]
@@ -50,6 +50,13 @@ namespace Hotel.API.Controllers
         public IActionResult Post([FromBody] Usuario usuario)
         {
             this.iUsuarioRepository.Add(usuario);
+            return Ok();
+        }
+
+        [HttpPost("SaveUsuarios")]
+        public IActionResult Post([FromBody] Usuario[] usuarios)
+        {
+            this.iUsuarioRepository.Add(usuarios);
             return Ok();
         }
 

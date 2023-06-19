@@ -3,9 +3,9 @@ using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Core;
 using Hotel.Infrastructure.Exceptions;
+using Hotel.Infrastructure.Extentions;
 using Hotel.Infrastructure.Interfaces;
 using Hotel.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -29,20 +29,19 @@ namespace Hotel.Infrastructure.Repositories
         {
             try
             {
+                if (usuario == null)
+                    throw new UsuarioException("El Usuario ingresado es nulo.");
+
                 string? correo = usuario.Correo;
                 string? nombre = usuario.NombreCompleto;
 
                 this.logger.LogInformation($"Añadiendo Usuario: {nombre}, Correo: {correo}...");
 
-                if (!this.Exists(u => u.Correo == correo))
-                {
-                    base.Add(usuario);
-                    base.SaveChanges();
-                }
-                else
-                {
+                if (this.Exists(u => u.Correo == correo))
                     throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
-                }
+                
+                base.Add(usuario);
+                base.SaveChanges();
             }
             catch (UsuarioException ex)
             {
@@ -60,19 +59,18 @@ namespace Hotel.Infrastructure.Repositories
             {
                 foreach (var usuario in usuarios)
                 {
+                    if (usuario == null)
+                        throw new UsuarioException("El Usuario ingresado es nulo.");
+
                     string? correo = usuario.Correo;
                     string? nombre = usuario.NombreCompleto;
 
                     this.logger.LogInformation($"Añadiendo Usuario: {nombre}, Correo: {correo}...");
 
-                    if (!this.Exists(u => u.Correo == correo))
-                    {
-                        base.Add(usuario);
-                    }
-                    else
-                    {
+                    if (this.Exists(u => u.Correo == correo))
                         throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
-                    }
+                    
+                    base.Add(usuario);
                 }
 
                 base.SaveChanges();
@@ -169,16 +167,19 @@ namespace Hotel.Infrastructure.Repositories
             
             try
             {
-               this.logger.LogInformation($"Consultado Usuario id: {id}...");
+                this.logger.LogInformation($"Consultado Usuario id: {id}...");
 
-               Usuario user = base.GetEntity(id);
+                Usuario user = context.Usuario.FirstOrDefault(t => t.IdUsuario == id && t.Estado == true);
 
-               usuario = new UsuarioModel()
-               {
-                  IdUsuario = user.IdUsuario,
-                  NombreCompleto = user.NombreCompleto,
-                  Correo = user.Correo  
-               };
+                if (user == null)
+                    throw new UsuarioException($"El usuario de id: {id} no existe");
+
+                usuario = user.ConvertUsuarioEntityToModel();
+
+            }
+            catch(UsuarioException uex)
+            {
+                this.logger.LogError(uex.Message);
 
             }
             catch (Exception ex)
@@ -198,17 +199,18 @@ namespace Hotel.Infrastructure.Repositories
             {
                 this.logger.LogInformation($"Consultado Usuario con rol id: {id}...");
 
-                usuario = (from user in base.GetEntities()
-                          join rol in context.RolUsuario.ToList() on user.IdRolUsuario equals rol.IdRolUsuario
-                          where user.IdRolUsuario == rol.IdRolUsuario
-                          select new UserWithRolModel()
-                          {
-                              IdUsuario = user.IdUsuario,
-                              NombreCompleto = user.NombreCompleto,
-                              Correo = user.Correo,
-                              Rol = rol.Descripcion
-                          }).FirstOrDefault();
+                usuario = (from user in base.GetEntities() where user.IdUsuario == id
+                           join rol in context.RolUsuario.ToList() on user.IdRolUsuario equals rol.IdRolUsuario
+                          where user.Estado == true
+                          select user.ConvertUsuarioWithRolToModel(rol)).FirstOrDefault();
 
+                if (usuario == null)
+                    throw new UsuarioException($"El usuario con id: {id} no existe.");
+
+            }
+            catch (UsuarioException uex)
+            {
+                this.logger.LogError(uex.Message);
             }
             catch (Exception ex)
             {
@@ -228,19 +230,21 @@ namespace Hotel.Infrastructure.Repositories
             {
                 this.logger.LogInformation($"Consultado Usuarios...");
 
-                List<Usuario> users = base.GetEntities();
+                List<Usuario> users = base.GetEntities().Where(u => u.Estado == true).ToList();
+
+                if (users == null)
+                    throw new UsuarioException("No existen Usuarios en la base de datos");
 
                 foreach (Usuario user in users)
                 {
-                    UsuarioModel usuario = new UsuarioModel()
-                    {
-                        IdUsuario = user.IdUsuario,
-                        NombreCompleto = user.NombreCompleto,
-                        Correo = user.Correo
-                    };
-
+                    UsuarioModel usuario = user.ConvertUsuarioEntityToModel();
                     usuarios.Add(usuario);
                 }
+
+            }
+            catch (UsuarioException uex)
+            {
+                this.logger.LogError(uex.Message);
 
             }
             catch (Exception ex)
@@ -262,15 +266,15 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from user in base.GetEntities()
                            join rol in context.RolUsuario.ToList() on user.IdRolUsuario equals rol.IdRolUsuario
-                           where user.IdRolUsuario == rol.IdRolUsuario
-                           select new UserWithRolModel()
-                           {
-                               IdUsuario = user.IdUsuario,
-                               NombreCompleto = user.NombreCompleto,
-                               Correo = user.Correo,
-                               Rol = rol.Descripcion
-                           }).ToList();
+                           where user.Estado == true
+                            select user.ConvertUsuarioWithRolToModel(rol)).ToList();
 
+                if (usuarios == null)
+                    throw new UsuarioException("No existen Usuarios en la base de datos");
+            }
+            catch (UsuarioException uex)
+            {
+                this.logger.LogError(uex.Message);
             }
             catch (Exception ex)
             {
