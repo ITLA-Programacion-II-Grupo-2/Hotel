@@ -1,7 +1,5 @@
 ﻿using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Interfaces;
-using Hotel.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -38,7 +36,7 @@ namespace Hotel.Api.Controllers
             }
 
             // POST 
-            [HttpPost("{ADD}")]
+            [HttpPost]
             public IActionResult Post([FromBody] Habitacion habitacion)
             {
                 this.habitacionRepository.Add(habitacion);
@@ -46,7 +44,7 @@ namespace Hotel.Api.Controllers
             }
 
             // PUT
-            [HttpPut("{UPDATE}")]
+            [HttpPut]
             public IActionResult Put([FromBody] Habitacion habitacion)
             {
                 this.habitacionRepository.Update(habitacion);
@@ -54,7 +52,7 @@ namespace Hotel.Api.Controllers
             }
 
             // DELETE
-            [HttpDelete("{REMOVE}")]
+            [HttpDelete]
             public IActionResult Delete([FromBody] Habitacion habitacion)
             {
                 this.habitacionRepository.Remove(habitacion);

@@ -1,0 +1,4 @@
+﻿CREATE LOGIN Luis WITH PASSWORD = '12345';
+
+ALTER SERVER ROLE  [dbcreator]  ADD MEMBER [Luis];
+GO

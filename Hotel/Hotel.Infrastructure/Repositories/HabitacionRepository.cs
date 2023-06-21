@@ -28,44 +28,46 @@ namespace Hotel.Infrastructure.Repositories
         {
 
                
-                if (this.Exists(H => H.Numero == entity.Numero))
+                if (this.Exists(H => H.IdHabitacion == entity.IdHabitacion))
                 {
-                    base.Add(entity);
-                    base.SaveChanges();
-                }
-                else
-                {
-                    throw new HabitacionException("La Habitacion Ya se Encuentra Reservada.");
+                  throw new HabitacionException("La Habitacion Ya se Encuentra Reservada.");
+
                 }
             
+            base.Add(entity);
+            base.SaveChanges();
+
         }
        
         public override void Remove(Habitacion entity)
         {
-            try
-            {
+            Habitacion HabitacionRemove = base.GetEntity(entity.IdHabitacion) ?? throw new HabitacionException("El curso no existe.");
+            HabitacionRemove.Estado = false;
+            HabitacionRemove.FechaEliminacion = DateTime.Now;
+            HabitacionRemove.UsuarioEliminacion = entity.UsuarioEliminacion;
 
-                base.Remove(entity);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al Eliminar Los Datos De la Habitacion: " + ex.Message, ex.ToString());
-            }
+            base.Update(HabitacionRemove);
+            base.SaveChanges();
         }
         
         public override void Update(Habitacion entity)
         {
-            try
-            {
+            Habitacion HabitacionUpdate = this.GetEntity(entity.IdHabitacion);
 
-                base.Update(entity);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al actualizar La Habitacion Con ID : " + entity.IdHabitacion + ex.Message, ex.ToString());
-            }
+            HabitacionUpdate.IdHabitacion = entity.IdHabitacion;
+            HabitacionUpdate.Numero = entity.Numero;
+            HabitacionUpdate.Detalle = entity.Detalle;
+            HabitacionUpdate.Precio = entity.Precio;
+            HabitacionUpdate.IdEstadoHabitacion = entity.IdEstadoHabitacion;
+            HabitacionUpdate.IdPiso = entity.IdPiso;
+            HabitacionUpdate.IdCategoria = entity.IdCategoria;
+            HabitacionUpdate.FechaModificacion = entity.FechaModificacion;
+            HabitacionUpdate.FechaCreacion = entity.FechaCreacion;
+            HabitacionUpdate.UsuarioModificacion = entity.UsuarioModificacion;
+
+            base.Update(HabitacionUpdate);
+            base.SaveChanges();
+
         }
         
 

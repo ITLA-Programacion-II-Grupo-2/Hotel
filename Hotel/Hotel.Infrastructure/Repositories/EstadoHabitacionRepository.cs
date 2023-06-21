@@ -25,43 +25,36 @@ namespace Hotel.Infrastructure.Repositories
 
         public override void Add(EstadoHabitacion entity)
         {
-            if (this.Exists(E => E.Descripcion == entity.Descripcion))
-            {
-                base.Add(entity);
-                base.SaveChanges();
-            }
-            else
+            if (this.Exists(E => E.IdEstadoHabitacion == entity.IdEstadoHabitacion))
             {
                 throw new HabitacionException("La Habitacion Ya se Encuentra Reservada.");
+
             }
+            
+            base.Add(entity);
+            base.SaveChanges();
         }
        
         public override void Update(EstadoHabitacion entity)
         {
-            try
-            {
+            EstadoHabitacion EstadoHabitacionUpdate = this.GetEntity(entity.IdEstadoHabitacion);
 
-                base.Update(entity);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al Actualizar El Estado De Habitaciones: " + ex.Message, ex.ToString());
-            }
+            EstadoHabitacionUpdate.IdEstadoHabitacion = entity.IdEstadoHabitacion;
+            EstadoHabitacionUpdate.Descripcion = entity.Descripcion;
+
+            base.Update(EstadoHabitacionUpdate);
+            base.SaveChanges();
         }
         
         public override void Remove(EstadoHabitacion entity)
         {
-            try
-            {
+            EstadoHabitacion EstadoHabitacionRemove = base.GetEntity(entity.IdEstadoHabitacion) ?? throw new EstadohabitacionExcepcion("El curso no existe.");
+            EstadoHabitacionRemove.Estado = false;
+            EstadoHabitacionRemove.FechaEliminacion = DateTime.Now;
+            EstadoHabitacionRemove.UsuarioEliminacion = entity.UsuarioEliminacion;
 
-                base.Remove(entity);
-                base.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("Error al eliminar El estado De Habitacion: " + ex.Message, ex.ToString());
-            }
+            base.Update(EstadoHabitacionRemove);
+            base.SaveChanges();
         }
         
         public List<EstadohabitacionModel> GetEstadohabitacions()
@@ -76,9 +69,8 @@ namespace Hotel.Infrastructure.Repositories
                 Estadohabitacions = this.context.EstadoHabitacion
                                  .Where(E => !E.Estado).Select(Es => new EstadohabitacionModel()
                                  {
-                               IdHabitacion = Es.IdHabitacion,
                                IdEstadoHabitacion = Es.IdEstadoHabitacion,
-                               Descripcion = Es.Descripcion,
+                                     Descripcion = Es.Descripcion,
 
 
                            }).ToList();
@@ -103,7 +95,6 @@ namespace Hotel.Infrastructure.Repositories
             {
                 EstadoHabitacion estadoHabitacion = this.GetEntity(id);
 
-                estadohabitacionModel.IdHabitacion = estadoHabitacion.IdHabitacion;
                 estadohabitacionModel.IdEstadoHabitacion = estadoHabitacion.IdEstadoHabitacion;
                 estadohabitacionModel.Descripcion = estadoHabitacion.Descripcion;
 

@@ -35,7 +35,7 @@ namespace Hotel.Api.Controllers
         }
 
         // ADD:  
-        [HttpPost("[ADD]")]
+        [HttpPost("{ADD}")]
         public IActionResult Post([FromBody] EstadoHabitacion estadoHabitacion)
         {
             this.estadoHabitacionRepository.Add(estadoHabitacion);

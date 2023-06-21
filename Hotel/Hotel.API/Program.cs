@@ -6,6 +6,11 @@ using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
+
+builder.Services.AddTransient<IHabitacionRepository, HabitacionRepository>();
+
+builder.Services.AddTransient<IEstadoHabitacionRepository, EstadoHabitacionRepository>();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -13,11 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
 
-builder.Services.AddTransient<IHabitacionRepository, HabitacionRepository>();
 
-builder.Services.AddTransient<IEstadoHabitacionRepository, EstadoHabitacionRepository>();
 
 var app = builder.Build();
 

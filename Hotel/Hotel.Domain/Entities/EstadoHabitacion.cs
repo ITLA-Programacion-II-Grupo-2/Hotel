@@ -7,7 +7,6 @@ namespace Hotel.Domain.Entities
     {
         [Key]
         public int IdEstadoHabitacion { get; set; }
-        public int IdHabitacion { get; set; }
         public string? Descripcion { get; set; }
 
     }
