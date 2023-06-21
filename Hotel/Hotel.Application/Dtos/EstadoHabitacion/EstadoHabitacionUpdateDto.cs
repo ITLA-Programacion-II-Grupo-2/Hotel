@@ -1,7 +1,7 @@
 ﻿
 namespace Hotel.Application.Dtos.EstadoHabitacion
 {
-    internal class EstadoHabitacionUpdateDto : EstadoHabitacionDto
+    public class EstadoHabitacionUpdateDto : EstadoHabitacionDto
     {
         public int IdEstadoHabitacion { get; set; }
     }

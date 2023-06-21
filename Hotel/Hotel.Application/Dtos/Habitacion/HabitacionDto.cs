@@ -2,7 +2,7 @@
 
 namespace Hotel.Application.Dtos.Habitacion
 {
-    internal abstract class HabitacionDto
+    public abstract class HabitacionDto
     {
         public string? Numero { get; set; }
         public string? Detalle { get; set; }

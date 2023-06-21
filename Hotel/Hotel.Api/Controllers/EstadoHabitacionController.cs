@@ -1,4 +1,6 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Contract;
+using Hotel.Application.Dtos.EstadoHabitacion;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Interfaces;
 using Hotel.Infrastructure.Repositories;
@@ -10,19 +12,19 @@ namespace Hotel.Api.Controllers
     [ApiController]
     public class EstadoHabitacionController : ControllerBase
     {
-        private readonly IEstadoHabitacionRepository estadoHabitacionRepository;
+        private readonly IEstadoHabitacionService estadoHabitacionService;
 
 
-        public EstadoHabitacionController(IEstadoHabitacionRepository estadoHabitacionRepository)
+        public EstadoHabitacionController(IEstadoHabitacionService estadoHabitacionService)
         {
-            this.estadoHabitacionRepository = estadoHabitacionRepository;
+            this.estadoHabitacionService = estadoHabitacionService;
         }
 
         // GET:
         [HttpGet]
         public IActionResult Get()
         {
-            var estadoHabitacions = this.estadoHabitacionRepository.GetEntities();
+            var estadoHabitacions = this.estadoHabitacionService.GetEntities();
             return Ok(estadoHabitacions);
         }
 
@@ -30,31 +32,31 @@ namespace Hotel.Api.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var estadoHabitacion = this.estadoHabitacionRepository.GetEntity(id);
+            var estadoHabitacion = this.estadoHabitacionService.Get(id);
             return Ok(estadoHabitacion);
         }
 
         // ADD:  
         [HttpPost("{ADD}")]
-        public IActionResult Post([FromBody] EstadoHabitacion estadoHabitacion)
+        public IActionResult Post([FromBody] EstadoHabitacionAddDto estadoHabitacionAdd)
         {
-            this.estadoHabitacionRepository.Add(estadoHabitacion);
+            this.estadoHabitacionService.Add(estadoHabitacionAdd);
             return Ok();
         }
 
         // UPDATE 
         [HttpPut("{UPDATE}")]
-        public IActionResult Put([FromBody] EstadoHabitacion estadoHabitacion)
+        public IActionResult Put([FromBody] EstadoHabitacionUpdateDto estadoHabitacionUpdate)
         {
-            this.estadoHabitacionRepository.Update(estadoHabitacion);
+            this.estadoHabitacionService.Update(estadoHabitacionUpdate);
             return Ok();
         }
 
         // DELETE 
         [HttpDelete("{REMOVE}")]
-        public IActionResult Delete([FromBody] EstadoHabitacion estadoHabitacion)
+        public IActionResult Delete([FromBody] EstadoHabitacionRemoveDto estadoHabitacionRemove)
         {
-            this.estadoHabitacionRepository.Remove(estadoHabitacion);
+            this.estadoHabitacionService.Remove(estadoHabitacionRemove);
             return Ok();
         }
     }

@@ -1,7 +1,10 @@
-﻿using Hotel.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using Hotel.Application.Contract;
+using Hotel.Application.Dtos.Habitacion;
+using Hotel.Domain.Entities;
+using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-
+using Hotel.Infrastructure.Models;
 
 namespace Hotel.Api.Controllers
 {
@@ -11,19 +14,19 @@ namespace Hotel.Api.Controllers
         public class HabitacionController : ControllerBase
         {
 
-            private readonly IHabitacionRepository habitacionRepository;
+            private readonly IHabitacionService habitacionService;
 
 
-            public HabitacionController(IHabitacionRepository habitacionRepository)
+            public HabitacionController(IHabitacionService habitacionService)
             {
-                this.habitacionRepository = habitacionRepository;
+                this.habitacionService = habitacionService;
             }
 
             // GET: 
             [HttpGet]
             public IActionResult Get()
             {
-                var habitacions = this.habitacionRepository.GetEntities();
+                var habitacions = this.habitacionService.GetEntities();
                  return Ok(habitacions);
             }
 
@@ -31,32 +34,32 @@ namespace Hotel.Api.Controllers
             [HttpGet("{id}")]
             public IActionResult Get(int id)
             {
-                var habitacion = this.habitacionRepository.GetEntity(id);
+                var habitacion = this.habitacionService.Get(id);
                 return Ok(habitacion);
             }
 
             // POST 
             [HttpPost]
-            public IActionResult Post([FromBody] Habitacion habitacion)
+            public IActionResult Post([FromBody] HabitacionAddDto habitacionAdd)
             {
-                this.habitacionRepository.Add(habitacion);
-                return Ok(habitacion);
+                var result = this.habitacionService.Add(habitacionAdd);
+                return Ok(result);
             }
 
             // PUT
             [HttpPut]
-            public IActionResult Put([FromBody] Habitacion habitacion)
+            public IActionResult Put([FromBody] HabitacionUpdateDto habitacionUpdate)
             {
-                this.habitacionRepository.Update(habitacion);
-                return Ok(habitacion);
+                this.habitacionService.Update(habitacionUpdate);
+                return Ok(habitacionUpdate);
             }
 
             // DELETE
             [HttpDelete]
-            public IActionResult Delete([FromBody] Habitacion habitacion)
+            public IActionResult Delete([FromBody] HabitacionRemoveDto habitacionRemove)
             {
-                this.habitacionRepository.Remove(habitacion);
-                return Ok(habitacion);
+                this.habitacionService.Remove(habitacionRemove);
+                return Ok(habitacionRemove);
             }
         }
     }
