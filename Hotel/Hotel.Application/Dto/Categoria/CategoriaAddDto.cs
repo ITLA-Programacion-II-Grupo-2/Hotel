@@ -6,7 +6,7 @@ namespace Hotel.Application.Dto.Categoria
 {
     public class CategoriaAddDto : DtoBase
     {
-      public string? Descripcion { get; set; }
+      public string? Descripcion {  get; set; }
 
     }
 }

@@ -198,6 +198,7 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogInformation($"Pase por aqui: {id}");
 
                  pisos = (from piso in GetEntities()
+                              where piso.IdPiso == id
                               select new PisoModels
                               {
                                   IdPiso = piso.IdPiso,

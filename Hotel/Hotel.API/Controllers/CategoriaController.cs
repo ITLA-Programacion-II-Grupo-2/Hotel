@@ -1,4 +1,5 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Dto.Categoria;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -39,24 +40,44 @@ namespace Hotel.API.Controllers
 
 
         [HttpPost("SaveCategoria")]
-        public void Post([FromBody] Categoria categoria)
+        public IActionResult Post([FromBody] CategoriaAddDto categoriaAddDto)
         {
-            
+            this.iCategoriaRepository.Add(new Categoria()
+            { 
+              Descripcion=categoriaAddDto.Descripcion,
+              UsuarioCreacion=categoriaAddDto.ChangeUser,
+
+            });
+            return Ok();
 
         }
 
-        
+
         [HttpPost("UpdateCategoria")]
-        public void Put([FromBody] Categoria categoria)
+        public IActionResult Put([FromBody] CategoriaUpdateDto categoriaUpdate)
         {
+            this.iCategoriaRepository.Update(new Categoria() 
+            {
+                IdCategoria=categoriaUpdate.IdCategoria,
+                UsuarioModificacion=categoriaUpdate.ChangeUser,
+                FechaModificacion=categoriaUpdate.ChangeDate
 
+            
+            });
+            return Ok();
 
         }
 
-        [HttpPost("Remove ")]
-        public void Delete([FromBody] Categoria categori)
+        [HttpPost("RemoveCategoria ")]
+        public IActionResult Delete([FromBody] CategoriaRemoveDto categoriaRemove)
         {
+            this.iCategoriaRepository.Remove(new Categoria()
+            {
+                IdCategoria=categoriaRemove.IdCategoria,
+                Estado=categoriaRemove.Estado,
 
+            });
+            return Ok();
         }
     }
 }

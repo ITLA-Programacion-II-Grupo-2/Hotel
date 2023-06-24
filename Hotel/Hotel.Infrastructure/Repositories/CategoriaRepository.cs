@@ -144,18 +144,22 @@ namespace Hotel.Infrastructure.Repositories
 
         public override void Remove(Categoria categoria)
         {
-            try
-            {
-                logger.LogInformation($"Eliminando Categoria con ID: {categoria.IdCategoria}");
-                base.Remove(categoria);
-                base.SaveChanges();
-            }
+             try
+             {
+                 Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
+                 CategoriaRemove.Estado = false;
+                 CategoriaRemove.FechaEliminacion = DateTime.Now;
+                 CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
+                 base.Update(CategoriaRemove);
+                 base.SaveChanges();
+             }
 
 
-            catch (Exception ex)
-            {
-                logger.LogError("Error al eliminar Categoria: " + ex.Message, ex.ToString());
-            }
+             catch (Exception ex)
+             {
+                 this.logger.LogError("Ocurrió un error actualizando la categoria", ex.ToString());
+             } 
+            this.logger.LogInformation("Removecategoria");
 
         }
 
