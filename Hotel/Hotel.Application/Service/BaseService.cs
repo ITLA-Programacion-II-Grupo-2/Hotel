@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Hotel.Application.Service
 {
-    public class CategoriaService
+    public abstract class BaseService
     {
+
     }
 }

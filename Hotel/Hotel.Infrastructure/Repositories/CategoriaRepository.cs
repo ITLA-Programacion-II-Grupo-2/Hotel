@@ -100,14 +100,17 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogInformation($"actualizando categoria con id: {categoria.IdCategoria}");
 
-                base.Update(categoria);
+                Categoria CategoriaUpdate = base.GetEntity(categoria.IdCategoria);
+
+                CategoriaUpdate.FechaModificacion = DateTime.Now;
+                CategoriaUpdate.UsuarioModificacion = categoria.UsuarioEliminacion;
+                CategoriaUpdate.Descripcion = categoria.Descripcion;
+
+                base.Update(CategoriaUpdate);
                 base.SaveChanges();
-            }
-            catch (CategoriaException ex)
+            }catch (Exception ex)
             {
-
                 logger.LogError("error al actualizar categoria: " + ex.Message, ex.ToString());
-
             }
 
         }
@@ -147,9 +150,11 @@ namespace Hotel.Infrastructure.Repositories
              try
              {
                  Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
+
                  CategoriaRemove.Estado = false;
                  CategoriaRemove.FechaEliminacion = DateTime.Now;
                  CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
+
                  base.Update(CategoriaRemove);
                  base.SaveChanges();
              }

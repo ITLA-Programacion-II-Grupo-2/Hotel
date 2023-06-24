@@ -1,6 +1,5 @@
 ﻿using Hotel.Application.Dto.Categoria;
 using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,13 +55,14 @@ namespace Hotel.API.Controllers
         [HttpPost("UpdateCategoria")]
         public IActionResult Put([FromBody] CategoriaUpdateDto categoriaUpdate)
         {
+            
             this.iCategoriaRepository.Update(new Categoria() 
             {
                 IdCategoria=categoriaUpdate.IdCategoria,
+                Descripcion=categoriaUpdate.Descripcion,
                 UsuarioModificacion=categoriaUpdate.ChangeUser,
-                FechaModificacion=categoriaUpdate.ChangeDate
+                FechaModificacion=categoriaUpdate.ChangeDate,
 
-            
             });
             return Ok();
 
@@ -74,7 +74,9 @@ namespace Hotel.API.Controllers
             this.iCategoriaRepository.Remove(new Categoria()
             {
                 IdCategoria=categoriaRemove.IdCategoria,
-                Estado=categoriaRemove.Estado,
+               Estado=categoriaRemove.Estado,
+                UsuarioEliminacion=categoriaRemove.ChangeUser,
+                FechaEliminacion=categoriaRemove.ChangeDate
 
             });
             return Ok();
