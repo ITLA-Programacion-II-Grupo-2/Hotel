@@ -40,7 +40,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 this.logger.LogInformation($"Añadiendo Usuario: {nombre}, Correo: {correo}...");
 
-                if (this.Exists(u => u.Correo == correo))
+                if (this.Exists(u => u.Correo == correo && u.Estado == true))
                     throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
 
                 usuario.ConvertUsuarioCreateToEntity();
@@ -72,7 +72,7 @@ namespace Hotel.Infrastructure.Repositories
 
                     this.logger.LogInformation($"Añadiendo Usuario: {nombre}, Correo: {correo}...");
 
-                    if (this.Exists(u => u.Correo == correo))
+                    if (this.Exists(u => u.Correo == correo && u.Estado == true))
                         throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
 
                     usuario.ConvertUsuarioCreateToEntity();
@@ -264,7 +264,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuario = (from user in base.GetEntities() where user.IdUsuario == id
                            join rol in context.RolUsuario.ToList() on user.IdRolUsuario equals rol.IdRolUsuario
-                          where user.Estado == true
+                          where user.Estado == true && rol.Estado == true
                           select user.ConvertUsuarioWithRolToModel(rol)).FirstOrDefault();
 
                 if (usuario == null)
@@ -329,7 +329,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from user in base.GetEntities()
                            join rol in context.RolUsuario.ToList() on user.IdRolUsuario equals rol.IdRolUsuario
-                           where user.Estado == true
+                           where user.Estado == true && rol.Estado == true
                             select user.ConvertUsuarioWithRolToModel(rol)).ToList();
 
                 if (usuarios == null)

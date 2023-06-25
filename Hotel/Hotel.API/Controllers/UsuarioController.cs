@@ -1,4 +1,7 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Contract;
+using Hotel.Application.Core;
+using Hotel.Application.Dtos.Usuario;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,82 +13,99 @@ namespace Hotel.API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioRepository iUsuarioRepository;
+        private readonly IUsuarioService iUsuarioService;
 
-        public UsuarioController(IUsuarioRepository iUsuarioRepository)
+        public UsuarioController(IUsuarioService iUsuarioService)
         {
-            this.iUsuarioRepository = iUsuarioRepository;
-
+            this.iUsuarioService = iUsuarioService;
         }
 
         [HttpGet("GetUsuario")]
         public IActionResult GetUsuario(int id)
         {
-            var usuario = this.iUsuarioRepository.GetUsuario(id);
-            return Ok(usuario);
+            var result = this.iUsuarioService.GetUsuario(id);
+
+            return HandleResponse(result);
         }
 
         [HttpGet("GetUsuarios")]
         public IActionResult GetUsuarios()
         {
-            var usuarios = this.iUsuarioRepository.GetUsuarios();
-            return Ok(usuarios);
+            var result = this.iUsuarioService.GetUsuarios();
+
+            return HandleResponse(result);
         }
 
         [HttpGet("GetUsuarioWithRol")]
         public IActionResult GetUsuarioWithRol(int id)
         {
-            var usuario = this.iUsuarioRepository.GetUsuarioWithRol(id);
-            return Ok(usuario);
+            var result = this.iUsuarioService.GetUsuarioWithRol(id);
+
+            return HandleResponse(result);
         }
 
         [HttpGet("GetUsuariosWithRol")]
         public IActionResult GetUsuariosWithRol()
         {
-            var usuarios = this.iUsuarioRepository.GetUsuariosWithRol();
-            return Ok(usuarios);
+            var result = this.iUsuarioService.GetUsuariosWithRol();
+
+            return HandleResponse(result);
         }
               
         [HttpPost("SaveUsuario")]
-        public IActionResult Post([FromBody] Usuario usuario)
+        public IActionResult Post([FromBody] UsuarioAddDto model)
         {
-            this.iUsuarioRepository.Add(usuario);
-            return Ok();
+            var result = this.iUsuarioService.Add(model);
+
+            return HandleResponse(result);
         }
 
         [HttpPost("SaveUsuarios")]
-        public IActionResult Post([FromBody] Usuario[] usuarios)
+        public IActionResult Post([FromBody] UsuarioAddDto[] models)
         {
-            this.iUsuarioRepository.Add(usuarios);
-            return Ok();
+            var result = this.iUsuarioService.Add(models);
+
+            return HandleResponse(result);
         }
 
         [HttpPost("UpdateUsuario")]
-        public IActionResult Put([FromBody] Usuario usuario)
+        public IActionResult Put([FromBody] UsuarioUpdateDto model)
         {
-            this.iUsuarioRepository.Update(usuario);
-            return Ok();
+            var result = this.iUsuarioService.Update(model);
+
+            return HandleResponse(result);
         }
 
         [HttpPost("UpdateUsuarios")]
-        public IActionResult Put([FromBody] Usuario[] usuarios)
+        public IActionResult Put([FromBody] UsuarioUpdateDto[] models)
         {
-            this.iUsuarioRepository.Update(usuarios);
-            return Ok();
+            var result = this.iUsuarioService.Update(models);
+
+            return HandleResponse(result);
         }
 
         [HttpPost("RemoveUsuario")]
-        public IActionResult Delete([FromBody] Usuario usuario)
+        public IActionResult Delete([FromBody] UsuarioRemoveDto model)
         {
-            this.iUsuarioRepository.Remove(usuario);
-            return Ok();
+            var result = this.iUsuarioService.Remove(model);
+
+            return HandleResponse(result);
         }
 
         [HttpPost("RemoveUsuarios")]
-        public IActionResult Delete([FromBody] Usuario[] usuarios)
+        public IActionResult Delete([FromBody] UsuarioRemoveDto[] models)
         {
-            this.iUsuarioRepository.Remove(usuarios);
-            return Ok();
+            var result = this.iUsuarioService.Remove(models);
+
+            return HandleResponse(result);
+        }
+
+        private IActionResult HandleResponse(ServiceResult result)
+        {
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
     }

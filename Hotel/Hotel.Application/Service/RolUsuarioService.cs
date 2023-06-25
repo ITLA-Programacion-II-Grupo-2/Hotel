@@ -2,10 +2,14 @@
 using Hotel.Application.Contract;
 using Hotel.Application.Core;
 using Hotel.Application.Dtos.RolUsuario;
+using Hotel.Application.Extentions;
+using Hotel.Application.Validations;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 
 namespace Hotel.Application.Service
 {
@@ -23,66 +27,295 @@ namespace Hotel.Application.Service
 
         public ServiceResult GetRolUsuarios()
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResult result = new ServiceResult();
 
+            try
+            {
+                result.Data = this.rolUsuarioRepository.GetRolUsuarios();
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error obteniendo los roles de usuarios.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
         public ServiceResult GetUsuariosByRol(string rol)
+        {
+            ServiceResult result = new ServiceResult();
+
+            result = RolUsuarioValidator.ValidateRol(rol);
+
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            try
+            {
+                result.Data = this.rolUsuarioRepository.GetUsuariosByRol(rol);
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error obteniendo el rol: {rol} y sus usuarios.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
+        public ServiceResult GetUsuariosByRoles()
         {
             ServiceResult result = new ServiceResult();
 
             try
             {
-                result.Data = this.rolUsuarioRepository;
+                result.Data = this.rolUsuarioRepository.GetUsuariosByRoles();
             }
-            catch (UsuarioException uex)
+            catch (RolUsuarioException ruex)
             {
                 result.Success = false;
-                result.Message = uex.Message;
+                result.Message = ruex.Message;
                 this.logger.LogError($"{result.Message}");
-
             }
             catch (Exception ex)
             {
-
                 result.Success = false;
-                result.Message = "Error obteniendo los usuarios";
+                result.Message = $"Error obteniendo los roles y sus usuarios.";
                 this.logger.LogError($"{result.Message}", ex.ToString());
             }
+
             return result;
         }
-
-        public ServiceResult GetUsuariosByRoles()
+        public ServiceResult Add(RolUsuarioAddDto model)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResult result = new ServiceResult();
+            result = model.ValidateRolUsuarioAdd();
 
-        public ServiceResult Save(RolUsuarioAddDto model)
+            if (!result.Success)
+                {
+                    return result;
+                }
+            try
+            {
+                var rolUsuario = model.ConvertAddDtoToEntity();
+                this.rolUsuarioRepository.Add(rolUsuario);
+
+                result.Message = "Rol de usuario agregado correctamente";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error añadiendo el rol de usuario: {model.Descripcion}";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
+        public ServiceResult Add(RolUsuarioAddDto[] models)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResult result = new ServiceResult();
+           
+            try
+            {
+                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
 
-        public ServiceResult Save(RolUsuarioAddDto[] model)
-        {
-            throw new System.NotImplementedException();
-        }
+                foreach (var model in models)
+                {
+                    result = model.ValidateRolUsuarioAdd();
 
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+
+                    var rolUsuario = model.ConvertAddDtoToEntity();
+                    rolesUsuario.Add(rolUsuario);
+                }
+
+                this.rolUsuarioRepository.Add(rolesUsuario.ToArray());
+
+                result.Success = true;
+                result.Message = "Roles de usuario agregados correctamente";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error añadiendo los roles de usuario";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
         public ServiceResult Update(RolUsuarioUpdateDto model)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResult result = new ServiceResult();
+            result = model.ValidateRolUsuarioUpdate();
 
-        public ServiceResult Update(RolUsuarioUpdateDto[] model)
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            try
+            {
+                var rolUsuario = model.ConvertUpdateDtoEntity();
+                this.rolUsuarioRepository.Update(rolUsuario);
+
+                result.Message = "Rol de usuario actualizado correctamente";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error actualizando el rol de usuario: {model.Descripcion}";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
+        public ServiceResult Update(RolUsuarioUpdateDto[] models)
         {
-            throw new System.NotImplementedException();
+            ServiceResult result = new ServiceResult();
+
+            try
+            {
+                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
+
+                foreach (var model in models)
+                {
+                    result = model.ValidateRolUsuarioUpdate();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+
+                    var rolUsuario = model.ConvertUpdateDtoEntity();
+                    rolesUsuario.Add(rolUsuario);
+                }
+
+                this.rolUsuarioRepository.Update(rolesUsuario.ToArray());
+
+                result.Message = "Roles de usuario actualizados correctamente.";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error actualizando roles de usuario.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
         }
         public ServiceResult Remove(RolUsuarioRemoveDto model)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResult result = new ServiceResult();
+            result = model.ValidateRolUsuarioRemove();
 
-        public ServiceResult Remove(RolUsuarioRemoveDto[] model)
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            try
+            {
+                var rolUsuario = model.ConvertRemoveEntity();
+                this.rolUsuarioRepository.Remove(rolUsuario);
+
+                result.Message = "Rol de usuario removido correctamente";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error removiendo el rol de usuario: {model.IdRolUsuario}";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
+        public ServiceResult Remove(RolUsuarioRemoveDto[] models)
         {
-            throw new System.NotImplementedException();
+            ServiceResult result = new ServiceResult();
+
+            try
+            {
+                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
+
+                foreach (var model in models)
+                {
+                    result = model.ValidateRolUsuarioRemove();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+
+                    var rolUsuario = model.ConvertRemoveEntity();
+                    rolesUsuario.Add(rolUsuario);
+                }
+                
+                this.rolUsuarioRepository.Remove(rolesUsuario.ToArray());
+
+                result.Message = "Roles de usuario removidos correctamente";
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error removiendo roles de usuario";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
         }
     }
 }

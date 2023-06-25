@@ -1,9 +1,8 @@
 ﻿
 namespace Hotel.Application.Dtos.Usuario
 {
-    public class UsuarioRemoveDto : UsuarioDto
+    public class UsuarioRemoveDto : DtoBase
     {
         public int IdUsuario { get; set; }
-        public bool Estado { get; set; }
     }
 }

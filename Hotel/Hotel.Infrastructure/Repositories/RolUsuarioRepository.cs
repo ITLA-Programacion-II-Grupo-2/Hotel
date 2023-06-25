@@ -31,7 +31,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 this.logger.LogInformation($"Añadiendo rol: {rol}");
 
-                if (this.Exists(u => u.Descripcion == rol))
+                if (this.Exists(u => u.Descripcion == rol && u.Estado == true))
                     throw new RolUsuarioException($"El rol: {rol} ya existe.");
                
                 rolUsuario.ConvertRolUsuarioCreateToEntity();
@@ -59,7 +59,7 @@ namespace Hotel.Infrastructure.Repositories
 
                     this.logger.LogInformation($"Añadiendo rol: {rol}");
 
-                    if (this.Exists(u => u.Descripcion == rol))
+                    if (this.Exists(u => u.Descripcion == rol && u.Estado == true))
                         throw new RolUsuarioException($"El rol: {rol} ya existe.");
 
                     rolUsuario.ConvertRolUsuarioCreateToEntity();
@@ -259,7 +259,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from rl in base.GetEntities() where rl.Descripcion == rol
                             join user in context.Usuario.ToList() on rl.IdRolUsuario equals user.IdRolUsuario
-                            where rl.Estado == true
+                            where rl.Estado == true && user.Estado == true
                             select user.ConvertUsuarioWithRolToModel(rl)).ToList();
 
                 if (usuarios == null)
@@ -288,7 +288,7 @@ namespace Hotel.Infrastructure.Repositories
 
                 usuarios = (from rl in base.GetEntities()
                             join user in context.Usuario.ToList() on rl.IdRolUsuario equals user.IdRolUsuario
-                            where rl.Estado == true
+                            where rl.Estado == true && user.Estado == true
                             select user.ConvertUsuarioWithRolToModel(rl)).ToList();
 
                 if (usuarios == null)
