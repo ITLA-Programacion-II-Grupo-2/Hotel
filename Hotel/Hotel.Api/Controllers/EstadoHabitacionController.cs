@@ -1,10 +1,12 @@
-﻿using Hotel.Application.Contract;
+﻿using Microsoft.AspNetCore.Mvc;
+using Hotel.Application.Contract;
 using Hotel.Application.Dtos.EstadoHabitacion;
 using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Context;
+using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
-using Hotel.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Mvc;
+using Hotel.Infrastructure.Models;
+
+
 
 namespace Hotel.Api.Controllers
 {
@@ -24,20 +26,20 @@ namespace Hotel.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var estadoHabitacions = this.estadoHabitacionService.GetEntities();
-            return Ok(estadoHabitacions);
+            var result = this.estadoHabitacionService.Get();
+            return Ok(result);
         }
 
         // GET [Id]: 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get( int id)
         {
-            var estadoHabitacion = this.estadoHabitacionService.Get(id);
-            return Ok(estadoHabitacion);
+            var result = this.estadoHabitacionService.GetById(id);
+            return Ok(result);
         }
 
         // ADD:  
-        [HttpPost("{ADD}")]
+        [HttpPost]
         public IActionResult Post([FromBody] EstadoHabitacionAddDto estadoHabitacionAdd)
         {
             this.estadoHabitacionService.Add(estadoHabitacionAdd);
@@ -45,19 +47,20 @@ namespace Hotel.Api.Controllers
         }
 
         // UPDATE 
-        [HttpPut("{UPDATE}")]
+        [HttpPut]
         public IActionResult Put([FromBody] EstadoHabitacionUpdateDto estadoHabitacionUpdate)
         {
-            this.estadoHabitacionService.Update(estadoHabitacionUpdate);
-            return Ok();
+            var result = this.estadoHabitacionService.Update(estadoHabitacionUpdate);
+
+            return Ok(result);
         }
 
         // DELETE 
-        [HttpDelete("{REMOVE}")]
+        [HttpDelete]
         public IActionResult Delete([FromBody] EstadoHabitacionRemoveDto estadoHabitacionRemove)
         {
-            this.estadoHabitacionService.Remove(estadoHabitacionRemove);
-            return Ok();
+            var result = this.estadoHabitacionService.Remove(estadoHabitacionRemove);
+            return Ok(result);
         }
     }
 }

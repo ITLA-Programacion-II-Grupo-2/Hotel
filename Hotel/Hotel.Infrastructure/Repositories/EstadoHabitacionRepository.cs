@@ -8,7 +8,6 @@ using Hotel.Infrastructure.Core;
 using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
 using Hotel.Infrastructure.Models;
-using Hotel.Domain.Core;
 
 namespace Hotel.Infrastructure.Repositories
 {
@@ -27,7 +26,7 @@ namespace Hotel.Infrastructure.Repositories
         {
             if (this.Exists(E => E.IdEstadoHabitacion == entity.IdEstadoHabitacion))
             {
-                throw new HabitacionException("La Habitacion Ya se Encuentra Reservada.");
+                throw new HabitacionException("El Estadohabitacion Ya existe.");
 
             }
             
@@ -39,7 +38,6 @@ namespace Hotel.Infrastructure.Repositories
         {
             EstadoHabitacion EstadoHabitacionUpdate = this.GetEntity(entity.IdEstadoHabitacion);
 
-            EstadoHabitacionUpdate.IdEstadoHabitacion = entity.IdEstadoHabitacion;
             EstadoHabitacionUpdate.Descripcion = entity.Descripcion;
 
             base.Update(EstadoHabitacionUpdate);
@@ -48,7 +46,7 @@ namespace Hotel.Infrastructure.Repositories
         
         public override void Remove(EstadoHabitacion entity)
         {
-            EstadoHabitacion EstadoHabitacionRemove = base.GetEntity(entity.IdEstadoHabitacion) ?? throw new EstadohabitacionExcepcion("El curso no existe.");
+            EstadoHabitacion EstadoHabitacionRemove = base.GetEntity(entity.IdEstadoHabitacion) ?? throw new EstadohabitacionExcepcion("El EstadoHabitacion no existe.");
             EstadoHabitacionRemove.Estado = false;
             EstadoHabitacionRemove.FechaEliminacion = DateTime.Now;
             EstadoHabitacionRemove.UsuarioEliminacion = entity.UsuarioEliminacion;
@@ -66,9 +64,9 @@ namespace Hotel.Infrastructure.Repositories
 
                 this.logger.LogInformation($"Consultando.....");
 
-                Estadohabitacions = this.context.EstadoHabitacion
-                                 .Where(E => !E.Estado).Select(Es => new EstadohabitacionModel()
-                                 {
+                Estadohabitacions = this.context.EstadoHabitacion.ToList()
+                                .Where(E => !E.Estado).Select(Es => new EstadohabitacionModel()
+                                {
                                IdEstadoHabitacion = Es.IdEstadoHabitacion,
                                      Descripcion = Es.Descripcion,
 

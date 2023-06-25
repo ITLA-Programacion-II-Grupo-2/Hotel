@@ -1,24 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using Hotel.Application.Contract;
+using Hotel.Application.Services;
 using Hotel.Infrastructure.Context;
-using Hotel.Infrastructure.Interfaces;
-using Hotel.Infrastructure.Repositories;
-using System.Runtime.CompilerServices;
+using Hotel.IOC.Dependencies;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
-
-builder.Services.AddTransient<IHabitacionRepository, HabitacionRepository>();
-
-builder.Services.AddTransient<IEstadoHabitacionRepository, EstadoHabitacionRepository>();
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
 
+builder.Services.AddEstadoHabitacionDependency();
+builder.Services.AddHabitacionDependency();
+// Add services to the container.
 
 
 var app = builder.Build();

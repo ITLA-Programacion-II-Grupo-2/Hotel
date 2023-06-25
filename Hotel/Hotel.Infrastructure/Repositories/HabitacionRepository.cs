@@ -41,7 +41,7 @@ namespace Hotel.Infrastructure.Repositories
        
         public override void Remove(Habitacion entity)
         {
-            Habitacion HabitacionRemove = base.GetEntity(entity.IdHabitacion) ?? throw new HabitacionException("El curso no existe.");
+            Habitacion HabitacionRemove = base.GetEntity(entity.IdHabitacion) ?? throw new HabitacionException("La Habitacion no existe.");
             HabitacionRemove.Estado = false;
             HabitacionRemove.FechaEliminacion = DateTime.Now;
             HabitacionRemove.UsuarioEliminacion = entity.UsuarioEliminacion;
@@ -54,7 +54,6 @@ namespace Hotel.Infrastructure.Repositories
         {
             Habitacion HabitacionUpdate = this.GetEntity(entity.IdHabitacion);
 
-            HabitacionUpdate.IdHabitacion = entity.IdHabitacion;
             HabitacionUpdate.Numero = entity.Numero;
             HabitacionUpdate.Detalle = entity.Detalle;
             HabitacionUpdate.Precio = entity.Precio;
@@ -71,7 +70,7 @@ namespace Hotel.Infrastructure.Repositories
         }
         
 
-        public HabitacionModel GetDepartmentById(int id)
+        public HabitacionModel GetHabitacionById(int id)
         {
             HabitacionModel habitacionModel = new HabitacionModel();
 
@@ -106,9 +105,11 @@ namespace Hotel.Infrastructure.Repositories
 
                 this.logger.LogInformation($"Consultando.....");
 
-                Habitacions =  this.context.Habitacion
-                                 .Where(cd => !cd.Estado).Select(Ha => new HabitacionModel()
-                                {
+                Habitacions = (from Ha in base.GetEntities()
+                               join Es in context.Habitacion.ToList() on Ha.IdEstadoHabitacion equals Es.IdEstadoHabitacion
+                               where Ha.IdEstadoHabitacion == Ha.IdEstadoHabitacion
+                               select new HabitacionModel()
+                               {
                                     IdHabitacion = Ha.IdHabitacion,
                                     Detalle = Ha.Detalle,
                                     Numero = Ha.Numero,

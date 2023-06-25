@@ -4,12 +4,10 @@ using System.Xml;
 
 namespace Hotel.Application.Contract
 {
-    public interface IHabitacionService 
+    public interface IHabitacionService : IBaseService<HabitacionAddDto,
+                                                  HabitacionUpdateDto,
+                                                  HabitacionRemoveDto>
     {
-        ServiceResult GetEntities();
-        ServiceResult Get(int Id);
-        ServiceResult Add(HabitacionAddDto habitacionAdd );
-        ServiceResult Update( HabitacionUpdateDto habitacionUpdate);
-        ServiceResult Remove(HabitacionRemoveDto habitacionRemove);
+       
     }
 }

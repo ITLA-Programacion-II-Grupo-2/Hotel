@@ -4,12 +4,10 @@ using Hotel.Application.Dtos.Habitacion;
 
 namespace Hotel.Application.Contract
 {
-    public interface IEstadoHabitacionService 
+    public interface IEstadoHabitacionService : IBaseService<EstadoHabitacionAddDto,
+                                                  EstadoHabitacionUpdateDto,
+                                                  EstadoHabitacionRemoveDto>
     {
-        ServiceResult GetEntities();
-        ServiceResult Get(int Id);
-        ServiceResult Add(EstadoHabitacionAddDto estadoHabitacionAdd);
-        ServiceResult Update(EstadoHabitacionUpdateDto estadoHabitacionUpdate);
-        ServiceResult Remove(EstadoHabitacionRemoveDto estadoHabitacionRemove);
+       
     }
 }

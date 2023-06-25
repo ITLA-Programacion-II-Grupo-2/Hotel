@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Application\Hotel.Application.csproj" />
     <ProjectReference Include="..\Hotel.Infrastructure\Hotel.Infrastructure.csproj" />
+    <ProjectReference Include="..\Hotel.IOC\Hotel.IOC.csproj" />
   </ItemGroup>
 
 </Project>

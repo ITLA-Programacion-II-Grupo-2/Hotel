@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Hotel.Application.Contract;
 using Hotel.Application.Dtos.Habitacion;
-using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Exceptions;
-using Hotel.Infrastructure.Interfaces;
-using Hotel.Infrastructure.Models;
 
 namespace Hotel.Api.Controllers
 {
@@ -26,7 +22,7 @@ namespace Hotel.Api.Controllers
             [HttpGet]
             public IActionResult Get()
             {
-                var habitacions = this.habitacionService.GetEntities();
+                var habitacions = this.habitacionService.Get();
                  return Ok(habitacions);
             }
 
@@ -34,7 +30,7 @@ namespace Hotel.Api.Controllers
             [HttpGet("{id}")]
             public IActionResult Get(int id)
             {
-                var habitacion = this.habitacionService.Get(id);
+                var habitacion = this.habitacionService.GetById(id);
                 return Ok(habitacion);
             }
 
@@ -50,17 +46,18 @@ namespace Hotel.Api.Controllers
             [HttpPut]
             public IActionResult Put([FromBody] HabitacionUpdateDto habitacionUpdate)
             {
-                this.habitacionService.Update(habitacionUpdate);
-                return Ok(habitacionUpdate);
-            }
+            var result = this.habitacionService.Update(habitacionUpdate);
+
+            return Ok(result);
+        }
 
             // DELETE
             [HttpDelete]
             public IActionResult Delete([FromBody] HabitacionRemoveDto habitacionRemove)
             {
-                this.habitacionService.Remove(habitacionRemove);
-                return Ok(habitacionRemove);
-            }
+            var result = this.habitacionService.Remove(habitacionRemove);
+            return Ok(result);
+        }
         }
     }
 
