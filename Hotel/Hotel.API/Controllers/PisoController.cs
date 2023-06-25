@@ -1,4 +1,6 @@
-﻿using Hotel.Domain.Entities;
+﻿using Hotel.Application.Dto.Categoria;
+using Hotel.Application.Dto.Piso;
+using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,20 +36,48 @@ namespace Hotel.API.Controllers
 
 
         [HttpPost("SavePiso")]
-        public void Post([FromBody] Piso piso)
+        public IActionResult Post([FromBody] PisoAddDto pisoAddDto)
         {
+            this.iPisoRepository.Add(new Piso()
+            {
+             Descripcion=pisoAddDto.Descripcion,
+             UsuarioCreacion=pisoAddDto.ChangeUser
+
+            }); 
+            return Ok();
+
         }
 
 
         [HttpPost("UpdatePiso")]
-        public void Put([FromBody] Piso piso)
+        public IActionResult Put([FromBody] PisoUpdateDto pisoUpdateDto)
         {
+            this.iPisoRepository.Update(new Piso()
+            {
+                IdPiso=pisoUpdateDto.Idpiso,
+                UsuarioModificacion=pisoUpdateDto.ChangeUser,
+                FechaModificacion=pisoUpdateDto.ChageDate,
+                Descripcion=pisoUpdateDto.Descripcion
+
+            });
+            return Ok();
+
         }
 
 
         [HttpPost("Remove ")]
-        public void Delete([FromBody] Piso piso)
+        public IActionResult Delete([FromBody] PisoRemoveDto pisoRemoveDto)
         {
+            Piso PisoToDelete = new Piso()
+            {
+                IdPiso = pisoRemoveDto.Idpiso,
+                UsuarioEliminacion=pisoRemoveDto.ChangeUser,
+                FechaCreacion=pisoRemoveDto.ChageDate,
+                Estado=pisoRemoveDto.Estado
+
+            };
+            this.iPisoRepository.Remove(PisoToDelete);
+            return Ok();
         }
     }
 }

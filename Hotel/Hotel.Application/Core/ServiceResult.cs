@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hotel.Application.Service
+namespace Hotel.Application.Core
 {
-    public abstract class BaseService
+    internal class ServiceResult
     {
-
     }
 }

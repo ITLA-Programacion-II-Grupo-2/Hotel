@@ -149,22 +149,22 @@ namespace Hotel.Infrastructure.Repositories
         {
              try
              {
-                 Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
+                 Categoria CategoriaRemove = this.GetEntity(categoria.IdCategoria);
 
                  CategoriaRemove.Estado = false;
-                 CategoriaRemove.FechaEliminacion = DateTime.Now;
+                 CategoriaRemove.FechaEliminacion = categoria.FechaEliminacion;
                  CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
 
                  base.Update(CategoriaRemove);
-                 base.SaveChanges();
+                base.SaveChanges();
              }
 
 
              catch (Exception ex)
              {
-                 this.logger.LogError("Ocurrió un error actualizando la categoria", ex.ToString());
+                 this.logger.LogError("Ocurrió un error actualizando la categoria" + ex.Message, ex.ToString());
              } 
-            this.logger.LogInformation("Removecategoria");
+           
 
         }
 

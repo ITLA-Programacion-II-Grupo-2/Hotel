@@ -95,8 +95,14 @@ namespace Hotel.Infrastructure.Repositories
             try 
             {
               logger.LogInformation($"Actualizando Piso con ID: {pisos.IdPiso}");
+                Piso PisoUpdate = base.GetEntity(pisos.IdPiso);
 
-                base.Update(pisos);
+                PisoUpdate.FechaModificacion = DateTime.Now;
+                PisoUpdate.UsuarioModificacion = pisos.UsuarioEliminacion;
+                PisoUpdate.Descripcion = pisos.Descripcion;
+
+
+                base.Update(PisoUpdate);
                 base.SaveChanges();
 
             }
@@ -106,6 +112,7 @@ namespace Hotel.Infrastructure.Repositories
             
            
             }
+            
         }
 
 
@@ -148,7 +155,12 @@ namespace Hotel.Infrastructure.Repositories
             {
 
                 logger.LogInformation($"Eliminando Piso con ID: {pisos.IdPiso}");
-                base.Remove(pisos);
+                Piso PisoRemove = this.GetEntity(pisos.IdPiso);
+
+                PisoRemove.Estado = false;
+                PisoRemove.FechaEliminacion = pisos.FechaEliminacion;
+                PisoRemove.UsuarioEliminacion = pisos.UsuarioEliminacion;
+                base.Update(PisoRemove);
                 base.SaveChanges();
 
             }

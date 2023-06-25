@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Hotel.Application.Dto.Piso
 {
-    internal class PisoRemoveDto
+    public class PisoRemoveDto : Dtobasep
     {
+        public int Idpiso { get; set; }
+        public bool Estado { get; set; }
+
     }
 }

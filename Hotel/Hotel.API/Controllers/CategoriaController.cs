@@ -2,6 +2,7 @@
 using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -61,24 +62,26 @@ namespace Hotel.API.Controllers
                 IdCategoria=categoriaUpdate.IdCategoria,
                 Descripcion=categoriaUpdate.Descripcion,
                 UsuarioModificacion=categoriaUpdate.ChangeUser,
-                FechaModificacion=categoriaUpdate.ChangeDate,
+                FechaModificacion=DateTime.Now
 
             });
             return Ok();
 
         }
 
-        [HttpPost("RemoveCategoria ")]
+        
+       [HttpPost("RemoveCategoria ")]
         public IActionResult Delete([FromBody] CategoriaRemoveDto categoriaRemove)
         {
-            this.iCategoriaRepository.Remove(new Categoria()
+            Categoria categoriaToDelete = new Categoria()
             {
-                IdCategoria=categoriaRemove.IdCategoria,
-               Estado=categoriaRemove.Estado,
-                UsuarioEliminacion=categoriaRemove.ChangeUser,
-                FechaEliminacion=categoriaRemove.ChangeDate
+                IdCategoria = categoriaRemove.IdCategoria,
+                Estado = categoriaRemove.Estado,
+                UsuarioEliminacion = categoriaRemove.ChangeUser,
+                FechaEliminacion = categoriaRemove.ChangeDate
 
-            });
+            };
+            this.iCategoriaRepository.Remove(categoriaToDelete);
             return Ok();
         }
     }

@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Hotel.Application.Dto.Piso
 {
-    internal class PisoUpdateDto
+    public class PisoUpdateDto : Dtobasep
     {
+        public int Idpiso { get; set; }
+        public string? Descripcion { get; set; }
+
     }
 }
