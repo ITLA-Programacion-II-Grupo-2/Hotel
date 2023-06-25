@@ -40,5 +40,17 @@ namespace Hotel.Application.Extentions
             };
 
         }
+        public static Habitacion ConvertDtoRemoveToEntity(this HabitacionRemoveDto habitacionRemove)
+        {
+            return new Habitacion()
+            {
+                IdHabitacion = habitacionRemove.IdHabitacion,
+                Estado = habitacionRemove.Estado,
+                FechaEliminacion = habitacionRemove.CambioFecha,
+                UsuarioEliminacion = habitacionRemove.CambioUsuario
+
+            };
+
+        }
     }
 }

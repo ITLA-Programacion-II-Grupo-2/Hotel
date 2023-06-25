@@ -1,6 +1,6 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Core;
-using Hotel.Application.Dtos.EstadoHabitacion;
+using Hotel.Application.Validaciones;
 using Hotel.Application.Dtos.Habitacion;
 using Hotel.Application.Extentions;
 using Hotel.Domain.Entities;
@@ -44,6 +44,13 @@ namespace Hotel.Application.Services
         public ServiceResult GetById(int id)
         {
             ServiceResult result = new ServiceResult();
+            result = HabitacioValidacion.ValidateIdHabitacion(id);
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
+
+
 
             try
             {
@@ -63,45 +70,9 @@ namespace Hotel.Application.Services
         {
             ServiceResult result = new ServiceResult();
 
-            if (string.IsNullOrEmpty(model.Numero))
+            result = HabitacioValidacion.ValidateHabitacionoAdd(model);
+            if ((bool)!result.Success)
             {
-                result.Message = "El Campo Es Requirido.";
-                result.Success = false;
-                return result;
-            }
-
-            if (string.IsNullOrEmpty(model.Detalle))
-            {
-                result.Message = "El Campo Es Requirido";
-                result.Success = false;
-                return result;
-            }
-
-            if (!model.Precio.HasValue)
-            {
-                result.Message = "El Campo de Precio No Puede Ser Cero .";
-                result.Success = false;
-                return result;
-            }
-
-            if (!model.IdEstadoHabitacion.HasValue)
-            {
-                result.Message = "El Campo de IdEstadoHabitacion No Puede Ser Cero .";
-                result.Success = false;
-                return result;
-            }
-
-            if (!model.IdCategoria.HasValue)
-            {
-                result.Message = "El Campo de IdCategoria No Puede Ser Cero ";
-                result.Success = false;
-                return result;
-            }
-
-            if (!model.IdPiso.HasValue)
-            {
-                result.Message = "El Campo de IdPiso No Puede Ser Cero ";
-                result.Success = false;
                 return result;
             }
 
@@ -128,16 +99,21 @@ namespace Hotel.Application.Services
         public ServiceResult Update(HabitacionUpdateDto model)
         {
             ServiceResult result = new ServiceResult();
+            result = HabitacioValidacion.ValidateHabitacionUpdate(model);
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
+
 
 
             try
             {
                 var habitacion = model.ConvertDtoUpdateToEntity();
 
-                this.habitacionRepository.Add(habitacion);
+                this.habitacionRepository.Update(habitacion);
 
                 result.Message = "Habiatcion Actualizada Sactifotoriamente.";
-                this.habitacionRepository.SaveChanges();
             } 
             catch (Exception ex)
             {
@@ -156,16 +132,17 @@ namespace Hotel.Application.Services
         public ServiceResult Remove(HabitacionRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
+            result = HabitacioValidacion.ValidateEstadoHabitacionRemove(model);
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
 
             try
             {
-                this.habitacionRepository.Remove(new Habitacion()
-                {
-                    IdHabitacion = model.IdHabitacion,
-                    Estado = model.Estado,
-                    FechaEliminacion = model.CambioFecha,
-                    UsuarioEliminacion = model.CambioUsuario
-                });
+                var habitacion = model.ConvertDtoRemoveToEntity();
+
+                this.habitacionRepository.Remove(habitacion);
 
                 result.Message = "Habitacion eliminada correctamente.";
 

@@ -3,11 +3,10 @@ using Hotel.Application.Core;
 using Hotel.Application.Dtos.EstadoHabitacion;
 using Hotel.Application.Extentions;
 using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Exceptions;
+using Hotel.Application.Validaciones;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Mail;
 
 namespace Hotel.Application.Services
 {
@@ -26,6 +25,7 @@ namespace Hotel.Application.Services
         public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
+           
 
             try
             {
@@ -44,6 +44,12 @@ namespace Hotel.Application.Services
         public ServiceResult GetById(int id)
         {
             ServiceResult result = new ServiceResult();
+            result = EstadoHabitacionValidacion.ValidateIdEstadoHabitacion(id);
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
+
 
             try
             {
@@ -64,16 +70,14 @@ namespace Hotel.Application.Services
         public ServiceResult Add(EstadoHabitacionAddDto model)
         {
             ServiceResult result = new ServiceResult();
+            result = EstadoHabitacionValidacion.ValidateEstadoHabitacionoAdd(model);
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
 
             try
             {
-                if (string.IsNullOrEmpty(model.Descripcion))
-                {
-                    result.Message = "El Campo Descripcion Es Requerido, No Puede Estar Vacio";
-                    result.Success = false;
-                    return result;
-                }
-
 
                 var estadoHabitacion = model.ConvertDtoAddToEntity();
 
@@ -95,6 +99,12 @@ namespace Hotel.Application.Services
         public ServiceResult Update(EstadoHabitacionUpdateDto model)
         {
             ServiceResult result = new ServiceResult();
+            result = EstadoHabitacionValidacion.ValidateEstadoHabitacionUpdate(model);
+
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
             try
             {
                 var estadoHabitacion = model.ConvertDtoUpdateToEntity();
@@ -119,16 +129,18 @@ namespace Hotel.Application.Services
         public ServiceResult Remove(EstadoHabitacionRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
+            result = EstadoHabitacionValidacion.ValidateEstadoHabitacionRemove(model);
+
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
 
             try
             {
-                this.estadoHabitacionRepository.Remove(new EstadoHabitacion()
-                {
-                    IdEstadoHabitacion = model.IdEstadoHabitacion,
-                    Estado = model.Estado,
-                    FechaEliminacion = model.CambioFecha,
-                    UsuarioEliminacion = model.CambioUsuario
-                });
+                var estadoHabitacion = model.ConvertDtoRemoveToEntity();
+
+                this.estadoHabitacionRepository.Remove(estadoHabitacion);
 
                 result.Message = "Estadohabitacion eliminado correctamente.";
 
