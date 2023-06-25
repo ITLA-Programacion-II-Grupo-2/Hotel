@@ -20,7 +20,7 @@ namespace Hotel.API.Controllers
 
         // GET: api/<ClienteController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetCliente()
         {
             var cliente = this.clienteRepository.GetCliente();
             return Ok(cliente);
@@ -33,6 +33,7 @@ namespace Hotel.API.Controllers
             var cliente = this.clienteRepository.GetCliente(id);
             return Ok(cliente);
         }
+
 
         // POST api/<ClienteController/ min36.04>
         [HttpPost("Save Cliente")]
@@ -48,6 +49,14 @@ namespace Hotel.API.Controllers
 
             return Ok();
         }
+
+        [HttpPost("Save Clientes")]
+        public IActionResult Post([FromBody] Cliente[] clientes)
+        {
+            this.clienteRepository.Add(clientes);
+            return Ok();
+        }
+
 
         // PUT api/<ClienteController>/5
         [HttpPost("Update Cliente")]
@@ -69,7 +78,16 @@ namespace Hotel.API.Controllers
         [HttpDelete("{Remove}")]
         public void Delete([FromBody] ClienteRemoveDto clienteRemoveDto)
         {
-            
+            //Cliente clienteToRemoveDto = new Cliente()
+            //{
+            //    IdCliente = clienteToRemoveDto.IdCliente,
+            //    TipoDocumento = clienteToRemoveDto.TipoDocumento,
+            //    Documento = clienteToRemoveDto.Documento,
+            //    ClienteModificacion = clienteToRemoveDto.ClienteChange,
+            //    FechaModificacion = clienteToRemoveDto.FechaChange
+            //};
+            //this.clienteRepository.Remove(clienteToRemove);
+            //return Ok();
         }
     }
 }

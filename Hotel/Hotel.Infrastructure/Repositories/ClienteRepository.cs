@@ -138,69 +138,6 @@ namespace Hotel.Infrastructure.Repositories
             }
         }
 
-        ////Actualizar el cliente//
-        //public override void Update(Cliente cliente)
-        //{
-        //    try
-        //    {
-        //        logger.LogInformation($"Actualizando cliente {cliente.IdCliente}");
-
-        //        base.Update(cliente);
-        //        base.SaveChanges();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
-        //    }
-        //}//
-
-        //Actualizar el cliente//
-        //// public override void Update(Cliente[] clientes)
-        //{
-        //    logger.LogInformation("Actualizando clientes");
-        //    try
-        //    {
-        //        foreach (var cliente in clientes)
-        //        {
-        //            try
-        //            {
-        //                logger.LogInformation($"Actualizando Id del cliente {cliente.IdCliente}");
-        //                base.Update(cliente);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                logger.LogError("Error al actualizar Id del cliente" + ex.Message, ex.ToString());
-        //            }
-        //        }
-        //        base.SaveChanges();
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        logger.LogError("Error al actualizar cliente" + ex.Message, ex.ToString());
-        //    }
-        //}
-        ////
-
-
-
-        //Remover cliente//
-        // public override void Remove(Cliente cliente)
-        // {
-        // try
-        // {
-        //  logger.LogInformation($"Eliminando id cliente: {cliente.IdCliente}");
-
-        //  base.Remove(cliente);
-        //  base.SaveChanges();
-        // }
-        //  catch (Exception ex)
-        //  {
-        //      logger.LogError("Error al eliminar cliente: " + ex.Message, ex.ToString());
-        //  }
-        //  }
-
-
         //Remover cliente//
         public override void Remove(Cliente cliente)
         {
@@ -253,17 +190,17 @@ namespace Hotel.Infrastructure.Repositories
 
             try
             {
-                this.logger.LogInformation($"Consultado id del cliente {id} ");
+                // this.logger.LogInformation($"Consultado id del cliente {id} ");
 
-                Cliente user = base.GetEntity(id);
+                Cliente clien = base.GetEntity(id);
 
                 cliente = new ClienteModel()
                 {
-                    IdCliente = user.IdCliente,
-                    NombreCompleto = user.NombreCompleto,
-                    Correo = user.Correo,
-                    TipoDocumento = user.TipoDocumento,
-                    Documento = user.Documento,
+                    IdCliente = clien.IdCliente,
+                    NombreCompleto = clien.NombreCompleto,
+                    Correo = clien.Correo,
+                    TipoDocumento = clien.TipoDocumento,
+                    Documento = clien.Documento,
                 };
 
             }
@@ -309,7 +246,7 @@ namespace Hotel.Infrastructure.Repositories
 
             return clientes;
         }
-        //mim 40.59//
+        
         
     }
 }
