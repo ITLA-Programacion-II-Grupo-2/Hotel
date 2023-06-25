@@ -27,6 +27,9 @@ namespace Hotel.Infrastructure.Repositories
         // Agregar usuario, validacion de correo no existente
         public override void Add(Usuario usuario)
         {
+
+            this.logger.LogInformation("Añadiendo Usuario");
+
             try
             {
                 if (usuario == null)
@@ -39,7 +42,9 @@ namespace Hotel.Infrastructure.Repositories
 
                 if (this.Exists(u => u.Correo == correo))
                     throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
-                
+
+                usuario.ConvertUsuarioCreateToEntity();
+
                 base.Add(usuario);
                 base.SaveChanges();
             }
@@ -51,7 +56,7 @@ namespace Hotel.Infrastructure.Repositories
             {
                 this.logger.LogError("Error al agregar usuario: " + ex.Message, ex.ToString());
             }
-            
+
         }
         public override void Add(Usuario[] usuarios)
         {
@@ -69,7 +74,9 @@ namespace Hotel.Infrastructure.Repositories
 
                     if (this.Exists(u => u.Correo == correo))
                         throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
-                    
+
+                    usuario.ConvertUsuarioCreateToEntity();
+
                     base.Add(usuario);
                 }
 
@@ -90,8 +97,21 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogInformation($"Actualizando Usuario con ID: {usuario.IdUsuario}");
 
-                base.Update(usuario);
+                Usuario usuarioToUpdate = base.GetEntity(usuario.IdUsuario);
+
+                if (usuarioToUpdate == null)
+                    throw new UsuarioException("El Usuario ha actualizar es nulo");
+                if (!usuarioToUpdate.Estado)
+                    throw new UsuarioException("El Usuario ha actualizar se encuentra eliminado");
+
+                usuarioToUpdate.ConvertUsuarioUpdateToEntity(usuario);
+
+                base.Update(usuarioToUpdate);
                 base.SaveChanges();
+            }
+            catch (UsuarioException uex)
+            {
+                logger.LogError(uex.Message);
             }
             catch (Exception ex)
             {
@@ -108,14 +128,28 @@ namespace Hotel.Infrastructure.Repositories
                     try
                     {
                         logger.LogInformation($"Actualizando Usuario con ID: {usuario.IdUsuario}");
-                        base.Update(usuario);
+
+                        Usuario usuarioToUpdate = base.GetEntity(usuario.IdUsuario);
+
+                        if (usuarioToUpdate == null)
+                            throw new UsuarioException("El Usuario ha actualizar es nulo");
+                        if (!usuarioToUpdate.Estado)
+                            throw new UsuarioException("El Usuario ha actualizar se encuentra eliminado");
+
+                        usuarioToUpdate.ConvertUsuarioUpdateToEntity(usuario);
+
+                        base.Update(usuarioToUpdate);
+                        base.SaveChanges();
+                    }
+                    catch (UsuarioException uex)
+                    {
+                        logger.LogError(uex.Message);
                     }
                     catch (Exception ex)
                     {
                         logger.LogError("Error al actualizar Usuario con ID: " + usuario.IdUsuario + ex.Message, ex.ToString());
                     }    
                 }
-                base.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -128,8 +162,22 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogInformation($"Eliminando Usuario con ID: {usuario.IdUsuario}");
 
-                base.Remove(usuario);
+                Usuario usuarioToRemove = base.GetEntity(usuario.IdUsuario);
+
+                if (usuarioToRemove == null)
+                    throw new UsuarioException("El Usuario ha eliminar es nulo");
+                if (!usuarioToRemove.Estado)
+                    throw new UsuarioException("El Usuario ha eliminar ha sido antes eliminado");
+
+                usuarioToRemove.ConvertUsuarioRemoveToEntity(usuario);
+
+                base.Update(usuarioToRemove);
+
                 base.SaveChanges();
+            }
+            catch (UsuarioException uex)
+            {
+                logger.LogError(uex.Message);
             }
             catch (Exception ex)
             {
@@ -145,14 +193,29 @@ namespace Hotel.Infrastructure.Repositories
                     try
                     {
                         logger.LogInformation($"Eliminando Usuario con ID: {usuario.IdUsuario}");
-                        base.Remove(usuario);
+
+                        Usuario usuarioToRemove = base.GetEntity(usuario.IdUsuario);
+
+                        if (usuarioToRemove == null)
+                            throw new UsuarioException("El Usuario ha eliminar es nulo");
+                        if (!usuarioToRemove.Estado)
+                            throw new UsuarioException("El Usuario ha eliminar ha sido antes eliminado");
+
+                        usuarioToRemove.ConvertUsuarioRemoveToEntity(usuario);
+
+                        base.Update(usuarioToRemove);
+
+                        base.SaveChanges();
+                    }
+                    catch (UsuarioException uex)
+                    {
+                        logger.LogError(uex.Message);
                     }
                     catch (Exception ex)
                     {
                         logger.LogError("Error al eliminar Usuario con ID: " + usuario.IdUsuario + ex.Message, ex.ToString());
                     }  
                 }
-                base.SaveChanges();
             }
             catch (Exception ex)
             {

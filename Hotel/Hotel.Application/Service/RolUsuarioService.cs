@@ -32,7 +32,7 @@ namespace Hotel.Application.Service
 
             try
             {
-                result.Data = this.rolUsuarioRepository
+                result.Data = this.rolUsuarioRepository;
             }
             catch (UsuarioException uex)
             {

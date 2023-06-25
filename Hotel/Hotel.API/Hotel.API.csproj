@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hotel.Domain\Hotel.Domain.csproj" />
     <ProjectReference Include="..\Hotel.Infrastructure\Hotel.Infrastructure.csproj" />
+    <ProjectReference Include="..\Hotel.IOC\Hotel.IOC.csproj" />
   </ItemGroup>
 
 </Project>

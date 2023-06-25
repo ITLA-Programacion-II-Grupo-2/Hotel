@@ -31,15 +31,14 @@ namespace Hotel.Infrastructure.Repositories
 
                 this.logger.LogInformation($"Añadiendo rol: {rol}");
 
-                if (!this.Exists(u => u.Descripcion == rol))
-                {
-                    base.Add(rolUsuario);
-                    base.SaveChanges();
-                }
-                else
-                {
+                if (this.Exists(u => u.Descripcion == rol))
                     throw new RolUsuarioException($"El rol: {rol} ya existe.");
-                }
+               
+                rolUsuario.ConvertRolUsuarioCreateToEntity();
+
+                base.Add(rolUsuario);
+                base.SaveChanges();
+
             }
             catch (RolUsuarioException ex)
             {
@@ -60,16 +59,14 @@ namespace Hotel.Infrastructure.Repositories
 
                     this.logger.LogInformation($"Añadiendo rol: {rol}");
 
-                    if (!this.Exists(u => u.Descripcion == rol))
-                    {
-                        base.Add(rolUsuario);
-                    }
-                    else
-                    {
+                    if (this.Exists(u => u.Descripcion == rol))
                         throw new RolUsuarioException($"El rol: {rol} ya existe.");
-                    }
-                }
-                base.SaveChanges();
+
+                    rolUsuario.ConvertRolUsuarioCreateToEntity();
+
+                    base.Add(rolUsuario);
+                    base.SaveChanges();
+                }      
 
             }
             catch (RolUsuarioException ex)
@@ -87,8 +84,22 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogInformation($"Actualizando RolUsuario con ID: {rolUsuario.IdRolUsuario}");
 
-                base.Update(rolUsuario);
+                RolUsuario rolUsuarioToUpdate = base.GetEntity(rolUsuario.IdRolUsuario);
+
+                if (rolUsuarioToUpdate == null)
+                    throw new RolUsuarioException("El RolUsuario ha actualizar es nulo");
+                if (!rolUsuarioToUpdate.Estado)
+                    throw new RolUsuarioException("El RolUsuario ha actualizar ha sido antes eliminado");
+
+                rolUsuarioToUpdate.ConvertRolUsuarioUpdateToEntity(rolUsuario);
+
+                base.Update(rolUsuarioToUpdate);
                 base.SaveChanges();
+
+            }
+            catch (RolUsuarioException ruex)
+            {
+                logger.LogError(ruex.Message);
             }
             catch (Exception ex)
             {
@@ -105,14 +116,28 @@ namespace Hotel.Infrastructure.Repositories
                     try
                     {
                         logger.LogInformation($"Actualizando RolUsuario con ID: {rolUsuario.IdRolUsuario}");
-                        base.Update(rolUsuario);   
+
+                        RolUsuario rolUsuarioToUpdate = base.GetEntity(rolUsuario.IdRolUsuario);
+
+                        if (rolUsuarioToUpdate == null)
+                            throw new RolUsuarioException("El RolUsuario ha actualizar es nulo");
+                        if (!rolUsuarioToUpdate.Estado)
+                            throw new RolUsuarioException("El RolUsuario ha actualizar ha sido antes eliminado");
+
+                        rolUsuarioToUpdate.ConvertRolUsuarioUpdateToEntity(rolUsuario);
+
+                        base.Update(rolUsuarioToUpdate);
+
+                        base.SaveChanges();
+                    }
+                    catch (RolUsuarioException ruex)
+                    {
+                        logger.LogError(ruex.Message);
                     }
                     catch (Exception ex)
                     {
                         logger.LogError("Error al actualizar RolUsuario con ID: "+ rolUsuario.IdRolUsuario + ex.Message, ex.ToString());
-                    }
-
-                    base.SaveChanges();
+                    }      
                 }        
             }
             catch (Exception ex)
@@ -126,8 +151,22 @@ namespace Hotel.Infrastructure.Repositories
             {
                 logger.LogInformation($"Eliminando RolUsuario con ID: {rolUsuario.IdRolUsuario}");
 
-                base.Remove(rolUsuario);
+                RolUsuario rolUsuarioToRemove = base.GetEntity(rolUsuario.IdRolUsuario);
+
+                if (rolUsuarioToRemove == null)
+                    throw new RolUsuarioException("El RolUsuario ha eliminar es nulo");
+                if (!rolUsuarioToRemove.Estado)
+                    throw new RolUsuarioException("El RolUsuario ha eliminar ha sido antes eliminado");
+
+                rolUsuarioToRemove.ConvertRolUsuarioRemoveToEntity(rolUsuario);
+
+                base.Update(rolUsuarioToRemove);
+
                 base.SaveChanges();
+            }
+            catch (RolUsuarioException ruex)
+            {
+                logger.LogError(ruex.Message);
             }
             catch (Exception ex)
             {
@@ -144,11 +183,27 @@ namespace Hotel.Infrastructure.Repositories
                     try
                     {
                         logger.LogInformation($"Eliminando RolUsuario con ID: {rolUsuario.IdRolUsuario}");
-                        base.Remove(rolUsuario);
+
+                        RolUsuario rolUsuarioToRemove = base.GetEntity(rolUsuario.IdRolUsuario);
+
+                        if (rolUsuarioToRemove == null)
+                            throw new RolUsuarioException("El RolUsuario ha eliminar es nulo");
+                        if (!rolUsuarioToRemove.Estado)
+                            throw new RolUsuarioException("El RolUsuario ha eliminar ha sido antes eliminado");
+
+                        rolUsuarioToRemove.ConvertRolUsuarioRemoveToEntity(rolUsuario);
+
+                        base.Update(rolUsuarioToRemove);
+
+                        base.SaveChanges();
+                    }
+                    catch (RolUsuarioException ruex)
+                    {
+                        logger.LogError(ruex.Message);
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError("Error al eliminar RolUsuario con ID: " + rolUsuario.IdRolUsuario + ex.Message, ex.ToString());
+                        logger.LogError("Error al eliminar RolUsuario: " + ex.Message, ex.ToString());
                     }
                 }
                 base.SaveChanges();

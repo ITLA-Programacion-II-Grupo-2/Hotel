@@ -1,6 +1,7 @@
 ﻿
 using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Models;
+using System;
 
 namespace Hotel.Infrastructure.Extentions
 {
@@ -25,6 +26,40 @@ namespace Hotel.Infrastructure.Extentions
                 Correo = usuario.Correo,
                 Rol = rol.Descripcion
             };
+        }
+
+        public static Usuario ConvertUsuarioCreateToEntity(this Usuario usuario)
+        {
+            return new Usuario()
+            {
+                NombreCompleto = usuario.NombreCompleto,
+                Correo = usuario.Correo,
+                Clave = usuario.Clave,
+                IdRolUsuario = usuario.IdRolUsuario,
+            };
+        }
+
+        public static Usuario ConvertUsuarioUpdateToEntity(this Usuario usuarioToUpdate,
+                                                                Usuario usuario)
+        {
+            usuarioToUpdate.NombreCompleto = usuario.NombreCompleto;
+            usuarioToUpdate.Correo = usuario.Correo;
+            usuarioToUpdate.Clave = usuario.Clave;
+            usuarioToUpdate.IdRolUsuario = usuario.IdRolUsuario;
+            usuarioToUpdate.FechaModificacion = DateTime.Now;
+            usuarioToUpdate.UsuarioModificacion = usuario.UsuarioModificacion;
+
+            return usuarioToUpdate; 
+        }
+
+        public static Usuario ConvertUsuarioRemoveToEntity(this Usuario usuarioToRemove, 
+                                                                Usuario usuario)
+        {
+            usuarioToRemove.Estado = false;
+            usuarioToRemove.FechaEliminacion = DateTime.Now;
+            usuarioToRemove.UsuarioEliminacion = usuario.UsuarioEliminacion;
+
+            return usuarioToRemove;
         }
     }
 }

@@ -40,10 +40,17 @@ namespace Hotel.API.Controllers
             return Ok(usuarios);
         }
 
-        [HttpPost("Save")]
+        [HttpPost("SaveRolUsuario")]
         public IActionResult Post([FromBody] RolUsuario rolusuario)
         {
             this.iRolUsuarioRepository.Add(rolusuario);
+            return Ok();
+        }
+
+        [HttpPost("SaveRolesUsuario")]
+        public IActionResult Post([FromBody] RolUsuario[] rolesusuario)
+        {
+            this.iRolUsuarioRepository.Add(rolesusuario);
             return Ok();
         }
 
@@ -54,12 +61,27 @@ namespace Hotel.API.Controllers
             return Ok();
         }
 
-        /*
-        [HttpPost("RemoveRolUsuario")]
-        public void Delete([FromBody] RolUsuario rolusuario)
+        [HttpPost("UpdateRolesUsuario")]
+        public IActionResult Put([FromBody] RolUsuario[] rolesusuario)
         {
-
+            this.iRolUsuarioRepository.Update(rolesusuario);
+            return Ok();
         }
-        */
+
+        
+        [HttpPost("RemoveRolUsuario")]
+        public IActionResult Delete([FromBody] RolUsuario rolusuario)
+        {
+            this.iRolUsuarioRepository.Remove(rolusuario);
+            return Ok();
+        }
+
+        [HttpPost("RemoveRolesUsuario")]
+        public IActionResult Delete([FromBody] RolUsuario[] rolesusuario)
+        {
+            this.iRolUsuarioRepository.Remove(rolesusuario);
+            return Ok();
+        }
+
     }
 }

@@ -60,20 +60,33 @@ namespace Hotel.API.Controllers
             return Ok();
         }
 
-
         [HttpPost("UpdateUsuario")]
         public IActionResult Put([FromBody] Usuario usuario)
         {
-            this.iUsuarioRepository.Add(usuario);
+            this.iUsuarioRepository.Update(usuario);
             return Ok();
         }
 
-        /*
+        [HttpPost("UpdateUsuarios")]
+        public IActionResult Put([FromBody] Usuario[] usuarios)
+        {
+            this.iUsuarioRepository.Update(usuarios);
+            return Ok();
+        }
+
         [HttpPost("RemoveUsuario")]
         public IActionResult Delete([FromBody] Usuario usuario)
         {
+            this.iUsuarioRepository.Remove(usuario);
             return Ok();
         }
-        */
+
+        [HttpPost("RemoveUsuarios")]
+        public IActionResult Delete([FromBody] Usuario[] usuarios)
+        {
+            this.iUsuarioRepository.Remove(usuarios);
+            return Ok();
+        }
+
     }
 }
