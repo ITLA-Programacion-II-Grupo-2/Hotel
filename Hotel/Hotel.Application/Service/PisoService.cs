@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Hotel.Application.Service
 {
-    internal class PisoService
+    public class PisoService
     {
+
+
     }
 }

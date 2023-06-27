@@ -103,7 +103,7 @@ namespace Hotel.Infrastructure.Repositories
                 Categoria CategoriaUpdate = base.GetEntity(categoria.IdCategoria);
 
                 CategoriaUpdate.FechaModificacion = DateTime.Now;
-                CategoriaUpdate.UsuarioModificacion = categoria.UsuarioEliminacion;
+                CategoriaUpdate.UsuarioModificacion = categoria.UsuarioModificacion;
                 CategoriaUpdate.Descripcion = categoria.Descripcion;
 
                 base.Update(CategoriaUpdate);
@@ -147,12 +147,14 @@ namespace Hotel.Infrastructure.Repositories
 
         public override void Remove(Categoria categoria)
         {
-             try
+            
+            try
              {
-                 Categoria CategoriaRemove = this.GetEntity(categoria.IdCategoria);
+                logger.LogInformation($"eliminando categoria con id: {categoria.IdCategoria}");
+                Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
 
-                 CategoriaRemove.Estado = false;
-                 CategoriaRemove.FechaEliminacion = categoria.FechaEliminacion;
+                 CategoriaRemove.Estado = categoria.Estado;
+                 CategoriaRemove.FechaEliminacion = DateTime.Now;
                  CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
 
                  base.Update(CategoriaRemove);

@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Hotel.Application.Core;
+using Hotel.Application.Dto.Categoria;
+
 
 namespace Hotel.Application.Contract
 {
-    internal class ICategoriaService
+    public interface ICategoriaService : IBaseService<CategoriaAddDto,
+                                                      CategoriaUpdateDto,
+                                                      CategoriaRemoveDto>
     {
+        
+
     }
 }

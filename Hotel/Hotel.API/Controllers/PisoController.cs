@@ -65,7 +65,7 @@ namespace Hotel.API.Controllers
         }
 
 
-        [HttpPost("Remove ")]
+        [HttpPost("RemovePiso")]
         public IActionResult Delete([FromBody] PisoRemoveDto pisoRemoveDto)
         {
             Piso PisoToDelete = new Piso()

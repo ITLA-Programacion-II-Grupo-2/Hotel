@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Hotel.Application.Core;
+using Hotel.Application.Dto.Piso;
+
 
 namespace Hotel.Application.Contract
 {
-    internal class IPisoServece
+    public interface IPisoServece : IBaseService< PisoAddDto,
+                                                  PisoUpdateDto,
+                                                  PisoRemoveDto>
     {
+
+
+
     }
 }

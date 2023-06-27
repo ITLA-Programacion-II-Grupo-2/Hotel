@@ -70,15 +70,15 @@ namespace Hotel.API.Controllers
         }
 
         
-       [HttpPost("RemoveCategoria ")]
+       [HttpPost("RemoveCategoria")]
         public IActionResult Delete([FromBody] CategoriaRemoveDto categoriaRemove)
         {
             Categoria categoriaToDelete = new Categoria()
             {
                 IdCategoria = categoriaRemove.IdCategoria,
-                Estado = categoriaRemove.Estado,
+                Estado = false,
                 UsuarioEliminacion = categoriaRemove.ChangeUser,
-                FechaEliminacion = categoriaRemove.ChangeDate
+                FechaEliminacion = DateTime.Now
 
             };
             this.iCategoriaRepository.Remove(categoriaToDelete);
