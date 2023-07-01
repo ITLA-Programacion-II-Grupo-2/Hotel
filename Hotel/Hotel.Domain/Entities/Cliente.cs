@@ -1,10 +1,6 @@
 ﻿using Hotel.Domain.Core;
 using System.ComponentModel.DataAnnotations;
-using Hotel.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
+
 
 namespace Hotel.Domain.Entities
 {

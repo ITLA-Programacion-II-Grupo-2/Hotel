@@ -39,13 +39,13 @@ namespace Hotel.API.Controllers
         [HttpPost("Save Cliente")]
         public IActionResult Post([FromBody] ClienteAddDto clienteAdd)
         {
-            this.clienteRepository.Add(new Cliente() 
-            {
-             TipoDocumento = clienteAdd.TipoDocumento,
-             Documento = clienteAdd.Documento,
-             ClienteCreacion = clienteAdd.ClienteChange,
-             FechaCreacion = clienteAdd.FechaChange
-            });
+            //this.clienteRepository.Add(new Cliente() 
+            //{
+            // TipoDocumento = clienteAdd.TipoDocumento,
+            // Documento = clienteAdd.Documento,
+            // ClienteCreacion = clienteAdd.ClienteChange,
+            // FechaCreacion = clienteAdd.FechaChange
+            //});
 
             return Ok();
         }

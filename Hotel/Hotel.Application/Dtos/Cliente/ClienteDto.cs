@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace Hotel.Application.Dtos.Cliente
 {
     public abstract  class ClienteDto : DtoBase
