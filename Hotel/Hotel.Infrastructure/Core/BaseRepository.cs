@@ -10,22 +10,18 @@ namespace Hotel.Infrastructure.Core
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
-        private readonly HotelContext hotel;
-        private readonly DbSet<TEntity> entities;
+        private readonly HotelContext context;
+        private readonly DbSet<TEntity> myDbSet;
 
-        public BaseRepository(HotelContext hotel)
+        public BaseRepository(HotelContext context)
         {
-            this.hotel = hotel;
-            this.entities = this.hotel.Set<TEntity>();
+            this.context = context;
+            this.myDbSet = this.context.Set<TEntity>();
         }
 
         public bool Exists(Expression<Func<TEntity, bool>> filter)
         {
-            if (this.entities.Where(filter).Count() > 0)
-            {
-                return true;
-            }
-            return false;
+            return this.myDbSet.Any(filter);
         }
 
         public IEnumerable<TEntity> GetEntities()

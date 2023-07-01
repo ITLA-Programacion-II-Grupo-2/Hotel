@@ -20,7 +20,8 @@ namespace Hotel.Domain.Core
         public int? UsuarioEliminacion { get; set; }
         public DateTime? FechaEliminacion { get; set; }
         public bool Estado { get; set; }
-
+        public int? IdCliente { get; set; }
+        public int? IdHabitacion { get; set; }
 
     }
 
