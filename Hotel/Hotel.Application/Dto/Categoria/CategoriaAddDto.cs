@@ -1,6 +1,6 @@
 ﻿
 using Hotel.API.Controllers;
-using System;
+
 
 namespace Hotel.Application.Dto.Categoria
 {

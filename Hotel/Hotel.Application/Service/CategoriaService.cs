@@ -1,13 +1,13 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Core;
 using Hotel.Application.Dto.Categoria;
+using Hotel.Application.Extentions;
 using Hotel.Application.Validations;
-using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Exceptions;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+
 
 
 namespace Hotel.Application.Service
@@ -25,7 +25,7 @@ namespace Hotel.Application.Service
             this.logger = logger;
         }
 
-        public ServiceResult GetCategoria()
+        public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
 
@@ -77,7 +77,7 @@ namespace Hotel.Application.Service
         {
             ServiceResult result = new ServiceResult();
 
-            result = model.validandocapadd();
+            result = model.validandocapAdd();
             if (!result.Success)
             {
                 return result;
@@ -85,8 +85,8 @@ namespace Hotel.Application.Service
 
             try
             {
-                //var categoria = model.ConvertAddDtoToEntity();
-                //this.categoriaRepository.Add(categoria);
+                var categoria = model.ConvertDtoAddToEntity();
+                this.categoriaRepository.Add(categoria);
 
                 result.Message = "Rol de usuario agregado correctamente";
             }
@@ -111,7 +111,32 @@ namespace Hotel.Application.Service
         public ServiceResult Update(CategoriaUpdateDto model)
         {
             ServiceResult result = new ServiceResult();
-            
+
+            result = CategoriaValidations.validandocapUpdate(model);
+
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
+            try
+            {
+                var categoria = model.ConvertDtoUpdateToEntity();
+
+                this.categoriaRepository.Add(categoria);
+
+
+
+                result.Message = "La categoria fue actualizada satisfactoriamente.";
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error al agregar una categoria.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
 
             return result;
         }
@@ -119,11 +144,32 @@ namespace Hotel.Application.Service
         public ServiceResult Remove(CategoriaRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
-           
+            result = CategoriaValidations.validandocapRemove(model);
+
+            if ((bool)!result.Success)
+            {
+                return result;
+            }
+
+            try
+            {
+                var categoria = model.ConvertDtoRemoveToEntity();
+
+                this.categoriaRepository.Remove(categoria);
+
+                result.Message = "categoria eliminada correctamente.";
+
+            }
+            catch (Exception ex)
+            {
+
+                result.Success = false;
+                result.Message = "Error al eliminar una categoria.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
             return result;
         }
 
     }
-
 
 }

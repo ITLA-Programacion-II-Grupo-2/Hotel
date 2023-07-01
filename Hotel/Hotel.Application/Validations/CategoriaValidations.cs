@@ -21,11 +21,11 @@ namespace Hotel.Application.Validations
             return result;
         }
 
-        public static ServiceResult validandocapadd(this CategoriaAddDto categoriaAddDto)
+        public static ServiceResult validandocapAdd(this CategoriaAddDto categoriaAdd)
         {
 
             ServiceResult result = new ServiceResult();
-            if (categoriaAddDto.ChangeUser <= 0)
+            if (categoriaAdd.ChangeUser <= 0)
             {
                 result.Message = "El Id del usuario que ejecuto es invalido";
                 result.Success = false;
@@ -33,7 +33,7 @@ namespace Hotel.Application.Validations
 
             }
 
-            if (string.IsNullOrEmpty(categoriaAddDto.Descripcion))
+            if (string.IsNullOrEmpty(categoriaAdd.Descripcion))
             {
 
                 result.Message = "El nombre de la categoria es necesario.";
@@ -42,7 +42,7 @@ namespace Hotel.Application.Validations
 
             }
 
-            else if (categoriaAddDto.Descripcion.Length > 50)
+            else if (categoriaAdd.Descripcion.Length > 50)
             {
                 result.Message = "El nombre que ingresa en la categoria supera el numero permitido de digitos.";
                 result.Success = false;
@@ -52,6 +52,51 @@ namespace Hotel.Application.Validations
             return result;
 
         }
+
+
+        public static ServiceResult validandocapUpdate(this CategoriaUpdateDto categoriaUpdate)
+        {
+            ServiceResult result = new ServiceResult();
+
+            if (categoriaUpdate.ChangeUser <= 0)
+            {
+                result.Message = "Id ingresado no es correcto, este no puede ser cero.";
+                result.Success = false;
+                return result;
+            }
+
+
+            if (string.IsNullOrEmpty(categoriaUpdate.Descripcion))
+            {
+                result.Message = "El campo de Descripcion es obligatorio: ";
+                result.Success = false;
+                return result;
+            }
+
+
+            return result;
+        }
+
+        public static ServiceResult validandocapRemove(this CategoriaRemoveDto categoriaRemove)
+        {
+            ServiceResult result = new ServiceResult();
+
+            if (categoriaRemove.ChangeUser <= 0)
+            {
+                result.Message = "Id ingresado no es correcto, este no puede ser cero.";
+                result.Success = false;
+                return result;
+            }
+
+            if (categoriaRemove.IdCategoria <= 0)
+            {
+                result.Message = "Debe selecionar el id de la categoria que desea eliminar.";
+                result.Success = false;
+                return result;
+            }
+            return result;
+        }
+
 
 
 

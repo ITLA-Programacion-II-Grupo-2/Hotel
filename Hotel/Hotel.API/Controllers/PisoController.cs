@@ -56,7 +56,7 @@ namespace Hotel.API.Controllers
             {
                 IdPiso=pisoUpdateDto.Idpiso,
                 UsuarioModificacion=pisoUpdateDto.ChangeUser,
-                FechaModificacion=pisoUpdateDto.ChageDate,
+                FechaModificacion=pisoUpdateDto.ChangeDate,
                 Descripcion=pisoUpdateDto.Descripcion
 
             });
@@ -72,7 +72,7 @@ namespace Hotel.API.Controllers
             {
                 IdPiso = pisoRemoveDto.Idpiso,
                 UsuarioEliminacion=pisoRemoveDto.ChangeUser,
-                FechaCreacion=pisoRemoveDto.ChageDate,
+                FechaCreacion=pisoRemoveDto.ChangeDate,
                 Estado=pisoRemoveDto.Estado
 
             };
