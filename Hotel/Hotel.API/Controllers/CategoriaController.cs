@@ -1,4 +1,5 @@
-﻿using Hotel.Application.Dto.Categoria;
+﻿using Hotel.Application.Contract;
+using Hotel.Application.Dto.Categoria;
 using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,12 @@ namespace Hotel.API.Controllers
     public class CategoriaController : ControllerBase
     {
        
-        private readonly ICategoriaRepository iCategoriaRepository;
+        private readonly ICategoriaService iCategoriaservice;
 
        
-        public CategoriaController(ICategoriaRepository iCategoriaRepository) 
+        public CategoriaController(ICategoriaService iCategoriaservice) 
         {
-            this.iCategoriaRepository = iCategoriaRepository;
+            this.iCategoriaservice = iCategoriaservice;
         }
 
        
@@ -26,28 +27,23 @@ namespace Hotel.API.Controllers
         [HttpGet("GetCategoria")]
         public IActionResult Get()
         {
-           var categorias = this.iCategoriaRepository.GetCategoria();
-            return Ok(categorias);
+            var result = this.iCategoriaservice.Get();
+            return Ok(result);
         }
 
       
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var categoria = this.iCategoriaRepository.GetCategoria(id);
-            return Ok(categoria);
+              var result = this.iCategoriaservice.GetById(id);
+              return Ok(result);
         }
 
 
         [HttpPost("SaveCategoria")]
         public IActionResult Post([FromBody] CategoriaAddDto categoriaAddDto)
         {
-            this.iCategoriaRepository.Add(new Categoria()
-            { 
-              Descripcion=categoriaAddDto.Descripcion,
-              UsuarioCreacion=categoriaAddDto.ChangeUser,
-
-            });
+            this.iCategoriaservice.Add(categoriaAddDto);
             return Ok();
 
         }
@@ -57,15 +53,8 @@ namespace Hotel.API.Controllers
         public IActionResult Put([FromBody] CategoriaUpdateDto categoriaUpdate)
         {
             
-            this.iCategoriaRepository.Update(new Categoria() 
-            {
-                IdCategoria=categoriaUpdate.IdCategoria,
-                Descripcion=categoriaUpdate.Descripcion,
-                UsuarioModificacion=categoriaUpdate.ChangeUser,
-                FechaModificacion=DateTime.Now
-
-            });
-            return Ok();
+           var result = this.iCategoriaservice.Update(categoriaUpdate);
+            return Ok(result);
 
         }
 
@@ -73,16 +62,8 @@ namespace Hotel.API.Controllers
        [HttpPost("RemoveCategoria")]
         public IActionResult Delete([FromBody] CategoriaRemoveDto categoriaRemove)
         {
-            Categoria categoriaToDelete = new Categoria()
-            {
-                IdCategoria = categoriaRemove.IdCategoria,
-                Estado = false,
-                UsuarioEliminacion = categoriaRemove.ChangeUser,
-                FechaEliminacion = DateTime.Now
-
-            };
-            this.iCategoriaRepository.Remove(categoriaToDelete);
-            return Ok();
+          var result = this.iCategoriaservice.Remove(categoriaRemove);
+            return Ok(result);  
         }
     }
 }
