@@ -1,7 +1,9 @@
-﻿using Hotel.Application.Dto.Categoria;
+﻿using Hotel.Application.Contract;
+using Hotel.Application.Dto.Categoria;
 using Hotel.Application.Dto.Piso;
 using Hotel.Domain.Entities;
 using Hotel.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,55 +14,44 @@ namespace Hotel.API.Controllers
     [ApiController]
     public class PisoController : ControllerBase
     {
-        private readonly IPisoRepository iPisoRepository;
+        private readonly IPisoServece ipisoServece;
 
-        public PisoController(IPisoRepository iPisoRepository) 
+        public PisoController(IPisoServece ipisoServece) 
         {
-            this.iPisoRepository = iPisoRepository;
+            this.ipisoServece = ipisoServece;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var piso = this.iPisoRepository.GetPiso();
-            return Ok(piso);
+            var result = this.ipisoServece.Get();
+            return Ok(result);
         }
 
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var piso = this.iPisoRepository.GetPiso(id);
-            return Ok (piso);
+            var result = this.ipisoServece.GetById(id);
+            return Ok (result);
         }
 
 
         [HttpPost("SavePiso")]
         public IActionResult Post([FromBody] PisoAddDto pisoAddDto)
         {
-            this.iPisoRepository.Add(new Piso()
-            {
-             Descripcion=pisoAddDto.Descripcion,
-             UsuarioCreacion=pisoAddDto.ChangeUser
-
-            }); 
+            this.ipisoServece.Add(pisoAddDto);
             return Ok();
-
+          
         }
 
 
         [HttpPost("UpdatePiso")]
         public IActionResult Put([FromBody] PisoUpdateDto pisoUpdateDto)
         {
-            this.iPisoRepository.Update(new Piso()
-            {
-                IdPiso=pisoUpdateDto.Idpiso,
-                UsuarioModificacion=pisoUpdateDto.ChangeUser,
-                FechaModificacion=pisoUpdateDto.ChangeDate,
-                Descripcion=pisoUpdateDto.Descripcion
-
-            });
-            return Ok();
+            var result = this.ipisoServece.Update(pisoUpdateDto);
+            return Ok(result);
+           
 
         }
 
@@ -68,16 +59,8 @@ namespace Hotel.API.Controllers
         [HttpPost("RemovePiso")]
         public IActionResult Delete([FromBody] PisoRemoveDto pisoRemoveDto)
         {
-            Piso PisoToDelete = new Piso()
-            {
-                IdPiso = pisoRemoveDto.Idpiso,
-                UsuarioEliminacion=pisoRemoveDto.ChangeUser,
-                FechaCreacion=pisoRemoveDto.ChangeDate,
-                Estado=pisoRemoveDto.Estado
-
-            };
-            this.iPisoRepository.Remove(PisoToDelete);
-            return Ok();
+           var result = this.ipisoServece.Remove(pisoRemoveDto);
+            return Ok(result);
         }
     }
 }

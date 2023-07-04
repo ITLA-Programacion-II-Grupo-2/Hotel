@@ -1,5 +1,6 @@
 ﻿using Hotel.Application.Dto.Categoria;
 using Hotel.Domain.Entities;
+using Hotel.Infrastructure.Models;
 
 namespace Hotel.Application.Extentions
 {
@@ -43,10 +44,21 @@ namespace Hotel.Application.Extentions
                 Estado = categoriaRemove.Estado,
                 FechaEliminacion = categoriaRemove.ChangeDate,
                 UsuarioEliminacion = categoriaRemove.ChangeUser
-
             };
-
         }
+
+        //public static CategoriaModels ToModel(this Categoria categoria)
+        //{
+        //    return new CategoriaModels
+        //    {
+        //        IdCategoria = categoria.IdCategoria,
+        //        Descripcion = categoria.Descripcion
+        //    };
+        //}
+
+
+
+
     }
 
 

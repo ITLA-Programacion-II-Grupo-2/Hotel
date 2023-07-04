@@ -35,8 +35,9 @@ namespace Hotel.API.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-              var result = this.iCategoriaservice.GetById(id);
-              return Ok(result);
+            var result = this.iCategoriaservice.GetById(id);
+            return Ok(result);
+
         }
 
 
