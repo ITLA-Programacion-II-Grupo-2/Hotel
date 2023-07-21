@@ -6,4 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hotel.Application\Hotel.Application.csproj" />
+    <ProjectReference Include="..\Hotel.IOC\Hotel.IOC.csproj" />
+  </ItemGroup>
+
 </Project>

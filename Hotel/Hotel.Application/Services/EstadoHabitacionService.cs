@@ -78,7 +78,6 @@ namespace Hotel.Application.Services
 
             try
             {
-
                 var estadoHabitacion = model.ConvertDtoAddToEntity();
 
                 this.estadoHabitacionRepository.Add(estadoHabitacion);
@@ -109,7 +108,7 @@ namespace Hotel.Application.Services
             {
                 var estadoHabitacion = model.ConvertDtoUpdateToEntity();
 
-                this.estadoHabitacionRepository.Add(estadoHabitacion);
+                this.estadoHabitacionRepository.Update(estadoHabitacion);
 
 
 
@@ -120,7 +119,7 @@ namespace Hotel.Application.Services
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Error Al Agregar El EstadoHabitacion.";
+                result.Message = "Error Al Actualizar El EstadoHabitacion.";
                 this.logger.LogError($"{result.Message}", ex.ToString());
             }
 
