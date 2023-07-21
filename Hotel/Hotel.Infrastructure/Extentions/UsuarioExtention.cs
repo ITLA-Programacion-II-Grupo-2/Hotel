@@ -13,7 +13,8 @@ namespace Hotel.Infrastructure.Extentions
             {
                 IdUsuario = usuario.IdUsuario,
                 NombreCompleto = usuario.NombreCompleto,
-                Correo = usuario.Correo
+                Correo = usuario.Correo,
+                IdRolUsuario = usuario.IdUsuario
             };
         }
 

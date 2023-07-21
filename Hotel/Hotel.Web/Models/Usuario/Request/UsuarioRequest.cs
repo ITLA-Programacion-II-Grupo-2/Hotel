@@ -1,11 +1,10 @@
-﻿
-namespace Hotel.Infrastructure.Models
+﻿namespace Hotel.Web.Models.Usuario.Request
 {
-    public class UsuarioModel
+    public class UsuarioRequest
     {
-        public int IdUsuario { get; set; }
         public string? NombreCompleto { get; set; }
         public string? Correo { get; set; }
         public int IdRolUsuario { get; set; }
+        public DateTime Fecha { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Hotel.Application.Extentions
                 Correo = usuarioAddDto.Correo,
                 Clave = usuarioAddDto.Clave,
                 IdRolUsuario = usuarioAddDto.IdRolUsuario,
-                UsuarioCreacion = usuarioAddDto.ChangeUser,
+                UsuarioCreacion = 1,
                 FechaCreacion = usuarioAddDto.ChangeDate
             };
         }

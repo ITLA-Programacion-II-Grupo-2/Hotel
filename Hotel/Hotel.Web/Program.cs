@@ -1,7 +1,19 @@
+using Hotel.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+using Hotel.IOC.Dependencies;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Database dependency registry
+builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
+
+// My Dependencies
+builder.Services.AddUsuarioDependency();
+builder.Services.AddRolUsuarioDependency();
 
 var app = builder.Build();
 
