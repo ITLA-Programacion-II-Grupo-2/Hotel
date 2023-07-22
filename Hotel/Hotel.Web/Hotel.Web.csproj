@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\RolUsuario\" />
-    <Folder Include="Views\RolUsuario\" />
+    <Folder Include="Models\RolUsuario\Request\" />
   </ItemGroup>
 
 </Project>
