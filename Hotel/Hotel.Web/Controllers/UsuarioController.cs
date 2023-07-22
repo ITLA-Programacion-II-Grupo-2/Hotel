@@ -1,5 +1,6 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Dtos.Usuario;
+using Hotel.Web.Controllers.Adapters;
 using Hotel.Web.Models.Usuario;
 using Hotel.Web.Models.Usuario.Request;
 using Microsoft.AspNetCore.Mvc;
@@ -30,16 +31,9 @@ namespace Hotel.Web.Controllers
 
             List<UsuarioResponse> usuariosResponses = new List<UsuarioResponse>();
 
-            foreach (var usuarioWithRolModel in usuarios)
+            foreach (var usuario in usuarios)
             {
-                UsuarioResponse usuarioResponse = new UsuarioResponse
-                {
-                    IdUsuario = usuarioWithRolModel.IdUsuario,
-                    NombreCompleto = usuarioWithRolModel.NombreCompleto,
-                    Correo = usuarioWithRolModel.Correo,
-                    RolUsuario = usuarioWithRolModel.Rol
-                };
-
+                UsuarioResponse usuarioResponse = UsuarioAdapter.UsuarioResponseAdapter.Convert(usuario);
                 usuariosResponses.Add(usuarioResponse);
             }
 
@@ -53,18 +47,13 @@ namespace Hotel.Web.Controllers
 
             if (!result.Success)
                 ViewBag.Message = result.Message;
+
             var usuario = result.Data;
 
             if (usuario == null)
                 throw new Exception();
 
-            UsuarioResponse usuarioResponse = new UsuarioResponse
-            {
-                IdUsuario = usuario.IdUsuario,
-                NombreCompleto = usuario.NombreCompleto,
-                Correo = usuario.Correo,
-                RolUsuario = usuario.Rol
-            };
+            UsuarioResponse usuarioResponse = UsuarioAdapter.UsuarioResponseAdapter.Convert(usuario);
 
             return View(usuarioResponse);
         }
@@ -82,15 +71,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var usuario = new UsuarioAddDto()
-                {
-                    NombreCompleto =  usuarioAdd.NombreCompleto,
-                    Correo = usuarioAdd.Correo,
-                    Clave =  usuarioAdd.Clave,
-                    IdRolUsuario = usuarioAdd.IdRolUsuario,
-                    ChangeUser = 1,
-                    ChangeDate = DateTime.Now
-                };
+                var usuario = UsuarioAdapter.UsuarioaAddDtoAdapter.Convert(usuarioAdd);
 
                 var result = this.usuarioService.Add(usuario);
 
@@ -122,13 +103,7 @@ namespace Hotel.Web.Controllers
                 throw new Exception();
 
 
-            UsuarioUpdateRequest usuarioToUpdate = new UsuarioUpdateRequest
-            {
-                IdUsuario = id,
-                NombreCompleto = usuario.NombreCompleto,
-                Correo = usuario.Correo,
-                IdRolUsuario = usuario.IdRolUsuario
-            };
+            UsuarioUpdateRequest usuarioToUpdate = UsuarioAdapter.UpdateRequestAdapter.Convert(usuario);
 
             return View(usuarioToUpdate);
         }
