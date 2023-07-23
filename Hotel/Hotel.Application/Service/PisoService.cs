@@ -10,16 +10,16 @@ using System;
 
 namespace Hotel.Application.Service
 {
-    public class PisoService : IPisoServece
+    public class PisoService : IPisoService
     {
 
-        private readonly IPisoRepository pisoRepository1;
+        private readonly IPisoRepository pisoRepository;
         private readonly ILogger<PisoService> logger;
 
     public PisoService(IPisoRepository pisoRepository,
                              ILogger<PisoService> logger)
     {
-        this.pisoRepository1 = pisoRepository;
+        this.pisoRepository = pisoRepository;
         this.logger = logger;
     }
 
@@ -30,7 +30,7 @@ namespace Hotel.Application.Service
             ServiceResult result = new ServiceResult();
             try
             {
-                var Piso = this.pisoRepository1.GetEntities();
+                var Piso = this.pisoRepository.GetPiso();
                 result.Data = Piso;
             }
             catch (Exception ex )
@@ -48,19 +48,11 @@ namespace Hotel.Application.Service
         {
             ServiceResult result = new ServiceResult();
 
-            result = PisoValidations.Validapiso(id);
-            if ((bool)!result.Success)
-            {
-                return result;
-            }
-
-
             try
             {
-                var piso = this.pisoRepository1.GetEntity(id);
+                var piso = this.pisoRepository.GetPiso(id);
                 result.Data = piso;
             }
-
             catch (Exception ex)
             {
 
@@ -75,7 +67,7 @@ namespace Hotel.Application.Service
         public ServiceResult Add(PisoAddDto model)
         {
             ServiceResult result = new ServiceResult();
-            result = model.validandopisAdd();
+            result = model.ValidandopisAdd();
             if (!result.Success)
             {
                 return result;
@@ -84,7 +76,7 @@ namespace Hotel.Application.Service
             try
             {
                 var piso = model.ConvertDtoAddToEntity();
-                this.pisoRepository1.Add(piso);
+                this.pisoRepository.Add(piso);
 
                 result.Message = "piso agregado de forma correcta";
             }
@@ -103,12 +95,11 @@ namespace Hotel.Application.Service
             return result;
         }
 
-
         public ServiceResult Update(PisoUpdateDto model)
         {
             ServiceResult result = new ServiceResult();
 
-            result = PisoValidations.validandopisUpdate(model);
+            result = PisoValidations.ValidandopisUpdate(model);
 
             if ((bool)!result.Success)
             {
@@ -118,7 +109,7 @@ namespace Hotel.Application.Service
             {
                 var piso = model.ConvertDtoUpdateToEntity();
 
-                this.pisoRepository1.Add(piso);
+                this.pisoRepository.Update(piso);
 
 
 
@@ -135,11 +126,10 @@ namespace Hotel.Application.Service
             return result;
         }
 
-
         public ServiceResult Remove(PisoRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
-            result = PisoValidations.validandopisRemove(model);
+            result = PisoValidations.ValidandopisRemove(model);
 
             if ((bool)!result.Success)
             {
@@ -150,7 +140,7 @@ namespace Hotel.Application.Service
             {
                 var piso = model.ConvertDtoRemoveToEntity();
 
-                this.pisoRepository1.Remove(piso);
+                this.pisoRepository.Remove(piso);
 
                 result.Message = "el piso eliminada correctamente.";
 

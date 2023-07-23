@@ -5,6 +5,7 @@ namespace Hotel.Infrastructure.Models
     {
         public int IdPiso { get; set; }
         public string? Descripcion { get; set; }
+      
 
     }
 }

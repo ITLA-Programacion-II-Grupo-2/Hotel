@@ -21,7 +21,7 @@ builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(buil
 
 // My Dependencies
 builder.Services.AddCategoriaDependency();
-builder.Services.AddPisooDependency();
+builder.Services.AddPisoDependency();
 
 
 var app = builder.Build();

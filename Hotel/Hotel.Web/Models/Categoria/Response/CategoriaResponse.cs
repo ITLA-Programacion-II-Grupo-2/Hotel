@@ -1,11 +1,9 @@
-﻿
-namespace Hotel.Infrastructure.Models
+﻿namespace Hotel.Web.Models.Categoria.Response
 {
-    public class CategoriaModels
+    public class CategoriaResponse
     {
         public int IdCategoria { get; set; }
         public string? Descripcion { get; set; }
-       
-
+    
     }
 }

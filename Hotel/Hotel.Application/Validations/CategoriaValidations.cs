@@ -21,7 +21,7 @@ namespace Hotel.Application.Validations
             return result;
         }
 
-        public static ServiceResult validandocapAdd(this CategoriaAddDto categoriaAdd)
+        public static ServiceResult ValidandocapAdd(this CategoriaAddDto categoriaAdd)
         {
 
             ServiceResult result = new ServiceResult();
@@ -54,7 +54,7 @@ namespace Hotel.Application.Validations
         }
 
 
-        public static ServiceResult validandocapUpdate(this CategoriaUpdateDto categoriaUpdate)
+        public static ServiceResult ValidandocapUpdate(this CategoriaUpdateDto categoriaUpdate)
         {
             ServiceResult result = new ServiceResult();
 
@@ -77,7 +77,7 @@ namespace Hotel.Application.Validations
             return result;
         }
 
-        public static ServiceResult validandocapRemove(this CategoriaRemoveDto categoriaRemove)
+        public static ServiceResult ValidandocapRemove(this CategoriaRemoveDto categoriaRemove)
         {
             ServiceResult result = new ServiceResult();
 

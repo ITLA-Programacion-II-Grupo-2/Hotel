@@ -8,7 +8,7 @@ namespace Hotel.Infrastructure.Interfaces
 {
    public interface ICategoriaRepository : IBaseRepository<Categoria>
     {
-        List<CategoriaModels> GetCategoria(int id);
+        CategoriaModels GetCategoria(int id);
         List<CategoriaModels> GetCategoria();
 
     }

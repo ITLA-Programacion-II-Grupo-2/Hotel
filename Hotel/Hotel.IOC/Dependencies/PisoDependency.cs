@@ -9,14 +9,12 @@ using System.Text;
 
 namespace Hotel.IOC.Dependencies
 {
-    public static class PisoDeoendency
+    public static class PisoDependency
     {
-        public static void AddPisooDependency(this IServiceCollection services)
+        public static void AddPisoDependency(this IServiceCollection services)
         {
             services.AddScoped<IPisoRepository, PisoRepository>();
-            services.AddTransient<IPisoServece, PisoService>();
+            services.AddTransient<IPisoService, PisoService>();
         }
-
-
     }
 }

@@ -8,6 +8,6 @@ namespace Hotel.Application.Dto.Categoria
     public class CategoriaRemoveDto : DtoBase
     {
         public int IdCategoria { get; set; }
-        public bool Estado { get; set; } 
+       
     }
 }

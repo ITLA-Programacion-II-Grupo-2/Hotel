@@ -4,7 +4,7 @@ using Hotel.Application.Dto.Piso;
 
 namespace Hotel.Application.Contract
 {
-    public interface IPisoServece : IBaseService< PisoAddDto,
+    public interface IPisoService : IBaseService< PisoAddDto,
                                                   PisoUpdateDto,
                                                   PisoRemoveDto>
     {

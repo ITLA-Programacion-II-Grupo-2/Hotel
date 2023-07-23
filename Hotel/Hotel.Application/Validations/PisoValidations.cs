@@ -24,7 +24,7 @@ namespace Hotel.Application.Validations
 
         }
 
-        public static ServiceResult validandopisAdd(this PisoAddDto pisoAdd)
+        public static ServiceResult ValidandopisAdd(this PisoAddDto pisoAdd)
         {
 
             ServiceResult result = new ServiceResult();
@@ -56,7 +56,7 @@ namespace Hotel.Application.Validations
 
         }
 
-        public static ServiceResult validandopisUpdate(this PisoUpdateDto pisoUpdate)
+        public static ServiceResult ValidandopisUpdate(this PisoUpdateDto pisoUpdate)
         {
             ServiceResult result = new ServiceResult();
 
@@ -77,7 +77,7 @@ namespace Hotel.Application.Validations
             return result;
         }
 
-        public static ServiceResult validandopisRemove(this PisoRemoveDto pisoRemove)
+        public static ServiceResult ValidandopisRemove(this PisoRemoveDto pisoRemove)
         {
             ServiceResult result = new ServiceResult();
 

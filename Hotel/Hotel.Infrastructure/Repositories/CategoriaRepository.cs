@@ -33,7 +33,7 @@ namespace Hotel.Infrastructure.Repositories
                 string? categoria = categorias.Descripcion;
                 this.logger.LogInformation($"Añadiendo Categoria: {categoria}");
 
-                if (!this.Exists(u => u.Descripcion == categoria))
+                if (!this.Exists(u => u.Descripcion == categoria && u.Estado == true))
                 {
                     base.Add(categorias);
                     base.SaveChanges();
@@ -147,17 +147,17 @@ namespace Hotel.Infrastructure.Repositories
 
         public override void Remove(Categoria categoria)
         {
-            
+
             try
-             {
+            {
                 logger.LogInformation($"eliminando categoria con id: {categoria.IdCategoria}");
                 Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
 
-                 CategoriaRemove.Estado = categoria.Estado;
-                 CategoriaRemove.FechaEliminacion = DateTime.Now;
-                 CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
+                CategoriaRemove.Estado = false; 
+                CategoriaRemove.FechaEliminacion = DateTime.Now;
+                CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
 
-                 base.Update(CategoriaRemove);
+                base.Update(CategoriaRemove);
                 base.SaveChanges();
              }
 
@@ -170,23 +170,31 @@ namespace Hotel.Infrastructure.Repositories
 
         }
 
-        public override void Remove(Categoria[] categoria)
+        public override void Remove(Categoria[] categorias)
         {
             logger.LogInformation("Eliminando Categoria");
             try
             {
 
-                foreach (var cat in categoria)
+                foreach (var categoria in categorias)
                 {
                     try
                     {
-                        logger.LogInformation($"Eliminando Categoria con ID: {cat.IdCategoria}");
-                        base.Remove(categoria);
+                        logger.LogInformation($"Eliminando Categoria con ID: {categoria.IdCategoria}");
+
+                        Categoria CategoriaRemove = base.GetEntity(categoria.IdCategoria);
+
+                        CategoriaRemove.Estado = false;
+                        CategoriaRemove.FechaEliminacion = DateTime.Now;
+                        CategoriaRemove.UsuarioEliminacion = categoria.UsuarioEliminacion;
+                        
+                        base.Update(categoria);
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError("Error al eliminar Categoria con ID: " + cat.IdCategoria + ex.Message, ex.ToString());
+                        logger.LogError("Error al eliminar Categoria con ID: " + categoria.IdCategoria + ex.Message, ex.ToString());
                     }
+                    
                     base.SaveChanges();
                 }
             }
@@ -198,32 +206,28 @@ namespace Hotel.Infrastructure.Repositories
 
         }
        
-        public List<CategoriaModels> GetCategoria(int id)
+        public CategoriaModels GetCategoria(int id)
         {
-            List<CategoriaModels> categorias = new List<CategoriaModels>();
+            CategoriaModels categoria = new CategoriaModels();
 
             try
             {
-
                 this.logger.LogInformation($"Pase por aqui: {id}");
 
-                categorias = (from categoria in GetEntities()
-                              where categoria.IdCategoria == id
-                              select new CategoriaModels
+                categoria = (from cat in GetEntities()
+                              where cat.IdCategoria == id && cat.Estado == true
+                              select new CategoriaModels()
                               {
-                                  IdCategoria = categoria.IdCategoria,
-                                  Descripcion = categoria.Descripcion,
-
-                              }).ToList();
+                                  IdCategoria = cat.IdCategoria,
+                                  Descripcion = cat.Descripcion
+                              }).FirstOrDefault();
 
             }
             catch (Exception ex)
             {
-
                 this.logger.LogError($"Error obeteniendo las Categorias: {ex.Message}", ex.ToString());
-
             }
-            return categorias;
+            return categoria;
         }
 
         public List<CategoriaModels> GetCategoria()
@@ -235,7 +239,8 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogInformation($"Consultado categorias...");
 
                 categorias = (from categoria in GetEntities()
-                              select new CategoriaModels
+                              where categoria.Estado == true
+                              select new CategoriaModels()
                               {
                                   IdCategoria = categoria.IdCategoria,
                                   Descripcion = categoria.Descripcion

@@ -8,7 +8,6 @@ namespace Hotel.Application.Contract
                                                       CategoriaUpdateDto,
                                                       CategoriaRemoveDto>
     {
-        
-
+     
     }
 }

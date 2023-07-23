@@ -14,52 +14,48 @@ namespace Hotel.API.Controllers
     [ApiController]
     public class PisoController : ControllerBase
     {
-        private readonly IPisoServece ipisoServece;
+        private readonly IPisoService iPisoService;
 
-        public PisoController(IPisoServece ipisoServece) 
+        public PisoController(IPisoService iPisoService) 
         {
-            this.ipisoServece = ipisoServece;
+            this.iPisoService = iPisoService;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var result = this.ipisoServece.Get();
+            var result = this.iPisoService.Get();
             return Ok(result);
         }
-
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var result = this.ipisoServece.GetById(id);
+            var result = this.iPisoService.GetById(id);
             return Ok (result);
         }
-
 
         [HttpPost("SavePiso")]
         public IActionResult Post([FromBody] PisoAddDto pisoAddDto)
         {
-            this.ipisoServece.Add(pisoAddDto);
+            this.iPisoService.Add(pisoAddDto);
             return Ok();
           
         }
 
-
         [HttpPost("UpdatePiso")]
         public IActionResult Put([FromBody] PisoUpdateDto pisoUpdateDto)
         {
-            var result = this.ipisoServece.Update(pisoUpdateDto);
+            var result = this.iPisoService.Update(pisoUpdateDto);
             return Ok(result);
            
 
         }
 
-
         [HttpPost("RemovePiso")]
         public IActionResult Delete([FromBody] PisoRemoveDto pisoRemoveDto)
         {
-           var result = this.ipisoServece.Remove(pisoRemoveDto);
+           var result = this.iPisoService.Remove(pisoRemoveDto);
             return Ok(result);
         }
     }

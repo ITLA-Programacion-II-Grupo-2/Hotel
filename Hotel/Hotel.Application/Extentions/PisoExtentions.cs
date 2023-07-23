@@ -42,7 +42,7 @@ namespace Hotel.Application.Extentions
             return new Piso()
             {
                 IdPiso = pisoRemove.Idpiso,
-                Estado = pisoRemove.Estado,
+                Estado = false,
                 FechaEliminacion = pisoRemove.ChangeDate,
                 UsuarioEliminacion = pisoRemove.ChangeUser
 

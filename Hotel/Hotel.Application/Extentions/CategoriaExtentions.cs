@@ -41,25 +41,25 @@ namespace Hotel.Application.Extentions
             return new Categoria()
             {
                 IdCategoria = categoriaRemove.IdCategoria,
-                Estado = categoriaRemove.Estado,
+                Estado = false,
                 FechaEliminacion = categoriaRemove.ChangeDate,
                 UsuarioEliminacion = categoriaRemove.ChangeUser
             };
         }
 
-        //public static CategoriaModels ToModel(this Categoria categoria)
-        //{
+       // public static CategoriaModels ToModel(this Categoria categoria)
+      //  {
         //    return new CategoriaModels
-        //    {
-        //        IdCategoria = categoria.IdCategoria,
-        //        Descripcion = categoria.Descripcion
-        //    };
-        //}
-
-
-
-
+          //  {
+         //       IdCategoria = categoria.IdCategoria,
+         //       Descripcion = categoria.Descripcion
+           // };
     }
 
 
-}  
+
+
+}
+
+
+

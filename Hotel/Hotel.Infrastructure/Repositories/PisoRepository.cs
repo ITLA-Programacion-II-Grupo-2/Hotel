@@ -23,21 +23,21 @@ namespace Hotel.Infrastructure.Repositories
             this.context = context;
         }
 
-        public override void Add(Piso pisos)
+        public override void Add(Piso piso)
         {
             try
             {
-                string? piso = pisos.Descripcion;
+                string? descripcion = piso.Descripcion;
                 this.logger.LogInformation($"Añadiendo rol: {piso}");
 
-                if (!Exists(p => p.Descripcion == pisos.Descripcion))
+                if (!Exists(p => p.Descripcion == descripcion && p.Estado == true))
                 {
-                    base.Add(pisos);
+                    base.Add(piso);
                     base.SaveChanges();
                 }
                 else
                 {
-                    throw new PisoException($"El piso: {pisos.Descripcion} ya existe.");
+                    throw new PisoException($"El piso: {piso.Descripcion} ya existe.");
 
                 }
 
@@ -55,7 +55,6 @@ namespace Hotel.Infrastructure.Repositories
             
         }
 
-        
         public override void Add(Piso[] pisos)
         {
 
@@ -86,20 +85,17 @@ namespace Hotel.Infrastructure.Repositories
 
         } 
 
-
-
-
-        public override void Update(Piso pisos)
+        public override void Update(Piso piso)
         {
 
             try 
             {
-              logger.LogInformation($"Actualizando Piso con ID: {pisos.IdPiso}");
-                Piso PisoUpdate = base.GetEntity(pisos.IdPiso);
+              logger.LogInformation($"Actualizando Piso con ID: {piso.IdPiso}");
+                Piso PisoUpdate = base.GetEntity(piso.IdPiso);
 
                 PisoUpdate.FechaModificacion = DateTime.Now;
-                PisoUpdate.UsuarioModificacion = pisos.UsuarioEliminacion;
-                PisoUpdate.Descripcion = pisos.Descripcion;
+                PisoUpdate.UsuarioModificacion = piso.UsuarioEliminacion;
+                PisoUpdate.Descripcion = piso.Descripcion;
 
 
                 base.Update(PisoUpdate);
@@ -114,7 +110,6 @@ namespace Hotel.Infrastructure.Repositories
             }
             
         }
-
 
         public override void Update(Piso[] pisos)
         {
@@ -147,24 +142,22 @@ namespace Hotel.Infrastructure.Repositories
             
         }
 
-
-
-        public override void Remove(Piso pisos)
+        public override void Remove(Piso piso)
         {
             try 
             {
 
-                logger.LogInformation($"Eliminando Piso con ID: {pisos.IdPiso}");
-                Piso PisoRemove = this.GetEntity(pisos.IdPiso);
+                logger.LogInformation($"Eliminando Piso con ID: {piso.IdPiso}");
+                Piso PisoRemove = this.GetEntity(piso.IdPiso);
 
                 PisoRemove.Estado = false;
-                PisoRemove.FechaEliminacion = pisos.FechaEliminacion;
-                PisoRemove.UsuarioEliminacion = pisos.UsuarioEliminacion;
+                PisoRemove.FechaEliminacion = piso.FechaEliminacion;
+                PisoRemove.UsuarioEliminacion = piso.UsuarioEliminacion;
                 base.Update(PisoRemove);
                 base.SaveChanges();
 
             }
-            catch (PisoException ex)
+            catch (Exception ex)
             {
                 logger.LogError("Error al eliminar Piso: " + ex.Message, ex.ToString());
             
@@ -172,10 +165,9 @@ namespace Hotel.Infrastructure.Repositories
                
         }
 
-
         public override void Remove(Piso[] pisos)
         {
-
+            logger.LogInformation("Eliminando Piso");
             try
             {
                 foreach(var piso in pisos)
@@ -183,8 +175,14 @@ namespace Hotel.Infrastructure.Repositories
                     try 
                     {
                         logger.LogInformation($"Eliminando Piso con ID: {piso.IdPiso}");
-                        base.Remove(pisos);
-                        base.Remove(pisos);
+
+                        Piso PisoRemove = this.GetEntity(piso.IdPiso);
+
+                        PisoRemove.Estado = false;
+                        PisoRemove.FechaEliminacion = piso.FechaEliminacion;
+                        PisoRemove.UsuarioEliminacion = piso.UsuarioEliminacion;
+
+                        base.Update(piso); 
                     }
                     catch (Exception ex)
                     {
@@ -201,7 +199,6 @@ namespace Hotel.Infrastructure.Repositories
           
         }
 
-
         public List<PisoModels> GetPiso(int id)
         {
              List<PisoModels> pisos = new List<PisoModels>();
@@ -210,8 +207,8 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogInformation($"Pase por aqui: {id}");
 
                  pisos = (from piso in GetEntities()
-                              where piso.IdPiso == id
-                              select new PisoModels
+                              where piso.IdPiso == id && piso.Estado == true
+                              select new PisoModels()
                               {
                                   IdPiso = piso.IdPiso,
                                   Descripcion  = piso.Descripcion
@@ -228,9 +225,6 @@ namespace Hotel.Infrastructure.Repositories
 
 
         }
-
-
-
         public List<PisoModels> GetPiso()
         {
             List<PisoModels> pisos = new List<PisoModels>();
@@ -240,7 +234,8 @@ namespace Hotel.Infrastructure.Repositories
                 this.logger.LogInformation("Consultando pisos...");
 
                 pisos = (from piso in GetEntities()
-                         select new PisoModels
+                         where piso.Estado == true
+                         select new PisoModels()
                          {
                              IdPiso = piso.IdPiso,
                              Descripcion = piso.Descripcion

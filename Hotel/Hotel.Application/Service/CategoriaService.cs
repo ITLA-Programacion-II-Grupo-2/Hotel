@@ -24,15 +24,14 @@ namespace Hotel.Application.Service
             this.categoriaRepository = categoriaRepository;
             this.logger = logger;
         }
-
+        
         public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
 
-
             try
             {
-                var Categoria = this.categoriaRepository.GetEntities();
+                var Categoria = this.categoriaRepository.GetCategoria();
                 result.Data = Categoria;
             }
             catch (Exception ex)
@@ -44,21 +43,13 @@ namespace Hotel.Application.Service
             }
             return result;
         }
-
         public ServiceResult GetById(int id)
         {
             ServiceResult result = new ServiceResult();
 
-            result = CategoriaValidations.ValidaCategorias(id);
-            if ((bool)!result.Success)
-            {
-                return result;
-            }
-
-
             try
             {
-                var Categoria = this.categoriaRepository.GetEntity(id);
+                var Categoria = this.categoriaRepository.GetCategoria(id);
                 result.Data = Categoria;
             }
 
@@ -77,7 +68,7 @@ namespace Hotel.Application.Service
         {
             ServiceResult result = new ServiceResult();
 
-            result = model.validandocapAdd();
+            result = model.ValidandocapAdd();
             if (!result.Success)
             {
                 return result;
@@ -112,7 +103,7 @@ namespace Hotel.Application.Service
         {
             ServiceResult result = new ServiceResult();
 
-            result = CategoriaValidations.validandocapUpdate(model);
+            result = CategoriaValidations.ValidandocapUpdate(model);
 
             if ((bool)!result.Success)
             {
@@ -122,13 +113,9 @@ namespace Hotel.Application.Service
             {
                 var categoria = model.ConvertDtoUpdateToEntity();
 
-                this.categoriaRepository.Add(categoria);
-
-
+                this.categoriaRepository.Update(categoria);
 
                 result.Message = "La categoria fue actualizada satisfactoriamente.";
-
-
             }
             catch (Exception ex)
             {
@@ -144,7 +131,7 @@ namespace Hotel.Application.Service
         public ServiceResult Remove(CategoriaRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
-            result = CategoriaValidations.validandocapRemove(model);
+            result = CategoriaValidations.ValidandocapRemove(model);
 
             if ((bool)!result.Success)
             {
@@ -170,9 +157,7 @@ namespace Hotel.Application.Service
             return result;
         }
 
-       
-        
-
+     
     }
 
 }
