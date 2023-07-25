@@ -23,7 +23,7 @@ namespace Hotel.API.Controllers
         [HttpGet("GetUsuario")]
         public IActionResult GetUsuario(int id)
         {
-            var result = this.iUsuarioService.GetUsuario(id);
+            var result = this.iUsuarioService.GetById(id);
 
             return HandleResponse(result);
         }
@@ -31,7 +31,7 @@ namespace Hotel.API.Controllers
         [HttpGet("GetUsuarios")]
         public IActionResult GetUsuarios()
         {
-            var result = this.iUsuarioService.GetUsuarios();
+            var result = this.iUsuarioService.Get();
 
             return HandleResponse(result);
         }

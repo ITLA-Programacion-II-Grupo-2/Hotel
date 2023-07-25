@@ -25,13 +25,43 @@ namespace Hotel.Application.Service
             this.logger = logger;
         }
 
-        public ServiceResult GetRolUsuarios()
+        public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
 
             try
             {
-                result.Data = this.rolUsuarioRepository.GetRolUsuarios();
+                result.Data = this.rolUsuarioRepository.GetRolesUsuario();
+            }
+            catch (RolUsuarioException ruex)
+            {
+                result.Success = false;
+                result.Message = ruex.Message;
+                this.logger.LogError($"{result.Message}");
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "Error obteniendo los roles de usuarios.";
+                this.logger.LogError($"{result.Message}", ex.ToString());
+            }
+
+            return result;
+        }
+        public ServiceResult GetById(int id)
+        {
+            ServiceResult result = new ServiceResult();
+
+            result = RolUsuarioValidator.ValidateIdRolUsuario(id);
+
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            try
+            {
+                result.Data = this.rolUsuarioRepository.GetRolUsuario(id);
             }
             catch (RolUsuarioException ruex)
             {

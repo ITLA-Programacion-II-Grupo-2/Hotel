@@ -214,7 +214,36 @@ namespace Hotel.Infrastructure.Repositories
             }
         }
 
-        public List<RolUsuarioModel> GetRolUsuarios()
+        public RolUsuarioModel GetRolUsuario(int id)
+        {
+            RolUsuarioModel rolUsuario = new RolUsuarioModel();
+
+            try
+            {
+                this.logger.LogInformation($"Consultado RolUsuario id: {id}...");
+
+                RolUsuario rolUser = context.RolUsuario.FirstOrDefault(t => t.IdRolUsuario == id && t.Estado == true);
+
+                if (rolUser == null)
+                    throw new RolUsuarioException($"El RolUsuario de id: {id} no existe");
+
+                rolUsuario = rolUser.ConvertRolUsuarioEntityToModel();
+
+            }
+            catch (RolUsuarioException uex)
+            {
+                this.logger.LogError(uex.Message);
+
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError("Error al consultar el RolUsuario id '" + id + "': " + ex.Message, ex.ToString());
+            }
+
+            return rolUsuario;
+        }
+
+        public List<RolUsuarioModel> GetRolesUsuario()
         {
             List<RolUsuarioModel> rolesusuario = new List<RolUsuarioModel>();
 

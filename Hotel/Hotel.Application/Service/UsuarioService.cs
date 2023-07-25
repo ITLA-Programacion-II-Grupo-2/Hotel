@@ -25,7 +25,7 @@ namespace Hotel.Application.Service
             this.logger = logger;
         }
 
-        public ServiceResult GetUsuario(int id)
+        public ServiceResult GetById(int id)
         {
             ServiceResult result = new ServiceResult();
             result = UsuarioValidator.ValidateIdUsuario(id);
@@ -34,6 +34,7 @@ namespace Hotel.Application.Service
             {
                 return result;
             }
+
             try
             {
                 result.Data = this.usuarioRepository.GetUsuario(id);
@@ -54,7 +55,7 @@ namespace Hotel.Application.Service
 
             return result;
         }
-        public ServiceResult GetUsuarios()
+        public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
 

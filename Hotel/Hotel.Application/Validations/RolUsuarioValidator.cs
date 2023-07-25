@@ -6,6 +6,19 @@ namespace Hotel.Application.Validations
 {
     public static class RolUsuarioValidator
     {
+        public static ServiceResult ValidateIdRolUsuario(int id)
+        {
+            ServiceResult result = new ServiceResult();
+
+            if (id <= 0)
+            {
+                result.Message = $"El id de rolusuario que busca es invalido. id: {id}";
+                result.Success = false;
+                return result;
+            }
+
+            return result;
+        }
         public static ServiceResult ValidateRolUsuarioAdd(this RolUsuarioAddDto rolUsuarioAddDto)
         {
             ServiceResult result = new ServiceResult();
@@ -60,7 +73,6 @@ namespace Hotel.Application.Validations
 
             return result;
         }
-
         public static ServiceResult ValidateRol(string rol)
         {
             ServiceResult result = new ServiceResult();

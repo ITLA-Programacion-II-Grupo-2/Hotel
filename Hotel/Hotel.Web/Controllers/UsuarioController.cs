@@ -1,6 +1,6 @@
 ﻿using Hotel.Application.Contract;
-using Hotel.Application.Dtos.Usuario;
-using Hotel.Web.Controllers.Adapters;
+using Hotel.Infrastructure.Models;
+using Hotel.Web.Controllers.Extentions;
 using Hotel.Web.Models.Usuario;
 using Hotel.Web.Models.Usuario.Request;
 using Microsoft.AspNetCore.Mvc;
@@ -19,43 +19,54 @@ namespace Hotel.Web.Controllers
         // GET: UsuarioController
         public ActionResult Index()
         {
-            var result = usuarioService.GetUsuariosWithRol();
-
-            if (!result.Success)
-                ViewBag.Message = result.Message;
-
-            var usuarios = result.Data;
-
-            if (usuarios == null)
-                throw new Exception();
-
-            List<UsuarioResponse> usuariosResponses = new List<UsuarioResponse>();
-
-            foreach (var usuario in usuarios)
+            try
             {
-                UsuarioResponse usuarioResponse = UsuarioAdapter.UsuarioResponseAdapter.Convert(usuario);
-                usuariosResponses.Add(usuarioResponse);
-            }
+                var result = usuarioService.GetUsuariosWithRol();
 
-            return View(usuariosResponses);
+                if (!result.Success)
+                    throw new Exception(result.Message);
+
+                var usuarios = result.Data as List<UserWithRolModel>;
+
+                if (usuarios == null)
+                    throw new Exception("No hay usuarios.");
+
+                List<UsuarioResponse> usuariosResponses = usuarios
+                .Select(p => p.ConvertUserWithRolToUsuarioResponse()).ToList();
+
+                return View(usuariosResponses);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: UsuarioController/Details/5
         public ActionResult Details(int id)
         {
-            var result = usuarioService.GetUsuarioWithRol(id);
+            try
+            {
+                var result = usuarioService.GetUsuarioWithRol(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
-            var usuario = result.Data;
+                var usuario = result.Data as UserWithRolModel;
 
-            if (usuario == null)
-                throw new Exception();
+                if (usuario == null)
+                    throw new Exception("No existe el usuario.");
 
-            UsuarioResponse usuarioResponse = UsuarioAdapter.UsuarioResponseAdapter.Convert(usuario);
+                    UsuarioResponse usuarioResponse = usuario.ConvertUserWithRolToUsuarioResponse();
 
-            return View(usuarioResponse);
+                return View(usuarioResponse);
+            }
+            catch(Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: UsuarioController/Create
@@ -71,7 +82,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var usuario = UsuarioAdapter.UsuarioaAddDtoAdapter.Convert(usuarioAdd);
+                var usuario = usuarioAdd.ConvertAddRequestToAddDto();
 
                 var result = this.usuarioService.Add(usuario);
 
@@ -92,20 +103,27 @@ namespace Hotel.Web.Controllers
         // GET: UsuarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            var result = usuarioService.GetUsuario(id);
+            try
+            {
+                var result = usuarioService.GetById(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
-            var usuario = result.Data;
+                var usuario = result.Data as UsuarioModel;
 
-            if (usuario == null)
-                throw new Exception();
+                if (usuario == null)
+                    throw new Exception("No existe el usuario.");
 
+                UsuarioUpdateRequest usuarioToUpdate = usuario.ConvertUsuarioToUpdateRequest();
 
-            UsuarioUpdateRequest usuarioToUpdate = UsuarioAdapter.UpdateRequestAdapter.Convert(usuario);
-
-            return View(usuarioToUpdate);
+                return View(usuarioToUpdate);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: UsuarioController/Edit/5
@@ -115,15 +133,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var usuario = new UsuarioUpdateDto()
-                {
-                    IdUsuario = usuarioUpdate.IdUsuario,
-                    NombreCompleto = usuarioUpdate.NombreCompleto,
-                    Correo = usuarioUpdate.Correo,
-                    IdRolUsuario = usuarioUpdate.IdRolUsuario,
-                    ChangeUser = 1,
-                    ChangeDate = DateTime.Now
-                };
+                var usuario = usuarioUpdate.ConvertUpdateRequestToUpdateDto();
 
                 var result = this.usuarioService.Update(usuario);
 
@@ -138,10 +148,7 @@ namespace Hotel.Web.Controllers
         // GET: UsuarioController/Delete/5
         public ActionResult Delete(int id)
         {
-            UsuarioRemoveRequest usuarioRemove = new UsuarioRemoveRequest()
-            {
-                IdUsuario = 11
-            };
+            UsuarioRemoveRequest usuarioRemove = new UsuarioRemoveRequest(id);
 
             return View(usuarioRemove);
         }
@@ -153,12 +160,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var usuario = new UsuarioRemoveDto()
-                {
-                    IdUsuario = id,
-                    ChangeUser = 1,
-                    ChangeDate = DateTime.Now
-                };
+                var usuario = usuarioRemove.ConvertRemoveDtoToRemoveRequest();
 
                 var result = this.usuarioService.Remove(usuario);
 

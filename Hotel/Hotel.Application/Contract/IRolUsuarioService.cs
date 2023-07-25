@@ -8,7 +8,6 @@ namespace Hotel.Application.Contract
                                                        RolUsuarioUpdateDto,
                                                        RolUsuarioRemoveDto>
     {
-        ServiceResult GetRolUsuarios();
         ServiceResult GetUsuariosByRoles();
         ServiceResult GetUsuariosByRol(string rol);
     }

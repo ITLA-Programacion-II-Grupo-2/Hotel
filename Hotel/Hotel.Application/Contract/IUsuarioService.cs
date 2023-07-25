@@ -9,9 +9,6 @@ namespace Hotel.Application.Contract
                                                     UsuarioUpdateDto,
                                                     UsuarioRemoveDto>
     {
-
-        ServiceResult GetUsuario(int id);
-        ServiceResult GetUsuarios();
         ServiceResult GetUsuarioWithRol(int id);
         ServiceResult GetUsuariosWithRol();
     }

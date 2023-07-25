@@ -20,10 +20,18 @@ namespace Hotel.API.Controllers
             this.iRolUsuarioService = iRolUsuarioService;
         }
 
-        [HttpGet("GetRolesUsuario")]
-        public IActionResult GetRolUsuarios()
+        [HttpGet("GetRolUsuario")]
+        public IActionResult GetRolUsuario(int id)
         {
-            var result = this.iRolUsuarioService.GetRolUsuarios();
+            var result = this.iRolUsuarioService.GetById(id);
+
+            return HandleResponse(result);
+        }
+
+        [HttpGet("GetRolesUsuario")]
+        public IActionResult GetRolesUsuario()
+        {
+            var result = this.iRolUsuarioService.Get();
 
             return HandleResponse(result);
         }

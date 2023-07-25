@@ -5,6 +5,8 @@ namespace Hotel.Application.Core
 {
     public interface IBaseService<TDtoAdd, TDtoMod, TDtoRem>
     {
+       ServiceResult Get();
+       ServiceResult GetById(int id);
        ServiceResult Add(TDtoAdd model);
        ServiceResult Add(TDtoAdd[] models); 
        ServiceResult Update(TDtoMod model);

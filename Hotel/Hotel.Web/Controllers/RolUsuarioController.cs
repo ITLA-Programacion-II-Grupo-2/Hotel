@@ -1,7 +1,5 @@
 ﻿using Hotel.Application.Contract;
-using Hotel.Web.Controllers.Adapters;
 using Hotel.Web.Models.RolUsuario.Response;
-using Hotel.Web.Models.Usuario;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
@@ -18,7 +16,7 @@ namespace Hotel.Web.Controllers
         // GET: RolUsuarioController
         public ActionResult Index()
         {
-            var result = rolUsuarioService.GetRolUsuarios();
+            var result = rolUsuarioService.Get();
 
             if (!result.Success)
                 ViewBag.Message = result.Message;
@@ -46,7 +44,7 @@ namespace Hotel.Web.Controllers
 
         // GET: RolUsuarioController/Details/5
         public ActionResult Details(int id)
-        {
+        {/*
             var result = rolUsuarioService.
 
             if (!result.Success)
@@ -62,8 +60,8 @@ namespace Hotel.Web.Controllers
                 IdRolUsuario = rolUsuario.IdRolUsuario,
                 Rol = rolUsuario.Rol
             };
-
-            return View(rolUsuarioResponse);
+            */
+            return View();
         }
 
         // GET: RolUsuarioController/Create
