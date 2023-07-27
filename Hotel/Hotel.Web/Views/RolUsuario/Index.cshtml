@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Hotel.Web.Models.RolUsuario.Response.RolUsuarioResponse>
+﻿@model IEnumerable<Hotel.Web.Models.RolUsuario.RolUsuarioModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Roles de Usuario</h1>
+<h1>Roles de Usuarios</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nuevo Rol de Usuario</a>
 </p>
 <table class="table">
     <thead>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Rol)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.IdRolUsuario }) 
-                @Html.ActionLink("Details", "Details", new { id=item.IdRolUsuario })
-                @Html.ActionLink("Delete", "Delete", new {  id=item.IdRolUsuario })
+                @Html.ActionLink("Edit", "Edit", new { id=item.IdRolUsuario}) |
+                @Html.ActionLink("Details", "Details", new { id=item.IdRolUsuario }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.IdRolUsuario})
             </td>
         </tr>
 }

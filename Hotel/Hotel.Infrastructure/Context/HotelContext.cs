@@ -17,8 +17,8 @@ namespace Hotel.Infrastructure.Context
 
         }
 
-        public DbSet<Usuario> Usuario { get; set; }
-        public DbSet<RolUsuario> RolUsuario { get; set; }
+        public DbSet<Usuario>? Usuario { get; set; }
+        public DbSet<RolUsuario>? RolUsuario { get; set; }
 
     }
 }

@@ -1,7 +1,7 @@
 using Hotel.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Hotel.IOC.Dependencies;
-
+using Hotel.Web.ApiServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +14,8 @@ builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(buil
 // My Dependencies
 builder.Services.AddUsuarioDependency();
 builder.Services.AddRolUsuarioDependency();
+
+builder.Services.AddTransient<IRolUsuarioApiService, RolUsuarioApiService>();
 
 var app = builder.Build();
 

@@ -29,7 +29,7 @@ namespace Hotel.Web.Controllers.Extentions
                 ChangeDate = usuarioAdd.ChangeDate
             };
         }
-        public static UsuarioUpdateRequest ConvertUsuarioToUpdateRequest(this UsuarioModel usuario)
+        public static UsuarioUpdateRequest ConvertUsuarioToUpdateRequest(this Infrastructure.Models.UsuarioModel usuario)
         {
             return new UsuarioUpdateRequest()
             {

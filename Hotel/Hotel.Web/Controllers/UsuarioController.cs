@@ -58,7 +58,7 @@ namespace Hotel.Web.Controllers
                 if (usuario == null)
                     throw new Exception("No existe el usuario.");
 
-                    UsuarioResponse usuarioResponse = usuario.ConvertUserWithRolToUsuarioResponse();
+                UsuarioResponse usuarioResponse = usuario.ConvertUserWithRolToUsuarioResponse();
 
                 return View(usuarioResponse);
             }
@@ -136,6 +136,12 @@ namespace Hotel.Web.Controllers
                 var usuario = usuarioUpdate.ConvertUpdateRequestToUpdateDto();
 
                 var result = this.usuarioService.Update(usuario);
+
+                if (!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
 
                 return RedirectToAction(nameof(Index));
             }

@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Hotel.IOC\Hotel.IOC.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\RolUsuario\Request\" />
-  </ItemGroup>
-
 </Project>

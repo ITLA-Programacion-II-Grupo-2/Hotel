@@ -1,4 +1,6 @@
-﻿using Hotel.Application.Contract;
+﻿using Hotel.Web.ApiServices;
+using Hotel.Web.Controllers.Extentions;
+using Hotel.Web.Models.RolUsuario.Request;
 using Hotel.Web.Models.RolUsuario.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,62 +8,55 @@ namespace Hotel.Web.Controllers
 {
     public class RolUsuarioController : Controller
     {
-        private readonly IRolUsuarioService rolUsuarioService;
+        private readonly IRolUsuarioApiService rolUsuarioApiService;
 
-        public RolUsuarioController(IRolUsuarioService rolUsuarioService)
+        public RolUsuarioController(IRolUsuarioApiService rolUsuarioApiService)
         {
-            this.rolUsuarioService = rolUsuarioService;
+            this.rolUsuarioApiService = rolUsuarioApiService;
         }
 
         // GET: RolUsuarioController
         public ActionResult Index()
         {
-            var result = rolUsuarioService.Get();
-
-            if (!result.Success)
-                ViewBag.Message = result.Message;
-
-            var rolUsuarios = result.Data;
-
-            if (rolUsuarios == null)
-                throw new Exception();
-
-            List<RolUsuarioResponse> rolUsuariosResponses = new List<RolUsuarioResponse>();
-
-            foreach (var rol in rolUsuarios)
+            try
             {
-                RolUsuarioResponse rolUsuarioResponse = new RolUsuarioResponse()
-                {
-                    IdRolUsuario = rol.IdRolUsuario,
-                    Rol = rol.Rol
-                };
+                RolUsuarioListResponse rolUsuarioList = new RolUsuarioListResponse();
 
-                rolUsuariosResponses.Add(rolUsuarioResponse);
+                rolUsuarioList = rolUsuarioApiService.Get();
+
+                if (!rolUsuarioList.Success)
+                    throw new Exception(rolUsuarioList.Message);
+
+
+                return View(rolUsuarioList.Data);
             }
-
-            return View(rolUsuariosResponses);
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: RolUsuarioController/Details/5
         public ActionResult Details(int id)
-        {/*
-            var result = rolUsuarioService.
-
-            if (!result.Success)
-                ViewBag.Message = result.Message;
-
-            var rolUsuario = result.Data;
-
-            if (rolUsuario == null)
-                throw new Exception();
-
-            RolUsuarioResponse rolUsuarioResponse = new RolUsuarioResponse()
+        {
+            try
             {
-                IdRolUsuario = rolUsuario.IdRolUsuario,
-                Rol = rolUsuario.Rol
-            };
-            */
-            return View();
+                RolUsuarioDetailsResponse rolUsuario = new RolUsuarioDetailsResponse();
+
+                rolUsuario = rolUsuarioApiService.GetById(id);
+
+                if (!rolUsuario.Success)
+                    throw new Exception(rolUsuario.Message);
+
+
+                return View(rolUsuario.Data);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: RolUsuarioController/Create
@@ -73,10 +68,18 @@ namespace Hotel.Web.Controllers
         // POST: RolUsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(RolUsuarioAddRequest rolUsuarioAdd)
         {
             try
             {
+                var result = rolUsuarioApiService.Add(rolUsuarioAdd);
+
+                if (!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -88,16 +91,44 @@ namespace Hotel.Web.Controllers
         // GET: RolUsuarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                RolUsuarioDetailsResponse rolUsuario = new RolUsuarioDetailsResponse();
+
+                rolUsuario = rolUsuarioApiService.GetById(id);
+
+                if (!rolUsuario.Success)
+                    throw new Exception(rolUsuario.Message);
+                if (rolUsuario.Data == null)
+                    throw new Exception("Rol usuario nulo");
+
+                RolUsuarioUpdateRequest rolUsuarioUpdate = rolUsuario.Data.ConvertModelToUpdateRequest();
+
+                return View(rolUsuarioUpdate);
+
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: RolUsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, RolUsuarioUpdateRequest rolUsuarioUpdate)
         {
             try
             {
+                var result = rolUsuarioApiService.Update(rolUsuarioUpdate);
+
+                if (!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -109,16 +140,26 @@ namespace Hotel.Web.Controllers
         // GET: RolUsuarioController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            RolUsuarioRemoveRequest rolUsuarioRemove = new RolUsuarioRemoveRequest(id);
+
+            return View(rolUsuarioRemove);
         }
 
         // POST: RolUsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, RolUsuarioRemoveRequest rolUsuarioRemove)
         {
             try
             {
+                var result = rolUsuarioApiService.Remove(rolUsuarioRemove);
+
+                if (!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch

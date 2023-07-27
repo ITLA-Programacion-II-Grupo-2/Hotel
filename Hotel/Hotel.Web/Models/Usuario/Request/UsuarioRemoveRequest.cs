@@ -4,9 +4,14 @@
     {
         public int IdUsuario { get; set; }
 
+        public UsuarioRemoveRequest()
+        {
+           
+        }
         public UsuarioRemoveRequest(int id)
         {
             IdUsuario = id;
         }
+
     }
 }

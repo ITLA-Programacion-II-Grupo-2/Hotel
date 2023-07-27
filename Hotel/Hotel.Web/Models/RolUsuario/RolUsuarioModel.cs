@@ -1,6 +1,6 @@
-﻿namespace Hotel.Web.Models.RolUsuario.Response
+﻿namespace Hotel.Web.Models.RolUsuario
 {
-    public class RolUsuarioResponse
+    public class RolUsuarioModel
     {
         public int IdRolUsuario { get; set; }
         public string? Rol { get; set; }
