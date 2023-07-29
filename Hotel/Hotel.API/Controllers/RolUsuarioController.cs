@@ -82,7 +82,7 @@ namespace Hotel.API.Controllers
             return HandleResponse(result);
         }
 
-        
+
         [HttpPost("RemoveRolUsuario")]
         public IActionResult Delete([FromBody] RolUsuarioRemoveDto model)
         {
