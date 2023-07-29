@@ -12,7 +12,6 @@ namespace Hotel.Infrastructure.Context
             : base(options)
         {
         }
-
         public DbSet<Cliente> Cliente { get; set; }
     }
 }

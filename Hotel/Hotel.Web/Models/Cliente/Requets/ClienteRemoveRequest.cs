@@ -1,6 +1,4 @@
-﻿using Microsoft.Graph;
-
-namespace Hotel.Web.Models.Cliente.Requets
+﻿namespace Hotel.Web.Models.Cliente.Requets
 {
     public class ClienteRemoveRequest : BaseRequest
     {
@@ -14,7 +12,5 @@ namespace Hotel.Web.Models.Cliente.Requets
         {
             IdCliente = id;
         }
-    }
-    {
     }
 }

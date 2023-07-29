@@ -25,10 +25,6 @@ builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 
 //Registros de app services//
 
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
