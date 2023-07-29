@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hotel.API\Hotel.API.csproj" />
     <ProjectReference Include="..\Hotel.Application\Hotel.Application.csproj" />
     <ProjectReference Include="..\Hotel.IOC\Hotel.IOC.csproj" />
   </ItemGroup>

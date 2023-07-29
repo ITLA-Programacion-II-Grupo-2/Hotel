@@ -1,56 +1,57 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Dto.Categoria;
+using Hotel.Application.Dto.Piso;
 using Hotel.Infrastructure.Models;
-using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
+using Hotel.Web.Models.Piso.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
 {
-    public class CategoriaController : Controller
+    public class PisoController : Controller
     {
-        private readonly ICategoriaService categoriaService;
+        private readonly IPisoService pisoService;
 
-        public CategoriaController(ICategoriaService categoriaService)
+        public PisoController(IPisoService pisoService)
         {
-            this.categoriaService = categoriaService;
+            this.pisoService = pisoService;
         }
 
         // GET: categoriaController
         public ActionResult Index()
         {
 
-            var result = this.categoriaService.Get();
+            var result = this.pisoService.Get();
 
             if (!result.Success)
                 ViewBag.Message = result.Message;
 
-            var categorias = result.Data;
+            var pisos = result.Data;
 
-            if (categorias == null)
+            if (pisos == null)
                 throw new Exception();
 
-            List<CategoriaResponse> categoriaResponses = new List<CategoriaResponse>();
+            List<PisoResponse> pisoResponses = new List<PisoResponse>();
 
-            foreach (var categoria in categorias)
+            foreach (var piso in pisos)
             {
-                CategoriaResponse categoriaResponse = new CategoriaResponse()
+                PisoResponse pisoResponse = new PisoResponse()
                 {
-                    IdCategoria = categoria.IdCategoria,
-                    Descripcion = categoria.Descripcion
+                    IdPiso = piso.IdPiso,
+                    Descripcion = piso.Descripcion
                 };
 
-                categoriaResponses.Add(categoriaResponse);
+                pisoResponses.Add(pisoResponse);
             }
 
-            return View(categoriaResponses);
+            return View(pisoResponses);
 
         }
 
         // GET: CategoriaController/Details/5
         public ActionResult Details(int id)
         {
-            var result = categoriaService.GetById(id);
+            var result = pisoService.GetById(id);
 
             if (!result.Success)
                 ViewBag.Message = result.Message;
@@ -70,12 +71,12 @@ namespace Hotel.Web.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CategoriaAddDto categoriaAddDto)
+        public ActionResult Create(PisoAddDto pisoAddDto)
         {
             try
             {
 
-                var result = this.categoriaService.Add(categoriaAddDto);
+                var result = this.pisoService.Add(pisoAddDto);
 
 
                 if (!result.Success)
@@ -97,13 +98,13 @@ namespace Hotel.Web.Controllers
         // GET: CategoriaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var result = categoriaService.GetById(id);
+            var result = pisoService.GetById(id);
 
             if (!result.Success)
                 ViewBag.Message = result.Message;
 
 
-            var piso = result.Data as CategoriaModels;
+            var piso = result.Data as PisoModels;
 
             return View(piso);
         }
@@ -111,11 +112,11 @@ namespace Hotel.Web.Controllers
         // POST: DepartmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CategoriaUpdateDto categoriaUpdateDto)
+        public ActionResult Edit(PisoUpdateDto pisoUpdateDto)
         {
             try
             {
-                var result = this.categoriaService.Update(categoriaUpdateDto);
+                var result = this.pisoService.Update(pisoUpdateDto);
 
 
                 if (!result.Success)
@@ -134,8 +135,11 @@ namespace Hotel.Web.Controllers
 
         }
 
-    } 
+    }
+
+
+
+
 
 
 }
-
