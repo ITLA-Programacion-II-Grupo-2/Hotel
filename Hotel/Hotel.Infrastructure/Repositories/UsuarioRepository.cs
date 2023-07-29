@@ -43,7 +43,7 @@ namespace Hotel.Infrastructure.Repositories
                 if (this.Exists(u => u.Correo == correo && u.Estado == true))
                     throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
 
-                usuario.ConvertUsuarioCreateToEntity();
+                usuario = usuario.ConvertUsuarioCreateToEntity();
 
                 base.Add(usuario);
                 base.SaveChanges();
@@ -75,9 +75,7 @@ namespace Hotel.Infrastructure.Repositories
                     if (this.Exists(u => u.Correo == correo && u.Estado == true))
                         throw new UsuarioException($"El correo: {correo} se encuentra en uso.");
 
-                    usuario.ConvertUsuarioCreateToEntity();
-
-                    base.Add(usuario);
+                    base.Add(usuario.ConvertUsuarioCreateToEntity());
                 }
 
                 base.SaveChanges();

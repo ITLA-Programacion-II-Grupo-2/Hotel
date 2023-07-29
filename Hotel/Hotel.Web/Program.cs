@@ -14,6 +14,7 @@ builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(buil
 // My Dependencies
 builder.Services.AddUsuarioDependency();
 builder.Services.AddRolUsuarioDependency();
+builder.Services.AddRecepcionDependency();
 
 builder.Services.AddTransient<IRolUsuarioApiService, RolUsuarioApiService>();
 

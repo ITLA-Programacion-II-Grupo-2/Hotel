@@ -27,8 +27,10 @@
                 <span asp-validation-for="Clave" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdRolUsuario" class="control-label">Rol Usuario</label>
-                <input asp-for="IdRolUsuario" class="form-control" required />
+                <label asp-for="IdRolUsuario" class="control-label">Rol</label>
+                <select asp-for="IdRolUsuario" asp-items="@(new SelectList(Model.Roles, "IdRolUsuario", "Rol"))" class="form-control" required>
+                    <option value="">Seleccionar un rol</option>
+                </select>
                 <span asp-validation-for="IdRolUsuario" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -10,10 +10,12 @@ namespace Hotel.Web.Controllers
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService usuarioService;
+        private readonly IRolUsuarioService rolUsuarioService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IRolUsuarioService rolUsuarioService)
         {
             this.usuarioService = usuarioService;
+            this.rolUsuarioService = rolUsuarioService;
         }
 
         // GET: UsuarioController
@@ -72,7 +74,16 @@ namespace Hotel.Web.Controllers
         // GET: UsuarioController/Create
         public ActionResult Create()
         {
-            return View();
+            var result = rolUsuarioService.Get();
+
+            var roles = result.Data as List<RolUsuarioModel>;
+
+            UsuarioAddRequest usuarioAdd = new UsuarioAddRequest()
+            {
+                Roles = roles
+            };
+
+            return View(usuarioAdd);
         }
 
         // POST: UsuarioController/Create

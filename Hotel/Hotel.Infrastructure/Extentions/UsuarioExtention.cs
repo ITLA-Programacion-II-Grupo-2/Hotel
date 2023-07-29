@@ -37,6 +37,8 @@ namespace Hotel.Infrastructure.Extentions
                 Correo = usuario.Correo,
                 Clave = usuario.Clave,
                 IdRolUsuario = usuario.IdRolUsuario,
+                UsuarioCreacion = usuario.UsuarioCreacion,
+                FechaCreacion = usuario.FechaCreacion
             };
         }
 
@@ -52,7 +54,7 @@ namespace Hotel.Infrastructure.Extentions
 
             return usuarioToUpdate; 
         }
-
+        
         public static Usuario ConvertUsuarioRemoveToEntity(this Usuario usuarioToRemove, 
                                                                 Usuario usuario)
         {
