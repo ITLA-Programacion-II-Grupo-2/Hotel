@@ -4,6 +4,6 @@ namespace Hotel.Application.Dtos.Cliente
     public abstract  class ClienteDto : DtoBase
     {
         public string? TipoDocumento { get; set; }
-        public int Documento { get; set; }
+        public string? Documento { get; set; }
     }
 }

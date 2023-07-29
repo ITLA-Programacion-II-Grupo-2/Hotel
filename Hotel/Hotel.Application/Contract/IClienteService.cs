@@ -1,5 +1,6 @@
 ﻿using Hotel.Application.Core;
 using Hotel.Application.Dtos.Cliente;
+using System.Collections.Generic;
 
 namespace Hotel.Application.Contract
 {
@@ -7,9 +8,6 @@ namespace Hotel.Application.Contract
     {
 
         ServiceResult GetCliente(int id);
-        ServiceResult GetClientes();
-        ServiceResult Remove();
-
-
-    }
+    ServiceResult GetCliente();
+}
 }

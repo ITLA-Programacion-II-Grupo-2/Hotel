@@ -1,5 +1,6 @@
 ﻿using Hotel.Application.Core;
 using Hotel.Application.Dtos.Cliente;
+using System.Linq;
 
 namespace Hotel.Application.Validations
 {
@@ -38,7 +39,7 @@ namespace Hotel.Application.Validations
             }
 
 
-            if (clienteAddDto.Documento <= 0)
+            if (clienteAddDto.Documento.Length <= 0)
             {
                 result.Message = "El documento debe existir";
                 result.Success = false;
@@ -46,6 +47,7 @@ namespace Hotel.Application.Validations
             }
 
             return result;
+
         }
 
         public static ServiceResult ValidateUsuarioUpdate(this ClienteUpdateDto clienteUpdateDto)

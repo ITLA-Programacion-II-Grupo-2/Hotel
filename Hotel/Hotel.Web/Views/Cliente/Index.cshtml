@@ -1,0 +1,63 @@
+﻿ç﻿@model IEnumerable<Hotel.Web.Models.Cliente.Response.ClienteResponse>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index clientes</h1>
+
+<p>
+    <a asp-action="Create">Create New Cliente</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.IdCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCompleto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Documento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.IdCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreCompleto)
+                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipoDocumento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Documento)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Correo)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.IdCliente }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.IdCliente }) |
+                    @Html.ActionLink("Delete", "Delete", new {  id=item.IdCliente })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
