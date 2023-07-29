@@ -2,13 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Hotel.Infrastructure.Context;
 using Hotel.IOC.Dependencies;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-
 
 builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HotelContext")));
 
@@ -16,6 +13,7 @@ builder.Services.AddEstadoHabitacionDependency();
 builder.Services.AddHabitacionDependency();
 
 var app = builder.Build();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -1,6 +1,6 @@
 ﻿using Hotel.Application.Dtos.EstadoHabitacion;
 using Hotel.Domain.Entities;
-
+using System.Collections.Generic;
 
 namespace Hotel.Application.Extentions
 {

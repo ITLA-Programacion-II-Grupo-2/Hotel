@@ -1,37 +1,34 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hotel.Application.Contract;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Hotel.Application.Contract;
 using Hotel.web.Models;
 using Hotel.Application.Dtos.EstadoHabitacion;
 
-
-
 namespace Hotel.web.Controllers
 {
-    public class EstadohabitacionController : Controller
+    public class EstadoHabitacionController : Controller
     {
         private readonly IEstadoHabitacionService estadoHabitacionService;
 
-        public EstadohabitacionController(IEstadoHabitacionService estadoHabitacionService)
+        public EstadoHabitacionController(IEstadoHabitacionService estadoHabitacionService)
         {
             this.estadoHabitacionService = estadoHabitacionService;
         }
-        // GET: HomeController1
+        // GET: EstadoHabitacionController
         public ActionResult Index()
         {
             var result = estadoHabitacionService.Get();
 
             if ((bool)!result.Success)
-                    ViewBag.Message = result.Message;
-           
+                ViewBag.Message = result.Message;
+
             var Estadohabitacions = result.Data;
+            List<EstadohabitacionModel> estadoHabitacionModels = new List<EstadohabitacionModel>();
 
-            List <EstadoHabitacionModel> estadoHabitacionModels = new List<EstadoHabitacionModel>();
-
-            foreach( var estados in Estadohabitacions)
+            foreach (var estados in Estadohabitacions)
             {
                 {
-                    EstadoHabitacionModel estadoHabitacionModel = new EstadoHabitacionModel
+                    EstadohabitacionModel estadoHabitacionModel = new EstadohabitacionModel
                     {
                         IdEstadoHabitacion = estados.IdEstadoHabitacion,
                         Descripcion = estados.Descripcion
@@ -39,123 +36,123 @@ namespace Hotel.web.Controllers
 
                     estadoHabitacionModels.Add(estadoHabitacionModel);
                 }
-            }
 
-            return View (estadoHabitacionModels);
+
+            }
+            return View(estadoHabitacionModels);
 
         }
 
         // GET: HomeController1/Details/5
         public ActionResult Details(int id)
-        {
-            var result = this.estadoHabitacionService.GetById(id);
-
-            if ((bool)!result.Success)
             {
-                ViewBag.Message = result.Message;
-                return View();
-            }
-            var Estadohabitacions =result.Data;
-
-            EstadoHabitacionModel estadoHabitacionModel = new Models.EstadoHabitacionModel
-            {
-                IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
-                Descripcion = Estadohabitacions.Descripcion
-            };
-
-           
-            return View(estadoHabitacionModel);
-
-
-
-
-        }
-
-        // GET: HomeController1/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: HomeController1/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(EstadoHabitacionAddDto estadoHabitacionAddDto)
-        {
-            try
-            {
-
-                var Estadohabitacion = new EstadoHabitacionAddDto()
-                {
-                    Descripcion = estadoHabitacionAddDto.Descripcion,
-                    CambioUsuario = 1,
-                    CambioFecha = DateTime.Now
-
-                };
-
-                var result = this.estadoHabitacionService.Add(Estadohabitacion);
+                var result = this.estadoHabitacionService.GetById(id);
 
                 if ((bool)!result.Success)
                 {
                     ViewBag.Message = result.Message;
                     return View();
                 }
+                var Estadohabitacions = result.Data;
 
-                return RedirectToAction(nameof(Index));
+              EstadohabitacionModel estadoHabitacionModel = new Models.EstadohabitacionModel
+              {
+                    IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
+                    Descripcion = Estadohabitacions.Descripcion
+                };
+
+
+                return View(estadoHabitacionModel);
+
+
+
+
             }
-            catch
+            
+
+        // GET: HomeController1/Create
+        public ActionResult Create()
             {
                 return View();
             }
-        }
 
-        // GET: HomeController1/Edit/5
-        public ActionResult Edit(int id)
-        {
-            var result = estadoHabitacionService.GetById(id);
-
-            if ((bool)!result.Success)
-                ViewBag.Message = result.Message;
-
-            var Estadohabitacions = result.Data;
-
-            EstadoHabitacionModel estadoHabitacionModel = new Models.EstadoHabitacionModel
+            // POST: HomeController1/Create
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public ActionResult Create(EstadoHabitacionAddDto estadoHabitacionAddDto)
             {
-                IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
-                Descripcion = Estadohabitacions.Descripcion
-
-            };
-
-
-            return View(estadoHabitacionModel);
-        }
-
-        // POST: HomeController1/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, EstadoHabitacionModel estadoHabitacionModel)
-        {
-            try
-            {
-                var Estadohabitacions = new EstadoHabitacionUpdateDto()
+                try
                 {
-                    IdEstadoHabitacion = estadoHabitacionModel.IdEstadoHabitacion,
-                    Descripcion = estadoHabitacionModel.Descripcion,
-                    CambioUsuario = 1,
-                    CambioFecha = DateTime.Now
+
+                    var Estadohabitacion = new EstadoHabitacionAddDto()
+                    {
+                        Descripcion = estadoHabitacionAddDto.Descripcion,
+                        CambioUsuario = 1,
+                        CambioFecha = DateTime.Now
+
+                    };
+
+                    var result = this.estadoHabitacionService.Add(Estadohabitacion);
+
+                    if ((bool)!result.Success)
+                    {
+                        ViewBag.Message = result.Message;
+                        return View();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
+            }
+
+            // GET: HomeController1/Edit/5
+            public ActionResult Edit(int id)
+            {
+                var result = estadoHabitacionService.GetById(id);
+
+                if ((bool)!result.Success)
+                    ViewBag.Message = result.Message;
+
+                var Estadohabitacions = result.Data;
+
+            EstadohabitacionModel estadoHabitacionModel = new Models.EstadohabitacionModel
+            {
+                    IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
+                    Descripcion = Estadohabitacions.Descripcion
 
                 };
 
-                var result = this.estadoHabitacionService.Update(Estadohabitacions);
 
-                return RedirectToAction(nameof(Index));
+                return View(estadoHabitacionModel);
             }
-            catch
+
+            // POST: HomeController1/Edit/5
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public ActionResult Edit(int id, EstadohabitacionModel estadoHabitacionModel)
             {
-                return View();
+                try
+                {
+                    var Estadohabitacions = new EstadoHabitacionUpdateDto()
+                    {
+                        IdEstadoHabitacion = estadoHabitacionModel.IdEstadoHabitacion,
+                        Descripcion = estadoHabitacionModel.Descripcion,
+                        CambioUsuario = 1,
+                        CambioFecha = DateTime.Now
+
+                    };
+
+                    var result = this.estadoHabitacionService.Update(Estadohabitacions);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
         }
-
-        
     }
-}

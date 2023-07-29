@@ -2,7 +2,9 @@
 using Hotel.Application.Dtos.Habitacion;
 using Hotel.Application.Services;
 using Hotel.Domain.Entities;
+using Hotel.web.Controllers.Extenciones;
 using Hotel.web.Models;
+using Hotel.web.Models.Response.Habitacion;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,29 +26,13 @@ namespace Hotel.web.Controllers
             if ((bool)!result.Success)
                 ViewBag.Message = result.Message;
 
-            var habitacions = result.Data;
+            var habitacions = result.Data as List<HabitacionModel>;
 
-            List<HabitacionModel> habitacionModels = new List<HabitacionModel>();
+            List<HabitacionReponse> habitacionReponses = habitacions.Select(h => h.ConvertModelToResponse()).ToList();
 
-            foreach (var habitacion in habitacions)
-            {
-                {
-                    HabitacionModel habitacionModel = new HabitacionModel
-                    {
-                       IdHabitacion = habitacion.IdHabitacion,
-                       Numero= habitacion.Numero,
-                       Detalle = habitacion.Detalle,
-                       Precio = habitacion.Precio,
-                       IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
-                       IdCategoria = habitacion.IdCategoria,
-                       IdPiso = habitacion.IdPiso
-                    };
 
-                    habitacionModels.Add(habitacionModel);
-                }
-            }
 
-            return View(habitacionModels);
+            return View(habitacionReponses);
         }
 
         // GET: HabitacionController/Details/5
@@ -59,21 +45,12 @@ namespace Hotel.web.Controllers
                 ViewBag.Message = result.Message;
                 return View();
             }
-            var habitacion = result.Data;
+            var habitacions = result.Data as List<HabitacionModel>;
 
-            HabitacionModel habitacionModel = new Models.HabitacionModel
-            {
-                IdHabitacion = habitacion.IdHabitacion,
-                Numero = habitacion.Numero,
-                Detalle = habitacion.Detalle,
-                Precio = habitacion.Precio,
-                IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
-                IdCategoria = habitacion.IdCategoria,
-                IdPiso = habitacion.IdPiso
-            };
+            List<HabitacionReponse> habitacionReponses = habitacions.Select(h => h.ConvertModelToResponse()).ToList();
 
 
-            return View(habitacionModel);
+            return View(habitacionReponses);
         }
 
         // GET: HabitacionController/Create
@@ -85,22 +62,11 @@ namespace Hotel.web.Controllers
         // POST: HabitacionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HabitacionAddDto habitacionAddDto)
+        public ActionResult Create(HabitacionAddReponse habitacionAdd)
         {
             try
             {
-                var habitacion = new HabitacionAddDto()
-                {
-                    Numero = habitacionAddDto.Numero,
-                    Detalle = habitacionAddDto.Detalle,
-                    Precio = habitacionAddDto.Precio,
-                    IdEstadoHabitacion = habitacionAddDto.IdEstadoHabitacion,
-                    IdCategoria = habitacionAddDto.IdCategoria,
-                    IdPiso = habitacionAddDto.IdPiso,
-                    CambioUsuario = 1,
-                    CambioFecha = DateTime.Now
-
-                };
+                var habitacion = habitacionAdd.ConvertRequestToDto();
 
                 var result = this.habitacionService.Add(habitacion);
 
@@ -109,6 +75,7 @@ namespace Hotel.web.Controllers
                     ViewBag.Message = result.Message;
                     return View();
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -127,47 +94,37 @@ namespace Hotel.web.Controllers
                 ViewBag.Message = result.Message;
                 return View();
             }
-            var habitacion = result.Data;
+            var habitacion = result.Data as HabitacionModel;
 
-            HabitacionModel habitacionModel = new Models.HabitacionModel
-            {
-                IdHabitacion = habitacion.IdHabitacion,
-                Numero = habitacion.Numero,
-                Detalle = habitacion.Detalle,
-                Precio = habitacion.Precio,
-                IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
-                IdCategoria = habitacion.IdCategoria,
-                IdPiso = habitacion.IdPiso
-            };
+           
+
+            HabitacionUpdateReponse habitacionUpdate = habitacion.ConvertModelToRequest();
 
 
-            return View(habitacionModel);
+
+            return View(habitacionUpdate);
+
+
         }
 
         // POST: HabitacionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, HabitacionModel habitacionModel)
+        public ActionResult Edit(int id, HabitacionUpdateReponse habitacionUpdate)
         {
             try
             {
-                
-                    var habitacion = new HabitacionUpdateDto()
-                    {
-                        IdHabitacionId = habitacionModel.IdHabitacion,
-                        Numero = habitacionModel.Numero,
-                        Detalle = habitacionModel.Detalle,
-                        Precio = habitacionModel.Precio,
-                        IdEstadoHabitacion = habitacionModel.IdEstadoHabitacion,
-                        IdCategoria = habitacionModel.IdCategoria,
-                        IdPiso = habitacionModel.IdPiso,
-                        CambioUsuario = 1,
-                        CambioFecha = DateTime.Now
 
-                    };
+                var habitacion = habitacionUpdate.ConvertRequestToDto();
 
-                    var result = this.habitacionService.Update(habitacion);
-                    return RedirectToAction(nameof(Index));
+                var result = this.habitacionService.Update(habitacion);
+
+                if ((bool)!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -175,6 +132,6 @@ namespace Hotel.web.Controllers
             }
         }
 
-       
+
     }
 }

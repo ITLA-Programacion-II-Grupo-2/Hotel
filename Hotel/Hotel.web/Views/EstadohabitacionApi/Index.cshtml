@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Estados</h1>
+<h1>Estados Api</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,6 +12,8 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
@@ -21,11 +23,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.IdEstadoHabitacion }) |
+                @Html.ActionLink("Edit", "Edit", new {  id=item.IdEstadoHabitacion  }) |
                 @Html.ActionLink("Details", "Details", new {  id=item.IdEstadoHabitacion  }) |
             </td>
         </tr>
