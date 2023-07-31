@@ -1,8 +1,12 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Dto.Categoria;
 using Hotel.Application.Dto.Piso;
+using Hotel.Application.Service;
 using Hotel.Infrastructure.Models;
+using Hotel.Web.Controllers.Extentions;
+using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
+using Hotel.Web.Models.Piso.Request;
 using Hotel.Web.Models.Piso.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +21,7 @@ namespace Hotel.Web.Controllers
             this.pisoService = pisoService;
         }
 
-        // GET: categoriaController
+        // GET: CategoriaController
         public ActionResult Index()
         {
 
@@ -51,15 +55,27 @@ namespace Hotel.Web.Controllers
         // GET: CategoriaController/Details/5
         public ActionResult Details(int id)
         {
-            var result = pisoService.GetById(id);
+            try
+            {
+                var result = pisoService.GetById(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
+                var piso = result.Data as PisoModels;
 
-            var piso = result.Data as CategoriaModels;
+                if (piso == null)
+                    throw new Exception("No existe el piso.");
 
-            return View(piso);
+                PisoResponse pisoResponse = piso.ConvertGetByIdToCategoriaResponse();
+
+                return View(pisoResponse);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: CategoriaController/Create
@@ -71,13 +87,13 @@ namespace Hotel.Web.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PisoAddDto pisoAddDto)
+        public ActionResult Create(PisoAddRequest pisoAddDto)
         {
             try
             {
+                var piso = pisoAddDto.ConvertAddRequestToAddDto();
 
-                var result = this.pisoService.Add(pisoAddDto);
-
+                var result = this.pisoService.Add(piso);
 
                 if (!result.Success)
                 {
@@ -85,9 +101,7 @@ namespace Hotel.Web.Controllers
                     return View();
                 }
 
-
                 return RedirectToAction(nameof(Index));
-
             }
             catch
             {
@@ -98,33 +112,45 @@ namespace Hotel.Web.Controllers
         // GET: CategoriaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var result = pisoService.GetById(id);
+            try
+            {
+                var result = pisoService.GetById(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
+                var piso = result.Data as PisoModels;
 
-            var piso = result.Data as PisoModels;
+                if (piso == null)
+                    throw new Exception("No existe el piso.");
 
-            return View(piso);
+                PisoUpdateRequest pisoToUpdate = piso.ConvertPisoToUpdateRequest();
+
+                return View(pisoToUpdate);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        // POST: DepartmentController/Edit/5
+        // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PisoUpdateDto pisoUpdateDto)
+        public ActionResult Edit(int id, PisoUpdateRequest pisoUpdate)
         {
             try
             {
-                var result = this.pisoService.Update(pisoUpdateDto);
+                var piso = pisoUpdate.ConvertirUpdateRequestToUpdateDto();
 
+                var result = this.pisoService.Update(piso);
 
                 if (!result.Success)
                 {
                     ViewBag.Message = result.Message;
                     return View();
                 }
-
 
                 return RedirectToAction(nameof(Index));
             }

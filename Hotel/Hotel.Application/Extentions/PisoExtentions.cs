@@ -30,7 +30,7 @@ namespace Hotel.Application.Extentions
                 Descripcion = pisoUpdate.Descripcion,
                 FechaModificacion = pisoUpdate.ChangeDate,
                 UsuarioModificacion = pisoUpdate.ChangeUser,
-                IdPiso = pisoUpdate.Idpiso
+                IdPiso = pisoUpdate.IdPiso
 
             };
 

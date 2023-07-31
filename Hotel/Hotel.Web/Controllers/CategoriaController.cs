@@ -1,6 +1,7 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Dto.Categoria;
 using Hotel.Infrastructure.Models;
+using Hotel.Web.Controllers.Extentions;
 using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Hotel.Web.Controllers
             this.categoriaService = categoriaService;
         }
 
-        // GET: categoriaController
+        // GET: CategoriaController
         public ActionResult Index()
         {
 
@@ -50,15 +51,27 @@ namespace Hotel.Web.Controllers
         // GET: CategoriaController/Details/5
         public ActionResult Details(int id)
         {
-            var result = categoriaService.GetById(id);
+            try
+            {
+                var result = categoriaService.GetById(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
+                var categoria = result.Data as CategoriaModels;
 
-            var piso = result.Data as CategoriaModels;
+                if (categoria == null)
+                    throw new Exception("No existe la categoria.");
 
-            return View(piso);
+                CategoriaResponse categoriaResponse = categoria.ConvertGetByIdToCategoriaResponse();
+
+                return View(categoriaResponse);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: CategoriaController/Create
@@ -70,13 +83,13 @@ namespace Hotel.Web.Controllers
         // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CategoriaAddDto categoriaAddDto)
+        public ActionResult Create(CategoriaAddRequest categoriaAddDto)
         {
             try
             {
+                var categoria = categoriaAddDto.ConvertAddRequestToAddDto();
 
-                var result = this.categoriaService.Add(categoriaAddDto);
-
+                var result = this.categoriaService.Add(categoria);
 
                 if (!result.Success)
                 {
@@ -84,9 +97,7 @@ namespace Hotel.Web.Controllers
                     return View();
                 }
 
-
                 return RedirectToAction(nameof(Index));
-
             }
             catch
             {
@@ -97,33 +108,45 @@ namespace Hotel.Web.Controllers
         // GET: CategoriaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var result = categoriaService.GetById(id);
+            try
+            {
+                var result = categoriaService.GetById(id);
 
-            if (!result.Success)
-                ViewBag.Message = result.Message;
+                if (!result.Success)
+                    throw new Exception(result.Message);
 
+                var categoria = result.Data as CategoriaModels;
 
-            var piso = result.Data as CategoriaModels;
+                if (categoria == null)
+                    throw new Exception("No existe la categoria.");
 
-            return View(piso);
+                CategoriaUpdateRequest categoriaToUpdate = categoria.ConvertCategoriaToUpdateRequest();
+
+                return View(categoriaToUpdate);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        // POST: DepartmentController/Edit/5
+        // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CategoriaUpdateDto categoriaUpdateDto)
+        public ActionResult Edit(int id, CategoriaUpdateRequest categoriaUpdate)
         {
             try
             {
-                var result = this.categoriaService.Update(categoriaUpdateDto);
+                var categoria = categoriaUpdate.ConvertirUpdateRequestToUpdateDto();
 
+                var result = this.categoriaService.Update(categoria);
 
                 if (!result.Success)
                 {
                     ViewBag.Message = result.Message;
                     return View();
                 }
-
 
                 return RedirectToAction(nameof(Index));
             }
@@ -132,7 +155,10 @@ namespace Hotel.Web.Controllers
                 return View();
             }
 
+
         }
+
+
 
     } 
 

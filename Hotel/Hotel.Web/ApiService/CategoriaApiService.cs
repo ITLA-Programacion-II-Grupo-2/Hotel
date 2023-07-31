@@ -6,8 +6,7 @@ namespace Hotel.Web.ApiService
 {
     public class CategoriaApiService : ICategoriaApiService
     {
-       
-
+     
         public CategoriaResponse Get()
         {
             throw new NotImplementedException();
@@ -19,11 +18,6 @@ namespace Hotel.Web.ApiService
         }
 
         public BaseResponse Add(CategoriaAddRequest categoria)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BaseResponse Remove(CategoriaRemoveRequet categoria)
         {
             throw new NotImplementedException();
         }

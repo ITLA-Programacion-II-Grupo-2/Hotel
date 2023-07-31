@@ -11,7 +11,7 @@ namespace Hotel.Web.ApiService
         public CategoriaResponse Get();
         public BaseResponse Add(CategoriaAddRequest categoria);
         public BaseResponse Update(CategoriaUpdateRequest categoria);
-        public BaseResponse Remove(CategoriaRemoveRequet categoria);
+     
 
     }
 }

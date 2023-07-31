@@ -199,9 +199,9 @@ namespace Hotel.Infrastructure.Repositories
           
         }
 
-        public List<PisoModels> GetPiso(int id)
+        public PisoModels GetPiso(int id)
         {
-             List<PisoModels> pisos = new List<PisoModels>();
+            PisoModels pisos = new PisoModels();
             try
             {
                 this.logger.LogInformation($"Pase por aqui: {id}");
@@ -213,7 +213,7 @@ namespace Hotel.Infrastructure.Repositories
                                   IdPiso = piso.IdPiso,
                                   Descripcion  = piso.Descripcion
 
-                              }).ToList();
+                              }).FirstOrDefault();
             }
             catch (Exception ex)
             {
