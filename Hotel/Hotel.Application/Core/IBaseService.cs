@@ -7,11 +7,8 @@ namespace Hotel.Application.Core
     {
        ServiceResult Get();
        ServiceResult GetById(int id);
-       ServiceResult Add(TDtoAdd model);
-       ServiceResult Add(TDtoAdd[] models); 
+       ServiceResult Add(TDtoAdd model); 
        ServiceResult Update(TDtoMod model);
-       ServiceResult Update(TDtoMod[] models);
        ServiceResult Remove(TDtoRem model);
-       ServiceResult Remove(TDtoRem[] models);
     }
 }

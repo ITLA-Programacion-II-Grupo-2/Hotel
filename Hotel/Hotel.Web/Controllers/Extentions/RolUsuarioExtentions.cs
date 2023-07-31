@@ -1,11 +1,30 @@
 ﻿using Hotel.Application.Dtos.RolUsuario;
-using Hotel.Web.Models.RolUsuario;
 using Hotel.Web.Models.RolUsuario.Request;
+using RolUsuarioIModel = Hotel.Infrastructure.Models.RolUsuarioModel;
+using RolUsuarioModel = Hotel.Web.Models.RolUsuario.RolUsuarioModel;
 
 namespace Hotel.Web.Controllers.Extentions
 {
     public static class RolUsuarioExtentions
     {
+        public static RolUsuarioModel ConvertModelToWebModel(this RolUsuarioIModel rolUsuario)
+        {
+            return new RolUsuarioModel()
+            {
+                IdRolUsuario = rolUsuario.IdRolUsuario,
+                Rol = rolUsuario.Rol
+            };
+        }
+
+        public static RolUsuarioUpdateRequest ConvertModelToUpdateRequest(this RolUsuarioIModel rolUsuario)
+        {
+            return new RolUsuarioUpdateRequest()
+            {
+                IdRolUsuario = rolUsuario.IdRolUsuario,
+                Descripcion = rolUsuario.Rol
+            };
+        }
+
         public static RolUsuarioUpdateRequest ConvertModelToUpdateRequest(this RolUsuarioModel rolUsuario)
         {
             return new RolUsuarioUpdateRequest()

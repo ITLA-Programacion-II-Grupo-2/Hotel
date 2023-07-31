@@ -7,14 +7,24 @@ namespace Hotel.Web.Controllers.Extentions
 {
     public static class UsuarioExtentions
     {
-        public static UsuarioResponse ConvertUserWithRolToUsuarioResponse(this UserWithRolModel usuario)
+        public static UsuarioWModel ConvertUserWithRolToUsuarioWModel(this UserWithRolModel usuario)
         {
-            return new UsuarioResponse()
+            return new UsuarioWModel()
             {
                 IdUsuario = usuario.IdUsuario,
                 NombreCompleto = usuario.NombreCompleto,
                 Correo = usuario.Correo,
-                RolUsuario = usuario.Rol
+                Rol= usuario.Rol
+            };
+        }
+        public static UsuarioUpdateRequest ConvertUsuarioToUpdateRequest(this UsuarioWModel usuario)
+        {
+            return new UsuarioUpdateRequest()
+            {
+                IdUsuario = usuario.IdUsuario,
+                NombreCompleto = usuario.NombreCompleto,
+                Correo = usuario.Correo,
+                IdRolUsuario = 1
             };
         }
         public static UsuarioAddDto ConvertAddRequestToAddDto(this UsuarioAddRequest usuarioAdd)

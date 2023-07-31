@@ -1,41 +1,34 @@
-﻿using Hotel.Application.Contract;
+﻿using Hotel.Web.Api.ApiServices.Interfaces;
 using Hotel.Web.Controllers.Extentions;
 using Hotel.Web.Models.RolUsuario.Request;
 using Hotel.Web.Models.RolUsuario.Response;
 using Microsoft.AspNetCore.Mvc;
-using RolUsuarioIModel = Hotel.Infrastructure.Models.RolUsuarioModel;
-using RolUsuarioModel = Hotel.Web.Models.RolUsuario.RolUsuarioModel;
 
 namespace Hotel.Web.Controllers
 {
-    public class RolUsuarioController : Controller
+    public class RolUsuarioApiController : Controller
     {
-        private readonly IRolUsuarioService rolUsuarioService;
+        private readonly IRolUsuarioApiService rolUsuarioApiService;
 
-        public RolUsuarioController(IRolUsuarioService rolUsuarioService)
+        public RolUsuarioApiController(IRolUsuarioApiService rolUsuarioApiService)
         {
-            this.rolUsuarioService = rolUsuarioService;
+            this.rolUsuarioApiService = rolUsuarioApiService;
         }
 
-        // GET: RolUsuarioController
+        // GET: RolUsuarioApiController
         public ActionResult Index()
         {
             try
             {
-                var result = rolUsuarioService.Get();
+                RolUsuarioListResponse rolUsuarioList = new RolUsuarioListResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                rolUsuarioList = rolUsuarioApiService.Get();
 
-                var rolUsuarios = result.Data as List<RolUsuarioIModel>;
+                if (!rolUsuarioList.Success)
+                    throw new Exception(rolUsuarioList.Message);
 
-                if (rolUsuarios == null)
-                    throw new Exception("No hay usuarios.");
 
-                List<RolUsuarioModel> rolUsuarioList = rolUsuarios
-                .Select(p => p.ConvertModelToWebModel()).ToList();
-
-                return View(rolUsuarioList);
+                return View(rolUsuarioList.Data);
             }
             catch (Exception e)
             {
@@ -44,24 +37,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RolUsuarioController/Details/5
+        // GET: RolUsuarioApiController/Details/5
         public ActionResult Details(int id)
         {
             try
             {
-                var result = rolUsuarioService.GetById(id);
+                RolUsuarioDetailsResponse rolUsuario = new RolUsuarioDetailsResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                rolUsuario = rolUsuarioApiService.GetById(id);
 
-                var rolUsuario = result.Data as RolUsuarioIModel;
+                if (!rolUsuario.Success)
+                    throw new Exception(rolUsuario.Message);
 
-                if (rolUsuario == null)
-                    throw new Exception("No hay usuarios.");
 
-                RolUsuarioModel rolUsuarioModel = rolUsuario.ConvertModelToWebModel();
-
-                return View(rolUsuarioModel);
+                return View(rolUsuario.Data);
             }
             catch (Exception e)
             {
@@ -70,22 +59,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RolUsuarioController/Create
+        // GET: RolUsuarioApiController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RolUsuarioController/Create
+        // POST: RolUsuarioApiController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RolUsuarioAddRequest rolUsuarioAdd)
         {
             try
             {
-                var rolUsuario = rolUsuarioAdd.ConvertAddRequestToDto();
-
-                var result = rolUsuarioService.Add(rolUsuario);
+                var result = rolUsuarioApiService.Add(rolUsuarioAdd);
 
                 if (!result.Success)
                 {
@@ -101,24 +88,24 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RolUsuarioController/Edit/5
+        // GET: RolUsuarioApiController/Edit/5
         public ActionResult Edit(int id)
         {
             try
             {
-                var result = rolUsuarioService.GetById(id);
+                RolUsuarioDetailsResponse rolUsuario = new RolUsuarioDetailsResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                rolUsuario = rolUsuarioApiService.GetById(id);
 
-                var rolUsuario = result.Data as RolUsuarioIModel;
+                if (!rolUsuario.Success)
+                    throw new Exception(rolUsuario.Message);
+                if (rolUsuario.Data == null)
+                    throw new Exception("Rol usuario nulo");
 
-                if (rolUsuario == null)
-                    throw new Exception("No hay usuarios.");
-
-                RolUsuarioUpdateRequest rolUsuarioUpdate = rolUsuario.ConvertModelToUpdateRequest();
+                RolUsuarioUpdateRequest rolUsuarioUpdate = rolUsuario.Data.ConvertModelToUpdateRequest();
 
                 return View(rolUsuarioUpdate);
+
             }
             catch (Exception e)
             {
@@ -127,16 +114,14 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // POST: RolUsuarioController/Edit/5
+        // POST: RolUsuarioApiController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, RolUsuarioUpdateRequest rolUsuarioUpdate)
         {
             try
             {
-                var rolUsuario = rolUsuarioUpdate.ConvertUpdateRequestToDto();
-
-                var result = rolUsuarioService.Update(rolUsuario);
+                var result = rolUsuarioApiService.Update(rolUsuarioUpdate);
 
                 if (!result.Success)
                 {
@@ -152,7 +137,7 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RolUsuarioController/Delete/5
+        // GET: RolUsuarioApiController/Delete/5
         public ActionResult Delete(int id)
         {
             RolUsuarioRemoveRequest rolUsuarioRemove = new RolUsuarioRemoveRequest(id);
@@ -160,16 +145,14 @@ namespace Hotel.Web.Controllers
             return View(rolUsuarioRemove);
         }
 
-        // POST: RolUsuarioController/Delete/5
+        // POST: RolUsuarioApiController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, RolUsuarioRemoveRequest rolUsuarioRemove)
         {
             try
             {
-                var rolUsuario = rolUsuarioRemove.ConvertRemoveRequestToDto();
-
-                var result = rolUsuarioService.Remove(rolUsuario);
+                var result = rolUsuarioApiService.Remove(rolUsuarioRemove);
 
                 if (!result.Success)
                 {

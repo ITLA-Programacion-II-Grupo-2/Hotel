@@ -162,47 +162,6 @@ namespace Hotel.Application.Service
 
             return result;
         }
-        public ServiceResult Add(RolUsuarioAddDto[] models)
-        {
-            ServiceResult result = new ServiceResult();
-           
-            try
-            {
-                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
-
-                foreach (var model in models)
-                {
-                    result = model.ValidateRolUsuarioAdd();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-
-                    var rolUsuario = model.ConvertAddDtoToEntity();
-                    rolesUsuario.Add(rolUsuario);
-                }
-
-                this.rolUsuarioRepository.Add(rolesUsuario.ToArray());
-
-                result.Success = true;
-                result.Message = "Roles de usuario agregados correctamente";
-            }
-            catch (RolUsuarioException ruex)
-            {
-                result.Success = false;
-                result.Message = ruex.Message;
-                this.logger.LogError($"{result.Message}");
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = "Error añadiendo los roles de usuario";
-                this.logger.LogError($"{result.Message}", ex.ToString());
-            }
-
-            return result;
-        }
         public ServiceResult Update(RolUsuarioUpdateDto model)
         {
             ServiceResult result = new ServiceResult();
@@ -235,46 +194,6 @@ namespace Hotel.Application.Service
 
             return result;
         }
-        public ServiceResult Update(RolUsuarioUpdateDto[] models)
-        {
-            ServiceResult result = new ServiceResult();
-
-            try
-            {
-                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
-
-                foreach (var model in models)
-                {
-                    result = model.ValidateRolUsuarioUpdate();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-
-                    var rolUsuario = model.ConvertUpdateDtoEntity();
-                    rolesUsuario.Add(rolUsuario);
-                }
-
-                this.rolUsuarioRepository.Update(rolesUsuario.ToArray());
-
-                result.Message = "Roles de usuario actualizados correctamente.";
-            }
-            catch (RolUsuarioException ruex)
-            {
-                result.Success = false;
-                result.Message = ruex.Message;
-                this.logger.LogError($"{result.Message}");
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = $"Error actualizando roles de usuario.";
-                this.logger.LogError($"{result.Message}", ex.ToString());
-            }
-
-            return result;
-        }
         public ServiceResult Remove(RolUsuarioRemoveDto model)
         {
             ServiceResult result = new ServiceResult();
@@ -302,46 +221,6 @@ namespace Hotel.Application.Service
             {
                 result.Success = false;
                 result.Message = $"Error removiendo el rol de usuario: {model.IdRolUsuario}";
-                this.logger.LogError($"{result.Message}", ex.ToString());
-            }
-
-            return result;
-        }
-        public ServiceResult Remove(RolUsuarioRemoveDto[] models)
-        {
-            ServiceResult result = new ServiceResult();
-
-            try
-            {
-                List<RolUsuario> rolesUsuario = new List<RolUsuario>();
-
-                foreach (var model in models)
-                {
-                    result = model.ValidateRolUsuarioRemove();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-
-                    var rolUsuario = model.ConvertRemoveEntity();
-                    rolesUsuario.Add(rolUsuario);
-                }
-                
-                this.rolUsuarioRepository.Remove(rolesUsuario.ToArray());
-
-                result.Message = "Roles de usuario removidos correctamente";
-            }
-            catch (RolUsuarioException ruex)
-            {
-                result.Success = false;
-                result.Message = ruex.Message;
-                this.logger.LogError($"{result.Message}");
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = $"Error removiendo roles de usuario";
                 this.logger.LogError($"{result.Message}", ex.ToString());
             }
 

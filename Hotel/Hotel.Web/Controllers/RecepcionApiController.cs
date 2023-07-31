@@ -1,40 +1,37 @@
-﻿using Hotel.Application.Contract;
-using Hotel.Infrastructure.Models;
+﻿using Hotel.Web.Api.ApiServices;
+using Hotel.Web.Api.ApiServices.Interfaces;
 using Hotel.Web.Controllers.Extentions;
-using Hotel.Web.Models.Recepcion;
 using Hotel.Web.Models.Recepcion.Request;
+using Hotel.Web.Models.Recepcion.Response;
+using Hotel.Web.Models.RolUsuario.Request;
+using Hotel.Web.Models.RolUsuario.Response;
 using Microsoft.AspNetCore.Mvc;
-using RecepcionWModel = Hotel.Web.Models.Recepcion.RecepcionWModel;
 
 namespace Hotel.Web.Controllers
 {
-    public class RecepcionController : Controller
+    public class RecepcionApiController : Controller
     {
-        private readonly IRecepcionService recepcionService;
-        public RecepcionController(IRecepcionService recepcionService)
+        private readonly IRecepcionApiService recepcionApiService;
+
+        public RecepcionApiController(IRecepcionApiService recepcionApiService)
         {
-            this.recepcionService = recepcionService;
+            this.recepcionApiService = recepcionApiService;
         }
 
-        // GET: RecepcionController
+        // GET: RecepcionApiControlador
         public ActionResult Index()
         {
             try
             {
-                var result = recepcionService.Get();
+                RecepcionListResponse recepcionList = new RecepcionListResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                recepcionList = recepcionApiService.Get();
 
-                var recepciones = result.Data as List<RecepcionModel>;
+                if (!recepcionList.Success)
+                    throw new Exception(recepcionList.Message);
 
-                if (recepciones == null)
-                    throw new Exception("No hay recepciones.");
 
-                List<RecepcionWModel> recepcionResponses = recepciones
-                .Select(r => r.ConvertModelToWModel()).ToList();
-
-                return View(recepcionResponses);
+                return View(recepcionList.Data);
             }
             catch (Exception e)
             {
@@ -43,24 +40,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionController/Details/5
+        // GET: RecepcionApiControlador/Details/5
         public ActionResult Details(int id)
         {
             try
             {
-                var result = recepcionService.GetById(id);
+                RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                recepcion = recepcionApiService.GetById(id);
 
-                var recepcion = result.Data as RecepcionModel;
+                if (!recepcion.Success)
+                    throw new Exception(recepcion.Message);
 
-                if (recepcion == null)
-                    throw new Exception("No hay recepciones.");
 
-                RecepcionWModel recepcionResponse = recepcion.ConvertModelToWModel();
-
-                return View(recepcionResponse);
+                return View(recepcion.Data);
             }
             catch (Exception e)
             {
@@ -69,22 +62,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionController/Create
+        // GET: RecepcionApiControlador/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RecepcionController/Create
+        // POST: RecepcionApiControlador/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecepcionAddRequest recepcionAdd)
         {
             try
             {
-                var recepcion = recepcionAdd.ConvertRequestToDto();
-
-                var result = this.recepcionService.Add(recepcion);
+                var result = recepcionApiService.Add(recepcionAdd);
 
                 if (!result.Success)
                 {
@@ -100,24 +91,24 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionController/Edit/5
+        // GET: RecepcionApiControlador/Edit/5
         public ActionResult Edit(int id)
         {
             try
             {
-                var result = recepcionService.GetById(id);
+                RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
 
-                if (!result.Success)
-                    throw new Exception(result.Message);
+                recepcion = recepcionApiService.GetById(id);
 
-                var recepcion = result.Data as RecepcionModel;
+                if (!recepcion.Success)
+                    throw new Exception(recepcion.Message);
+                if (recepcion.Data == null)
+                    throw new Exception("Recepcion nula");
 
-                if (recepcion == null)
-                    throw new Exception("No hay recepciones.");
-
-                RecepcionUpdateRequest recepcionUpdate = recepcion.ConvertModelToRequest();
+                RecepcionUpdateRequest recepcionUpdate = recepcion.Data.ConvertModelToRequest();
 
                 return View(recepcionUpdate);
+
             }
             catch (Exception e)
             {
@@ -126,16 +117,14 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // POST: RecepcionController/Edit/5
+        // POST: RecepcionApiControlador/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, RecepcionUpdateRequest recepcionUpdate)
         {
             try
             {
-                var recepcion = recepcionUpdate.ConvertRequestToDto();
-
-                var result = this.recepcionService.Update(recepcion);
+                var result = recepcionApiService.Update(recepcionUpdate);
 
                 if (!result.Success)
                 {
@@ -151,23 +140,28 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionController/Delete/5
+        // GET: RecepcionApiControlador/Delete/5
         public ActionResult Delete(int id)
         {
             RecepcionRemoveRequest recepcionRemove = new RecepcionRemoveRequest(id);
+
             return View(recepcionRemove);
         }
 
-        // POST: RecepcionController/Delete/5
+        // POST: RecepcionApiControlador/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, RecepcionRemoveRequest recepcionRemove)
         {
             try
             {
-                var recepcion = recepcionRemove.ConvertRequestToDto();
+                var result = recepcionApiService.Remove(recepcionRemove);
 
-                var result = this.recepcionService.Remove(recepcion);
+                if (!result.Success)
+                {
+                    ViewBag.Message = result.Message;
+                    return View();
+                }
 
                 return RedirectToAction(nameof(Index));
             }

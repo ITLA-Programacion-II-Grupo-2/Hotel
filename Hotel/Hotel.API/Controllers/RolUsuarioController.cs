@@ -1,8 +1,6 @@
 ﻿using Hotel.Application.Contract;
 using Hotel.Application.Core;
 using Hotel.Application.Dtos.RolUsuario;
-using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,14 +58,6 @@ namespace Hotel.API.Controllers
             return HandleResponse(result);
         }
 
-        [HttpPost("SaveRolesUsuario")]
-        public IActionResult Post([FromBody] RolUsuarioAddDto[] models)
-        {
-            var result = this.iRolUsuarioService.Add(models);
-
-            return HandleResponse(result);
-        }
-
         [HttpPost("UpdateRolUsuario")]
         public IActionResult Put([FromBody] RolUsuarioUpdateDto model)
         {
@@ -75,25 +65,10 @@ namespace Hotel.API.Controllers
             return HandleResponse(result);
         }
 
-        [HttpPost("UpdateRolesUsuario")]
-        public IActionResult Put([FromBody] RolUsuarioUpdateDto[] models)
-        {
-            var result = this.iRolUsuarioService.Update(models);
-            return HandleResponse(result);
-        }
-
-
         [HttpPost("RemoveRolUsuario")]
         public IActionResult Delete([FromBody] RolUsuarioRemoveDto model)
         {
             var result = this.iRolUsuarioService.Remove(model);
-            return HandleResponse(result);
-        }
-
-        [HttpPost("RemoveRolesUsuario")]
-        public IActionResult Delete([FromBody] RolUsuarioRemoveDto[] models)
-        {
-            var result = this.iRolUsuarioService.Remove(models);
             return HandleResponse(result);
         }
 

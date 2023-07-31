@@ -7,9 +7,27 @@ namespace Hotel.Web.Controllers.Extentions
 {
     public static class RecepcionExtentions
     {
-        public static RecepcionResponse ConvertModelToResponse(this RecepcionModel recepcion)
+        public static RecepcionWModel ConvertModelToWModel(this RecepcionModel recepcion)
         {
-            return new RecepcionResponse()
+            return new RecepcionWModel()
+            {
+                IdRecepcion = recepcion.IdRecepcion,
+                IdCliente = recepcion.IdCliente,
+                IdHabitacion = recepcion.IdHabitacion,
+                Observacion = recepcion.Observacion,
+                FechaEntrada = recepcion.FechaEntrada,
+                FechaSalida = recepcion.FechaSalida,
+                FechaSalidaConfirmacion = recepcion.FechaSalidaConfirmacion,
+                PrecioInicial = recepcion.PrecioInicial,
+                Adelanto = recepcion.Adelanto,
+                PrecioRestante = recepcion.PrecioRestante,
+                TotalPagado = recepcion.TotalPagado,
+                CostoPenalidad = recepcion.CostoPenalidad
+            };
+        }
+        public static RecepcionUpdateRequest ConvertModelToRequest(this RecepcionWModel recepcion)
+        {
+            return new RecepcionUpdateRequest()
             {
                 IdRecepcion = recepcion.IdRecepcion,
                 IdCliente = recepcion.IdCliente,

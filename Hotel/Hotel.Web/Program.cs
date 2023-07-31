@@ -1,7 +1,9 @@
 using Hotel.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Hotel.IOC.Dependencies;
-using Hotel.Web.ApiServices;
+using Hotel.Web.Api.ApiServices;
+using Hotel.Web.Api;
+using Hotel.Web.Api.ApiServices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,11 @@ builder.Services.AddUsuarioDependency();
 builder.Services.AddRolUsuarioDependency();
 builder.Services.AddRecepcionDependency();
 
+builder.Services.AddTransient<IUsuarioApiService, UsuarioApiService>();
 builder.Services.AddTransient<IRolUsuarioApiService, RolUsuarioApiService>();
+builder.Services.AddTransient<IRecepcionApiService, RecepcionApiService>();
+
+builder.Services.AddTransient<IApiCaller, ApiCaller>();
 
 var app = builder.Build();
 

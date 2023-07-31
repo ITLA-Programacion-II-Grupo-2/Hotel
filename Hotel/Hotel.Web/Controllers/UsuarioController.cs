@@ -33,8 +33,8 @@ namespace Hotel.Web.Controllers
                 if (usuarios == null)
                     throw new Exception("No hay usuarios.");
 
-                List<UsuarioResponse> usuariosResponses = usuarios
-                .Select(p => p.ConvertUserWithRolToUsuarioResponse()).ToList();
+                List<UsuarioWModel> usuariosResponses = usuarios
+                .Select(p => p.ConvertUserWithRolToUsuarioWModel()).ToList();
 
                 return View(usuariosResponses);
             }
@@ -60,7 +60,7 @@ namespace Hotel.Web.Controllers
                 if (usuario == null)
                     throw new Exception("No existe el usuario.");
 
-                UsuarioResponse usuarioResponse = usuario.ConvertUserWithRolToUsuarioResponse();
+                UsuarioWModel usuarioResponse = usuario.ConvertUserWithRolToUsuarioWModel();
 
                 return View(usuarioResponse);
             }

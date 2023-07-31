@@ -1,6 +1,6 @@
 ﻿namespace Hotel.Web.Models.Recepcion
 {
-    public class RecepcionResponse
+    public class RecepcionWModel
     {
         public int IdRecepcion { get; set; }
         public int IdCliente { get; set; }
