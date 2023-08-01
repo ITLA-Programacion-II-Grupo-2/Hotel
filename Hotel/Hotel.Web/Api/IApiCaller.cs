@@ -4,7 +4,7 @@ namespace Hotel.Web.Api
 {
     public interface IApiCaller
     {
-       ObjIn? Get<ObjIn>(string url, ObjIn objIn) where ObjIn : BaseResponse;
-       ObjOut? Set<ObjIn, ObjOut>(string url, ObjIn objIn, ObjOut objOut) where ObjOut : BaseResponse;
+       Response? Get<Response>(string url, Response response) where Response : BaseResponse;
+       Response? Set<Request, Response>(string url, Request request, Response response) where Response : BaseResponse;
     }
 }

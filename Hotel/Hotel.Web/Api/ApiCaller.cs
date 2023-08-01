@@ -17,36 +17,36 @@ namespace Hotel.Web.Api
             this.logger = logger;
         }
 
-        public ObjIn? Get<ObjIn>(string url, ObjIn? objIn) where ObjIn : BaseResponse
+        public Response? Get<Response>(string url, Response? response) where Response : BaseResponse
         {
             using (var httpClient = new HttpClient(httpClientHandler))
             {
-                using (var response = httpClient.GetAsync(url).Result)
+                using (var result = httpClient.GetAsync(url).Result)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        string apiResponse = response.Content.ReadAsStringAsync().Result;
-                        objIn = JsonConvert.DeserializeObject<ObjIn>(apiResponse);
+                        string apiResponse = result.Content.ReadAsStringAsync().Result;
+                        response = JsonConvert.DeserializeObject<Response>(apiResponse);
                     }
                 }
             }
 
-            return objIn;
+            return response;
         }
 
-        public ObjOut? Set<ObjIn, ObjOut>(string url, ObjIn objIn, ObjOut? objOut) where ObjOut : BaseResponse
+        public Response? Set<Request, Response>(string url, Request request, Response? response) where Response : BaseResponse
         {
             using (var httpClient = new HttpClient(httpClientHandler))
             {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(objIn), Encoding.UTF8, "application/json");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
-                using (var response = httpClient.PostAsync(url, content).Result)
+                using (var result = httpClient.PostAsync(url, content).Result)
                 {
-                    string apiResponse = response.Content.ReadAsStringAsync().Result;
-                    objOut = JsonConvert.DeserializeObject<ObjOut>(apiResponse);
+                    string apiResponse = result.Content.ReadAsStringAsync().Result;
+                    response = JsonConvert.DeserializeObject<Response>(apiResponse);
                 }
 
-                return objOut;
+                return response;
             }
         }
     }
