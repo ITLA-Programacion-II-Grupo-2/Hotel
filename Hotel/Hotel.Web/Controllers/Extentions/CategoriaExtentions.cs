@@ -7,9 +7,9 @@ namespace Hotel.Web.Controllers.Extentions
 {
     public static class CategoriaExtentions
     {
-        public static CategoriaResponse ConvertGetByIdToCategoriaResponse(this CategoriaModels categoria)
+        public static CategoriaResponseModel ConvertGetByIdToCategoriaResponse(this CategoriaModels categoria)
         {
-            return new CategoriaResponse()
+            return new CategoriaResponseModel()
             {
                    IdCategoria = categoria.IdCategoria,
                    Descripcion = categoria.Descripcion,
@@ -27,7 +27,7 @@ namespace Hotel.Web.Controllers.Extentions
             };
         }
 
-        public static CategoriaUpdateRequest ConvertCategoriaToUpdateRequest(this Infrastructure.Models.CategoriaModels categoria)
+        public static CategoriaUpdateRequest ConvertCategoriaToUpdateRequest(this CategoriaModels categoria)
         {
             return new CategoriaUpdateRequest()
             {

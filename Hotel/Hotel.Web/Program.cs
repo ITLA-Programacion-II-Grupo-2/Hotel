@@ -1,6 +1,8 @@
 using Hotel.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Hotel.IOC.Dependencies;
+using Hotel.Web.Api;
+using Hotel.Web.Api.ApiService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,11 @@ builder.Services.AddDbContext<HotelContext>(options => options.UseSqlServer(buil
 // My Dependencies
 builder.Services.AddCategoriaDependency();
 builder.Services.AddPisoDependency();
+
+builder.Services.AddTransient<ICategoriaApiService, CategoriaApiService>();
+builder.Services.AddTransient<IPisoApiService, PisoApiService>();
+
+builder.Services.AddTransient<IApicaller, Apicaller>();
 
 var app = builder.Build();
 

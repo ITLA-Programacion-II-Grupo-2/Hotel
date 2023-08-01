@@ -21,7 +21,7 @@ namespace Hotel.API.Controllers
             this.iPisoService = iPisoService;
         }
 
-        [HttpGet]
+        [HttpGet("GetPiso")]
         public IActionResult Get()
         {
             var result = this.iPisoService.Get();

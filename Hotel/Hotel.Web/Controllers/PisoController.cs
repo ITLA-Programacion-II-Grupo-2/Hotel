@@ -35,11 +35,11 @@ namespace Hotel.Web.Controllers
             if (pisos == null)
                 throw new Exception();
 
-            List<PisoResponse> pisoResponses = new List<PisoResponse>();
+            List<PisoResponseModel> pisoResponses = new List<PisoResponseModel>();
 
             foreach (var piso in pisos)
             {
-                PisoResponse pisoResponse = new PisoResponse()
+                PisoResponseModel pisoResponse = new PisoResponseModel()
                 {
                     IdPiso = piso.IdPiso,
                     Descripcion = piso.Descripcion
@@ -67,7 +67,7 @@ namespace Hotel.Web.Controllers
                 if (piso == null)
                     throw new Exception("No existe el piso.");
 
-                PisoResponse pisoResponse = piso.ConvertGetByIdToCategoriaResponse();
+                PisoResponseModel pisoResponse = piso.ConvertGetByIdToCategoriaResponse();
 
                 return View(pisoResponse);
             }

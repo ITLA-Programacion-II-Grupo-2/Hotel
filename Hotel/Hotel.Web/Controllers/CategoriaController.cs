@@ -31,11 +31,11 @@ namespace Hotel.Web.Controllers
             if (categorias == null)
                 throw new Exception();
 
-            List<CategoriaResponse> categoriaResponses = new List<CategoriaResponse>();
+            List<CategoriaResponseModel> categoriaResponses = new List<CategoriaResponseModel>();
 
             foreach (var categoria in categorias)
             {
-                CategoriaResponse categoriaResponse = new CategoriaResponse()
+                CategoriaResponseModel categoriaResponse = new CategoriaResponseModel()
                 {
                     IdCategoria = categoria.IdCategoria,
                     Descripcion = categoria.Descripcion
@@ -63,7 +63,7 @@ namespace Hotel.Web.Controllers
                 if (categoria == null)
                     throw new Exception("No existe la categoria.");
 
-                CategoriaResponse categoriaResponse = categoria.ConvertGetByIdToCategoriaResponse();
+                CategoriaResponseModel categoriaResponse = categoria.ConvertGetByIdToCategoriaResponse();
 
                 return View(categoriaResponse);
             }

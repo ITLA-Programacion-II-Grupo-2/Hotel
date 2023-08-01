@@ -11,9 +11,9 @@ namespace Hotel.Web.Controllers.Extentions
     public static class PisoExtentions
     {
 
-        public static PisoResponse ConvertGetByIdToCategoriaResponse(this PisoModels piso)
+        public static PisoResponseModel ConvertGetByIdToCategoriaResponse(this PisoModels piso)
         {
-            return new PisoResponse()
+            return new PisoResponseModel()
             {
                 IdPiso = piso.IdPiso,
                 Descripcion = piso.Descripcion,
