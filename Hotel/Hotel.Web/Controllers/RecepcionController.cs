@@ -4,7 +4,6 @@ using Hotel.Web.Controllers.Extentions;
 using Hotel.Web.Models.Recepcion;
 using Hotel.Web.Models.Recepcion.Request;
 using Microsoft.AspNetCore.Mvc;
-using RecepcionWModel = Hotel.Web.Models.Recepcion.RecepcionWModel;
 
 namespace Hotel.Web.Controllers
 {

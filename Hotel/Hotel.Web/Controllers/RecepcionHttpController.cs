@@ -1,18 +1,19 @@
 ﻿using Hotel.Web.Api.ApiServices.Interfaces;
 using Hotel.Web.Controllers.Extentions;
+using Hotel.Web.Http.Interfaces;
 using Hotel.Web.Models.Recepcion.Request;
 using Hotel.Web.Models.Recepcion.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
 {
-    public class RecepcionApiController : Controller
+    public class RecepcionHttpController : Controller
     {
-        private readonly IRecepcionApiService recepcionApiService;
+        private readonly IRecepcionHttpService recepcionHttpService;
 
-        public RecepcionApiController(IRecepcionApiService recepcionApiService)
+        public RecepcionHttpController(IRecepcionHttpService recepcionHttpService)
         {
-            this.recepcionApiService = recepcionApiService;
+            this.recepcionHttpService = recepcionHttpService;
         }
 
         // GET: RecepcionApiControlador
@@ -22,7 +23,7 @@ namespace Hotel.Web.Controllers
             {
                 RecepcionListResponse recepcionList = new RecepcionListResponse();
 
-                recepcionList = recepcionApiService.Get();
+                recepcionList = recepcionHttpService.Get();
 
                 if (!recepcionList.Success)
                     throw new Exception(recepcionList.Message);
@@ -44,7 +45,7 @@ namespace Hotel.Web.Controllers
             {
                 RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
 
-                recepcion = recepcionApiService.GetById(id);
+                recepcion = recepcionHttpService.GetById(id);
 
                 if (!recepcion.Success)
                     throw new Exception(recepcion.Message);
@@ -72,7 +73,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var result = recepcionApiService.Add(recepcionAdd);
+                var result = recepcionHttpService.Add(recepcionAdd);
 
                 if (!result.Success)
                 {
@@ -95,7 +96,7 @@ namespace Hotel.Web.Controllers
             {
                 RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
 
-                recepcion = recepcionApiService.GetById(id);
+                recepcion = recepcionHttpService.GetById(id);
 
                 if (!recepcion.Success)
                     throw new Exception(recepcion.Message);
@@ -121,7 +122,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var result = recepcionApiService.Update(recepcionUpdate);
+                var result = recepcionHttpService.Update(recepcionUpdate);
 
                 if (!result.Success)
                 {
@@ -152,7 +153,7 @@ namespace Hotel.Web.Controllers
         {
             try
             {
-                var result = recepcionApiService.Remove(recepcionRemove);
+                var result = recepcionHttpService.Remove(recepcionRemove);
 
                 if (!result.Success)
                 {

@@ -1,27 +1,28 @@
-﻿using Hotel.Web.Models;
+﻿using Hotel.Web.Api.ApiServices;
+using Hotel.Web.Models;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace Hotel.Web.Api
+namespace Hotel.Web.Http
 {
-    public class ApiCaller : IApiCaller
+    public class HttpCaller : IHttpCaller
     {
-        HttpClientHandler httpClientHandler = new HttpClientHandler();
-        private readonly ILogger<ApiCaller> logger;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger<HttpCaller> logger;
 
-        public ApiCaller(ILogger<ApiCaller> logger)
+        public HttpCaller(IHttpClientFactory httpClientFactory, ILogger<HttpCaller> logger)
         {
-            httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyError) => { return true; };
+            this.httpClientFactory = httpClientFactory;
             this.logger = logger;
         }
 
         public Response? Get<Response>(string url, Response? response) where Response : BaseResponse
         {
-            using (var httpClient = new HttpClient(httpClientHandler))
+            using (var httpClient = this.httpClientFactory.CreateClient())
             {
                 using (var result = httpClient.GetAsync(url).Result)
                 {
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    if (result.IsSuccessStatusCode)
                     {
                         string apiResponse = result.Content.ReadAsStringAsync().Result;
                         response = JsonConvert.DeserializeObject<Response>(apiResponse);
@@ -31,21 +32,23 @@ namespace Hotel.Web.Api
 
             return response;
         }
-
         public Response? Set<Request, Response>(string url, Request request, Response? response) where Response : BaseResponse
         {
-            using (var httpClient = new HttpClient(httpClientHandler))
+            using (var httpClient = this.httpClientFactory.CreateClient())
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
                 using (var result = httpClient.PostAsync(url, content).Result)
                 {
-                    string apiResponse = result.Content.ReadAsStringAsync().Result;
-                    response = JsonConvert.DeserializeObject<Response>(apiResponse);
-                }
+                    if (result.IsSuccessStatusCode)
+                    {
+                        string apiResponse = result.Content.ReadAsStringAsync().Result;
 
-                return response;
+                        response = JsonConvert.DeserializeObject<Response>(apiResponse);
+                    }
+                }
             }
+            return response;
         }
     }
 }

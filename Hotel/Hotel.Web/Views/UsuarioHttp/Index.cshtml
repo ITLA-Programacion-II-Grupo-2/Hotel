@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Hotel.Web.Models.Usuario.UsuarioWModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="row pt-4">
+        <div class="col-9">
+            <h1>Usuarios</h1>
+        </div>
+        <div class="col-2">
+            <br />
+            <a class="btn btn-info" asp-action="Create">Nuevo Usuario</a>
+        </div>
+    </div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.IdUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCompleto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rol)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody >
+@foreach (var item in Model) {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.IdUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCompleto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rol)
+            </td>
+            <td class="text-center">
+                <a asp-controller="UsuarioHttp" asp-action="Details" asp-route-id="@item.IdUsuario" class="btn btn-success">Detalles</a> |
+                <a asp-controller="UsuarioHttp" asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-warning">Editar</a> |
+                <a asp-controller="UsuarioHttp" asp-action="Delete" asp-route-id="@item.IdUsuario" class="btn btn-danger">Eliminar</a>          
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

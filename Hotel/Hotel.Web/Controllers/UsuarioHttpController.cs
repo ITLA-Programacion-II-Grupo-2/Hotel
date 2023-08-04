@@ -1,34 +1,34 @@
 ﻿using Hotel.Web.Api.ApiServices.Interfaces;
 using Hotel.Web.Controllers.Extentions;
-using Hotel.Web.Models.Recepcion.Request;
-using Hotel.Web.Models.Recepcion.Response;
+using Hotel.Web.Http.Interfaces;
+using Hotel.Web.Models.Usuario.Request;
+using Hotel.Web.Models.Usuario.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
 {
-    public class RecepcionApiController : Controller
+    public class UsuarioHttpController : Controller
     {
-        private readonly IRecepcionApiService recepcionApiService;
-
-        public RecepcionApiController(IRecepcionApiService recepcionApiService)
+        private readonly IUsuarioHttpService usuarioHttpService;
+        public UsuarioHttpController(IUsuarioHttpService usuarioHttpService)
         {
-            this.recepcionApiService = recepcionApiService;
+            this.usuarioHttpService = usuarioHttpService;
         }
 
-        // GET: RecepcionApiControlador
+        // GET: UsuarioApiController
         public ActionResult Index()
         {
             try
             {
-                RecepcionListResponse recepcionList = new RecepcionListResponse();
+                UsuarioListResponse usuarioList = new UsuarioListResponse();
 
-                recepcionList = recepcionApiService.Get();
+                usuarioList = usuarioHttpService.Get();
 
-                if (!recepcionList.Success)
-                    throw new Exception(recepcionList.Message);
+                if (!usuarioList.Success)
+                    throw new Exception(usuarioList.Message);
 
 
-                return View(recepcionList.Data);
+                return View(usuarioList.Data);
             }
             catch (Exception e)
             {
@@ -37,20 +37,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionApiControlador/Details/5
+        // GET: UsuarioApiController/Details/5
         public ActionResult Details(int id)
         {
             try
             {
-                RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
+               UsuarioDetailsResponse usuario = new UsuarioDetailsResponse();
 
-                recepcion = recepcionApiService.GetById(id);
+                usuario = usuarioHttpService.GetById(id);
 
-                if (!recepcion.Success)
-                    throw new Exception(recepcion.Message);
+                if (!usuario.Success)
+                    throw new Exception(usuario.Message);
 
 
-                return View(recepcion.Data);
+                return View(usuario.Data);
             }
             catch (Exception e)
             {
@@ -59,20 +59,20 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionApiControlador/Create
+        // GET: UsuarioApiController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: RecepcionApiControlador/Create
+        // POST: UsuarioApiController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(RecepcionAddRequest recepcionAdd)
+        public ActionResult Create(UsuarioAddRequest usuarioAdd)
         {
             try
             {
-                var result = recepcionApiService.Add(recepcionAdd);
+                var result = usuarioHttpService.Add(usuarioAdd);
 
                 if (!result.Success)
                 {
@@ -88,23 +88,23 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionApiControlador/Edit/5
+        // GET: UsuarioApiController/Edit/5
         public ActionResult Edit(int id)
         {
             try
             {
-                RecepcionDetailsResponse recepcion = new RecepcionDetailsResponse();
+                UsuarioDetailsResponse usuario = new UsuarioDetailsResponse();
 
-                recepcion = recepcionApiService.GetById(id);
+                usuario = usuarioHttpService.GetById(id);
 
-                if (!recepcion.Success)
-                    throw new Exception(recepcion.Message);
-                if (recepcion.Data == null)
-                    throw new Exception("Recepcion nula");
+                if (!usuario.Success)
+                    throw new Exception(usuario.Message);
+                if (usuario.Data == null)
+                    throw new Exception("Usuario nulo");
 
-                RecepcionUpdateRequest recepcionUpdate = recepcion.Data.ConvertModelToRequest();
+                UsuarioUpdateRequest usuarioUpdate = usuario.Data.ConvertUsuarioToUpdateRequest();
 
-                return View(recepcionUpdate);
+                return View(usuarioUpdate);
 
             }
             catch (Exception e)
@@ -114,14 +114,14 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // POST: RecepcionApiControlador/Edit/5
+        // POST: UsuarioApiController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, RecepcionUpdateRequest recepcionUpdate)
+        public ActionResult Edit(int id, UsuarioUpdateRequest usuarioUpdate)
         {
             try
             {
-                var result = recepcionApiService.Update(recepcionUpdate);
+                var result = usuarioHttpService.Update(usuarioUpdate);
 
                 if (!result.Success)
                 {
@@ -137,22 +137,22 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: RecepcionApiControlador/Delete/5
+        // GET: UsuarioApiController/Delete/5
         public ActionResult Delete(int id)
         {
-            RecepcionRemoveRequest recepcionRemove = new RecepcionRemoveRequest(id);
+            UsuarioRemoveRequest usuarioRemove = new UsuarioRemoveRequest(id);
 
-            return View(recepcionRemove);
+            return View(usuarioRemove);
         }
 
-        // POST: RecepcionApiControlador/Delete/5
+        // POST: UsuarioApiController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, RecepcionRemoveRequest recepcionRemove)
+        public ActionResult Delete(int id, UsuarioRemoveRequest usuarioRemove)
         {
             try
             {
-                var result = recepcionApiService.Remove(recepcionRemove);
+                var result = usuarioHttpService.Remove(usuarioRemove);
 
                 if (!result.Success)
                 {

@@ -1,9 +1,5 @@
-﻿using Hotel.Infrastructure.Models;
-using Hotel.Web.Api.ApiServices;
-using Hotel.Web.Api.ApiServices.Interfaces;
+﻿using Hotel.Web.Api.ApiServices.Interfaces;
 using Hotel.Web.Controllers.Extentions;
-using Hotel.Web.Models.RolUsuario.Request;
-using Hotel.Web.Models.RolUsuario.Response;
 using Hotel.Web.Models.Usuario.Request;
 using Hotel.Web.Models.Usuario.Response;
 using Microsoft.AspNetCore.Mvc;

@@ -1,0 +1,59 @@
+﻿@model Hotel.Web.Models.Usuario.Request.UsuarioAddRequest
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Crear usuario</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NombreCompleto" class="control-label">Nombre Completo</label>
+                <input asp-for="NombreCompleto" class="form-control" required/>
+                <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Correo" class="control-label"></label>
+                <input asp-for="Correo" class="form-control" required/>
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Clave" class="control-label"></label>
+                <input asp-for="Clave" type="password" class="form-control" required />
+                <span asp-validation-for="Clave" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdRolUsuario" class="control-label"></label>
+                <input asp-for="IdRolUsuario" class="form-control" required/>
+                <span asp-validation-for="IdRolUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeUser" class="control-label">Creador</label>
+                <input asp-for="ChangeUser" class="form-control" required />
+                <span asp-validation-for="ChangeUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeDate" class="control-label">Fecha Creación</label>
+                <input asp-for="ChangeDate" class="form-control" required/>
+                <span asp-validation-for="ChangeDate" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+            <br />
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Usuarios</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

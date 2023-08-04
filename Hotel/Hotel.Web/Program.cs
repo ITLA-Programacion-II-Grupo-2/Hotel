@@ -4,6 +4,9 @@ using Hotel.IOC.Dependencies;
 using Hotel.Web.Api.ApiServices;
 using Hotel.Web.Api;
 using Hotel.Web.Api.ApiServices.Interfaces;
+using Hotel.Web.Http.Interfaces;
+using Hotel.Web.Http.HttpServices;
+using Hotel.Web.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,14 @@ builder.Services.AddTransient<IRolUsuarioApiService, RolUsuarioApiService>();
 builder.Services.AddTransient<IRecepcionApiService, RecepcionApiService>();
 
 builder.Services.AddTransient<IApiCaller, ApiCaller>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddTransient<IUsuarioHttpService, UsuarioHttpService>();
+builder.Services.AddTransient<IRolUsuarioHttpService, RolUsuarioHttpService>();
+builder.Services.AddTransient<IRecepcionHttpService, RecepcionHttpService>();
+
+builder.Services.AddTransient<IHttpCaller, HttpCaller>();
 
 var app = builder.Build();
 
