@@ -53,7 +53,6 @@ namespace Hotel.Application.Validations
 
         }
 
-
         public static ServiceResult ValidandocapUpdate(this CategoriaUpdateDto categoriaUpdate)
         {
             ServiceResult result = new ServiceResult();
@@ -96,10 +95,6 @@ namespace Hotel.Application.Validations
             }
             return result;
         }
-
-
-
-
     }
 
 

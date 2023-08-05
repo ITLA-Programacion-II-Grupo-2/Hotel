@@ -50,8 +50,6 @@ namespace Hotel.Application.Extentions
 
         }
 
-
-
     }
 
 

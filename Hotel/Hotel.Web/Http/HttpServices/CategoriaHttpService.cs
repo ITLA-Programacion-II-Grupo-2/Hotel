@@ -1,23 +1,28 @@
 ﻿using Hotel.Application.Dto.Categoria;
 using Hotel.Web.Controllers.Extentions;
+using Hotel.Web.Http.Interfaces;
 using Hotel.Web.Models;
 using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
+using static Hotel.Web.Http.HttpServices.CategoriaHttpService;
 
-namespace Hotel.Web.Api.ApiService
+namespace Hotel.Web.Http.HttpServices
 {
-    public class CategoriaApiService : ICategoriaApiService
+    public class CategoriaHttpService : ICategoriaHttpService
     {
-        private readonly IApicaller apicaller;
-        private readonly ILogger<CategoriaApiService> logger;
-        private string baseUrl = "http://localhost:5286/api/Categoria/";
-       
+        
+            private readonly IHttpCaller httpCaller;
+            private readonly ILogger<CategoriaHttpService> logger;
+            private string baseUrl = string.Empty;
 
-        public CategoriaApiService(IApicaller apicaller, ILogger<CategoriaApiService> logger)
-        {
-            this.apicaller = apicaller;
-            this.logger = logger;
-        }
+            public CategoriaHttpService(IHttpCaller apiCaller,
+                                    IConfiguration configuration,
+                                    ILogger<CategoriaHttpService> logger)
+            {
+                this.httpCaller = apiCaller;
+                this.logger = logger;
+                this.baseUrl = configuration["ApiConfig:baseUrl"] + "Categoria/";
+            }
 
         public CategoriaListResponse Get()
         {
@@ -26,7 +31,7 @@ namespace Hotel.Web.Api.ApiService
 
             try
             {
-                categoriasList = apicaller.Get(url, categoriasList);
+                categoriasList = httpCaller.Get(url, categoriasList);
 
                 if (categoriasList == null)
                     throw new Exception();
@@ -41,14 +46,15 @@ namespace Hotel.Web.Api.ApiService
 
             return categoriasList;
         }
-        public CategoriaDetailsResponse GetById(int id)
+
+        public CategoriaDetailsResponse GetById(int Id)
         {
             CategoriaDetailsResponse? categoria = new CategoriaDetailsResponse();
-            string url = $" {baseUrl}GetCategoriaid={id}";
+            string url = $" {baseUrl}GetCategoria?id={Id}";
 
             try
             {
-                categoria = apicaller.Get(url, categoria);
+                categoria = httpCaller.Get(url, categoria);
 
                 if (categoria == null)
                     throw new Exception();
@@ -63,6 +69,7 @@ namespace Hotel.Web.Api.ApiService
 
             return categoria;
         }
+
         public BaseResponse Add(CategoriaAddRequest add)
         {
             BaseResponse? result = new BaseResponse();
@@ -73,7 +80,7 @@ namespace Hotel.Web.Api.ApiService
 
             try
             {
-                result = apicaller.Set(url, categoriaAdd, result);
+                result = httpCaller.Set(url, categoriaAdd, result);
                 if (result == null)
                     throw new Exception();
             }
@@ -87,16 +94,17 @@ namespace Hotel.Web.Api.ApiService
 
             return result;
         }
+
         public BaseResponse Update(CategoriaUpdateRequest update)
         {
             BaseResponse? result = new BaseResponse();
 
-            CategoriaUpdateDto categoriaUpdate = update.ConvertirUpdateRequestToUpdateDto();
+             CategoriaUpdateDto categoriaUpdate = update.ConvertirUpdateRequestToUpdateDto();
             string url = $" {baseUrl}UpdateCategoria";
 
             try
             {
-                result = apicaller.Set(url, categoriaUpdate, result);
+                result = httpCaller.Set(url, categoriaUpdate, result);
                 if (result == null)
                     throw new Exception();
             }

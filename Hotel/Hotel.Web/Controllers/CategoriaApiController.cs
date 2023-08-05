@@ -89,7 +89,7 @@ namespace Hotel.Web.Controllers
 
 
 
-        // GET: UsuarioApiController/Edit/5
+        // GET: CategoriaApiController/Edit/5
         public ActionResult Edit(int id)
         {
             try
@@ -101,9 +101,9 @@ namespace Hotel.Web.Controllers
                 if (!categoria.Success)
                     throw new Exception(categoria.Message);
                 if (categoria.Data == null)
-                    throw new Exception("Usuario nulo");
+                    throw new Exception("Categoria nulo");
 
-                 //CategoriaUpdateRequest categoriaUpdate = categoria.Data.ConvertCategoriaToUpdateRequest();
+                 // CategoriaUpdateRequest categoriaUpdate = categoria.Data.ConvertCategoriaToUpdateRequest();
 
                return View();
 
@@ -115,7 +115,7 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // POST: UsuarioApiController/Edit/5
+        // POST: CategoriaApiController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, CategoriaUpdateRequest categoriaUpdate)

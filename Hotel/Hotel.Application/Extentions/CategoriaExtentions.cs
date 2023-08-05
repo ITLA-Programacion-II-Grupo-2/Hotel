@@ -1,6 +1,6 @@
 ﻿using Hotel.Application.Dto.Categoria;
 using Hotel.Domain.Entities;
-using Hotel.Infrastructure.Models;
+
 
 namespace Hotel.Application.Extentions
 {
@@ -47,13 +47,7 @@ namespace Hotel.Application.Extentions
             };
         }
 
-       // public static CategoriaModels ToModel(this Categoria categoria)
-      //  {
-        //    return new CategoriaModels
-          //  {
-         //       IdCategoria = categoria.IdCategoria,
-         //       Descripcion = categoria.Descripcion
-           // };
+    
     }
 
 

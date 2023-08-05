@@ -29,7 +29,7 @@ namespace Hotel.API.Controllers
             return Ok(result);
         }
       
-        [HttpGet("{id}")]
+        [HttpGet("{id?}")]
         public IActionResult GetById(int id)
         {
             var result = this.iCategoriaService.GetById(id);

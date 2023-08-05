@@ -28,7 +28,7 @@ namespace Hotel.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id?}")]
         public IActionResult Get(int id)
         {
             var result = this.iPisoService.GetById(id);

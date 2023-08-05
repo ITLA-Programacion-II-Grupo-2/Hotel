@@ -1,9 +1,6 @@
 ﻿using Hotel.Application.Core;
-using Hotel.Application.Dto.Categoria;
 using Hotel.Application.Dto.Piso;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Hotel.Application.Validations
 {
@@ -96,8 +93,6 @@ namespace Hotel.Application.Validations
             }
             return result;
         }
-
-
 
     }
 

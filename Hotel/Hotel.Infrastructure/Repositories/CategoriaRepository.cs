@@ -262,10 +262,6 @@ namespace Hotel.Infrastructure.Repositories
 
 
         }
-
-
-
-
     }
 
 

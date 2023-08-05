@@ -23,8 +23,6 @@ namespace Hotel.Application.Service
         this.logger = logger;
     }
 
-       
-
         public ServiceResult Get()
         {
             ServiceResult result = new ServiceResult();
@@ -42,7 +40,6 @@ namespace Hotel.Application.Service
             }
             return result;
         }
-
 
         public ServiceResult GetById(int id)
         {
@@ -62,7 +59,6 @@ namespace Hotel.Application.Service
             }
             return result;
         }
-
 
         public ServiceResult Add(PisoAddDto model)
         {
@@ -154,14 +150,6 @@ namespace Hotel.Application.Service
             }
             return result;
         }
-
-
-
-
-
-
-
-
         
     }
 }

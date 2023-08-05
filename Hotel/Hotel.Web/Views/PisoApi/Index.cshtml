@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hotel.Web.Models.Categoria.Response.CategoriaResponseModel>
+﻿@model IEnumerable<Hotel.Web.Models.Piso.Response.PisoResponseModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdCategoria)
+                @Html.DisplayNameFor(model => model.IdPiso)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
@@ -25,14 +25,14 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.IdCategoria)
+                @Html.DisplayFor(modelItem => item.IdPiso)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.IdCategoria }) |
-                @Html.ActionLink("Details", "Details", new { id=item.IdCategoria}) |
+                @Html.ActionLink("Edit", "Edit", new {  id=item.IdPiso }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.IdPiso }) 
             </td>
         </tr>
 }

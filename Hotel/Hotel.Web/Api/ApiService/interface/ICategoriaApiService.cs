@@ -10,9 +10,6 @@ namespace Hotel.Web.Api.ApiService
                                             CategoriaDetailsResponse, 
                                             CategoriaAddRequest, 
                                             CategoriaUpdateRequest>
-    {
-       
-
-      
+    {   
     }
 }

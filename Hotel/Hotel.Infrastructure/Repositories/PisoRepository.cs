@@ -249,7 +249,6 @@ namespace Hotel.Infrastructure.Repositories
             return pisos;
         }
 
-
     }
 
 }

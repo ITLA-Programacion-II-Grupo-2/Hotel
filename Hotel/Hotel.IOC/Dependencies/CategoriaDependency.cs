@@ -18,9 +18,5 @@ namespace Hotel.IOC.Dependencies
 
         }
 
-
-    }
-        
-
-    
+    }  
 }

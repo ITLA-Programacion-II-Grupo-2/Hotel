@@ -1,26 +1,29 @@
 ﻿using Hotel.Application.Dto.Categoria;
 using Hotel.Application.Dto.Piso;
 using Hotel.Web.Controllers.Extentions;
+using Hotel.Web.Http.Interfaces;
 using Hotel.Web.Models;
+using Hotel.Web.Models.Categoria.Response;
 using Hotel.Web.Models.Piso.Request;
 using Hotel.Web.Models.Piso.Response;
 
-namespace Hotel.Web.Api.ApiService
+namespace Hotel.Web.Http.HttpServices
 {
-    public class PisoApiService : IPisoApiService
+    public class PisoHttpService : IPisoHttpService
     {
-        private readonly IApicaller apicaller;
-        private readonly ILogger<PisoApiService> logger;
-        private string baseUrl = "http://localhost:5286/api/Piso/";
 
+        private readonly IHttpCaller httpCaller;
+        private readonly ILogger<PisoHttpService> logger;
+        private string baseUrl = string.Empty;
 
-        public PisoApiService(IApicaller apicaller, ILogger<PisoApiService> logger)
+        public PisoHttpService(IHttpCaller apiCaller,
+                                IConfiguration configuration,
+                                ILogger<PisoHttpService> logger)
         {
-            this.apicaller = apicaller;
+            this.httpCaller = apiCaller;
             this.logger = logger;
+            this.baseUrl = configuration["ApiConfig:baseUrl"] + "Piso/";
         }
-
-
         public PisoListResponse Get()
         {
             PisoListResponse? pisosList = new PisoListResponse();
@@ -28,7 +31,7 @@ namespace Hotel.Web.Api.ApiService
 
             try
             {
-                pisosList = apicaller.Get(url, pisosList);
+                pisosList = httpCaller.Get(url, pisosList);
 
                 if (pisosList == null)
                     throw new Exception();
@@ -41,17 +44,17 @@ namespace Hotel.Web.Api.ApiService
                 logger.LogError(pisosList.Message, ex.ToString());
             }
 
-            return pisosList;
+            return pisosList; throw new NotImplementedException();
         }
 
-        public PisoDetailsResponse GetById(int id)
+        public PisoDetailsResponse GetById(int Id)
         {
             PisoDetailsResponse? piso = new PisoDetailsResponse();
-            string url = $" {baseUrl}GetPisoid={id}";
+            string url = $" {baseUrl}GetPiso?id={Id}";
 
             try
             {
-                piso = apicaller.Get(url, piso);
+                piso = httpCaller.Get(url, piso);
 
                 if (piso == null)
                     throw new Exception();
@@ -69,14 +72,13 @@ namespace Hotel.Web.Api.ApiService
         public BaseResponse Add(PisoAddRequest add)
         {
             BaseResponse? result = new BaseResponse();
-
             PisoAddDto pisoAdd = add.ConvertAddRequestToAddDto();
 
             string url = $" {baseUrl}SavePiso";
 
             try
             {
-                result = apicaller.Set(url, pisoAdd, result);
+                result = httpCaller.Set(url, pisoAdd, result);
                 if (result == null)
                     throw new Exception();
             }
@@ -94,12 +96,12 @@ namespace Hotel.Web.Api.ApiService
         {
             BaseResponse? result = new BaseResponse();
 
-            PisoUpdateDto pisoUpdate = update.ConvertirUpdateRequestToUpdateDto();
+             PisoUpdateDto pisoUpdate = update.ConvertirUpdateRequestToUpdateDto();
             string url = $" {baseUrl}UpdatePiso";
 
             try
             {
-                result = apicaller.Set(url, pisoUpdate, result);
+                result = httpCaller.Set(url, pisoUpdate, result);
                 if (result == null)
                     throw new Exception();
             }
