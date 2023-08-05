@@ -1,28 +1,30 @@
 ﻿using Hotel.Web.Api.ApiService;
+using Hotel.Web.Http.HttpServices;
+using Hotel.Web.Http.Interfaces;
 using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
 using Hotel.Web.Models.Piso.Request;
 using Hotel.Web.Models.Piso.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
 {
-    public class PisoApiController : Controller
+    public class PisoHttpController : Controller
     {
-        private readonly IPisoApiService pisoApiService;
-        public PisoApiController(IPisoApiService pisoApiService)
+        private readonly IPisoApiService pisoHttpService;
+        public PisoHttpController(IPisoApiService pisoHttpService)
         {
-            this.pisoApiService = pisoApiService;
+            this.pisoHttpService = pisoHttpService;
         }
-
-        // GET: PisoApiController
+        // GET: PisoHttpController
         public ActionResult Index()
         {
             try
             {
                 PisoListResponse pisoList = new PisoListResponse();
 
-                pisoList = pisoApiService.Get();
+                pisoList = pisoHttpService.Get();
 
                 if (!pisoList.Success)
                     throw new Exception(pisoList.Message);
@@ -36,43 +38,26 @@ namespace Hotel.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
-        // GET: PisoApiController/Details/5
-        public ActionResult Details(int id)
+            // GET: PisoHttpController/Details/5
+            public ActionResult Details(int id)
         {
-            try
-            {
-                PisoDetailsResponse piso = new PisoDetailsResponse();
-
-                piso = pisoApiService.GetById(id);
-
-                if (!piso.Success)
-                    throw new Exception(piso.Message);
-
-
-                return View(piso.Data);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Message = e.Message;
-                return RedirectToAction(nameof(Index));
-            }
+            return View();
         }
 
-        // GET: PisoApiController/Create
+        // GET: PisoHttpController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: PisoApiController/Create
+        // POST: PisoHttpController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PisoAddRequest pisoAdd)
+        public ActionResult Create(PisoAddRequest pisoadd)
         {
             try
             {
-                var result = pisoApiService.Add(pisoAdd);
+                var result = pisoHttpService.Add(pisoadd);
 
                 if (!result.Success)
                 {
@@ -88,24 +73,23 @@ namespace Hotel.Web.Controllers
             }
         }
 
-        // GET: PisoApiController/Edit/5
+        // GET: PisoHttpController/Edit/5
         public ActionResult Edit(int id)
         {
             PisoDetailsResponse pisodetail = new PisoDetailsResponse();
-            pisodetail = this.pisoApiService.GetById(id);
+            pisodetail = this.pisoHttpService.GetById(id);
 
             return View(pisodetail.Data);
-
         }
 
-        // POST: PisooApiController/Edit/5
+        // POST: PisoHttpController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, PisoUpdateRequest pisoUpdate)
         {
             try
             {
-                var result = pisoApiService.Update(pisoUpdate);
+                var result = pisoHttpService.Update(pisoUpdate);
 
                 if (!result.Success)
                 {
@@ -120,5 +104,7 @@ namespace Hotel.Web.Controllers
                 return View();
             }
         }
+
+    
     }
 }

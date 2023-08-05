@@ -44,7 +44,7 @@ namespace Hotel.Web.Api.ApiService
         public CategoriaDetailsResponse GetById(int id)
         {
             CategoriaDetailsResponse? categoria = new CategoriaDetailsResponse();
-            string url = $" {baseUrl}GetCategoriaid={id}";
+            string url = $" {baseUrl}/{id}";
 
             try
             {

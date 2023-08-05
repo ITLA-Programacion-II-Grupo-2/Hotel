@@ -1,27 +1,26 @@
 ﻿using Hotel.Web.Api.ApiService;
 using Hotel.Web.Models.Categoria.Request;
 using Hotel.Web.Models.Categoria.Response;
-using Hotel.Web.Controllers.Extentions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Web.Controllers
 {
-    public class CategoriaApiController : Controller
+    public class CategoriaHttpController : Controller
     {
-        private readonly ICategoriaApiService categoriaApiService;
-        public CategoriaApiController(ICategoriaApiService categoriaApiService)
+        private readonly ICategoriaApiService categoriaHttpService;
+        public CategoriaHttpController(ICategoriaApiService categoriaHttpService)
         {
-            this.categoriaApiService = categoriaApiService;
+            this.categoriaHttpService = categoriaHttpService;
         }
-
-        // GET: CategoriaApiController
+        // GET: CategoriaHttpController
         public ActionResult Index()
         {
             try
             {
                 CategoriaListResponse categoriaList = new CategoriaListResponse();
 
-                categoriaList = categoriaApiService.Get();
+                categoriaList = categoriaHttpService.Get();
 
                 if (!categoriaList.Success)
                     throw new Exception(categoriaList.Message);
@@ -34,31 +33,45 @@ namespace Hotel.Web.Controllers
                 ViewBag.Message = e.Message;
                 return RedirectToAction(nameof(Index));
             }
+
         }
 
-        // GET: CategoriaApiController/Details/5
+        // GET: CategoriaHttpController/Details/5
         public ActionResult Details(int id)
         {
-            CategoriaDetailsResponse categoriadetail = new CategoriaDetailsResponse();
-            categoriadetail = this.categoriaApiService.GetById(id);
+            try
+            {
+                CategoriaDetailsResponse usuario = new CategoriaDetailsResponse();
 
-            return View(categoriadetail.Data);
+                usuario = categoriaHttpService.GetById(id);
+
+                if (!usuario.Success)
+                    throw new Exception(usuario.Message);
+
+
+                return View(usuario.Data);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        // GET: CategoriaApiController/Create
+        // GET: CategoriaHttpController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CategoriaApiController/Create
+        // POST: CategoriaHttpController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CategoriaAddRequest categoriaAdd)
         {
             try
             {
-                var result = categoriaApiService.Add(categoriaAdd);
+                var result = categoriaHttpService.Add(categoriaAdd);
 
                 if (!result.Success)
                 {
@@ -74,25 +87,23 @@ namespace Hotel.Web.Controllers
             }
         }
 
-
-
-        // GET: CategoriaApiController/Edit/5
+        // GET: CategoriaHttpController/Edit/5
         public ActionResult Edit(int id)
         {
             CategoriaDetailsResponse categoriadetail = new CategoriaDetailsResponse();
-            categoriadetail = this.categoriaApiService.GetById(id);
+            categoriadetail = this.categoriaHttpService.GetById(id);
 
             return View(categoriadetail.Data);
         }
 
-        // POST: CategoriaApiController/Edit/5
+        // POST: CategoriaHttpController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, CategoriaUpdateRequest categoriaUpdate)
         {
             try
             {
-                var result = categoriaApiService.Update(categoriaUpdate);
+                var result = categoriaHttpService.Update(categoriaUpdate);
 
                 if (!result.Success)
                 {
@@ -108,8 +119,7 @@ namespace Hotel.Web.Controllers
             }
         }
 
+      
 
     }
-
 }
-
