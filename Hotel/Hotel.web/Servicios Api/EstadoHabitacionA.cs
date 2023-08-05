@@ -44,7 +44,7 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 estadohabitacionList.success = false;
-                estadohabitacionList.message = "Error obteniendo los Los Estados";
+                estadohabitacionList.message = "Error obteniendo Los Estados";
                 this.logger.LogError($"{estadohabitacionList.message}", ex.ToString());
 
             }
@@ -74,7 +74,7 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 estadoHabitacionDetail.success = false;
-                estadoHabitacionDetail.message = "Error obteniendo los Estados";
+                estadoHabitacionDetail.message = "Error al obtener el Estado";
                 this.logger.LogError($"{estadoHabitacionDetail.message}", ex.ToString());
 
             }
@@ -102,15 +102,38 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 estadoHabitacionAdd1.success = false;
-                estadoHabitacionAdd1.message = "Error guardando el curso.";
+                estadoHabitacionAdd1.message = "Error al Guardar el Estado.";
                 this.logger.LogError($"{estadoHabitacionAdd1.message}", ex.ToString());
             }
             return estadoHabitacionAdd1;
         }
 
-        public EstadoHabitacionUpdateResponse Update(EstadoHabitacionUpdateDto estadoHabitacionUpdateDto)
+        public EstadoHabitacionUpdateResponse Update(EstadoHabitacionUpdateDto estadoHabitacionUpdate)
         {
-            throw new NotImplementedException();
+            EstadoHabitacionUpdateResponse estadoHabitacionUpdate1 = new EstadoHabitacionUpdateResponse();
+
+            try
+            {
+                using (var httpClient = new HttpClient(this.httpClientHandler))
+                {
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(estadoHabitacionUpdate1), Encoding.UTF8, "application/json");
+
+                    using (var response = httpClient.PostAsync($" {baseUrl}Update", content).Result)
+                    {
+                        string apiResponse = response.Content.ReadAsStringAsync().Result;
+
+                        estadoHabitacionUpdate1 = JsonConvert.DeserializeObject<EstadoHabitacionUpdateResponse>(apiResponse);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                estadoHabitacionUpdate1.success = false;
+                estadoHabitacionUpdate1.message = "Error Editar el Estado.";
+                this.logger.LogError($"{estadoHabitacionUpdate1.message}", ex.ToString());
+            }
+            return estadoHabitacionUpdate1;
         }
     }
 }

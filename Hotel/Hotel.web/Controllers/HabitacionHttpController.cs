@@ -1,6 +1,7 @@
 ﻿using Hotel.Application.Dtos.Habitacion;
 using Hotel.web.Models.Response.Habitacion;
 using Hotel.web.Servicios_Api;
+using Hotel.web.Servicios_Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,18 +9,18 @@ namespace Hotel.web.Controllers
 {
     public class HabitacionHttpController : Controller
     {
-        private readonly HabitacionServiceA habitacionServiceA;
+        private readonly HabitacionService habitacionService;
 
-        public HabitacionHttpController(HabitacionServiceA habitacionServiceA)
+        public HabitacionHttpController(HabitacionService habitacionService)
         {
-            this.habitacionServiceA = habitacionServiceA;
+            this.habitacionService = habitacionService;
         }
         // GET: HabitacionHttpController
         public ActionResult Index()
         {
             HabitacionListReponse habitacionList = new HabitacionListReponse();
 
-            habitacionList = this.habitacionServiceA.GetEntities();
+            habitacionList = this.habitacionService.GetEntities();
             return View(habitacionList.data);
         }
 
@@ -27,7 +28,7 @@ namespace Hotel.web.Controllers
         public ActionResult Details(int id)
         {
             HabitacionDetailReponse habitacionDetail = new HabitacionDetailReponse();
-            habitacionDetail = this.habitacionServiceA.GetEntity(id);
+            habitacionDetail = this.habitacionService.GetEntity(id);
             return View(habitacionDetail.data);
         }
 
@@ -45,7 +46,7 @@ namespace Hotel.web.Controllers
             try
             {
                 HabitacionAddReponse habitacionAdd1 = new HabitacionAddReponse();
-                habitacionAdd1 = this.habitacionServiceA.Add(habitacionAdd);
+                habitacionAdd1 = this.habitacionService.Add(habitacionAdd);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -59,7 +60,7 @@ namespace Hotel.web.Controllers
         public ActionResult Edit(int id)
         {
             HabitacionDetailReponse habitacionDetail = new HabitacionDetailReponse();
-            habitacionDetail = this.habitacionServiceA.GetEntity(id);
+            habitacionDetail = this.habitacionService.GetEntity(id);
             return View(habitacionDetail.data);
         }
 
@@ -72,7 +73,7 @@ namespace Hotel.web.Controllers
             {
                 HabitacionUpdateReponse habitacionUpdate1 = new HabitacionUpdateReponse();
 
-                habitacionUpdate1 = this.habitacionServiceA.Update(habitacionUpdate);
+                habitacionUpdate1 = this.habitacionService.Update(habitacionUpdate);
                 return RedirectToAction(nameof(Index));
             }
             catch

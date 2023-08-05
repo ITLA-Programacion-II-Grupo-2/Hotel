@@ -45,7 +45,7 @@ namespace Hotel.web.Servicios_Http
             catch (Exception ex)
             {
                 estadohabitacionList.success = false;
-                estadohabitacionList.message = "Error obteniendo los Los Estados";
+                estadohabitacionList.message = "Error obteniendo Los Estados";
                 this.logger.LogError($"{estadohabitacionList.message}", ex.ToString());
 
             }
@@ -60,7 +60,7 @@ namespace Hotel.web.Servicios_Http
             {
                 using (var httpClient = this.httpClientFactory.CreateClient())
                 {
-                    using (var response = httpClient.GetAsync($"{this.baseUrl}/Course/GetCourse?id={id}").Result)
+                    using (var response = httpClient.GetAsync($" {baseUrl}/{id}").Result)
                     {
                         if (response.IsSuccessStatusCode)
                         {
@@ -74,7 +74,7 @@ namespace Hotel.web.Servicios_Http
             catch (Exception ex)
             {
                 estadoHabitacionDetail.success = false;
-                estadoHabitacionDetail.message = "Error obteniendo los Estados";
+                estadoHabitacionDetail.message = "Error Al Obtener El Estado";
                 this.logger.LogError($"{estadoHabitacionDetail.message}", ex.ToString());
 
             }
@@ -91,7 +91,7 @@ namespace Hotel.web.Servicios_Http
                     StringContent content = new StringContent(JsonConvert.SerializeObject(estadoHabitacionAdd), Encoding.UTF8, "application/json");
 
 
-                    using (var response = httpClient.PostAsync($"{this.baseUrl}/Course/Save", content).Result)
+                    using (var response = httpClient.PostAsync($" {baseUrl}Add", content).Result)
                     {
                         if (response.IsSuccessStatusCode)
                         {
@@ -106,14 +106,42 @@ namespace Hotel.web.Servicios_Http
             catch (Exception ex)
             {
                 estadoHabitacionAdd.success = false;
-                estadoHabitacionAdd.message = "Error guardando el curso.";
+                estadoHabitacionAdd.message = "Error Al Guardar El Estado.";
                 this.logger.LogError($"{estadoHabitacionAdd.message}", ex.ToString());
             }
             return estadoHabitacionAdd;
         }
         public EstadoHabitacionUpdateResponse Update(EstadoHabitacionUpdateDto estadoHabitacionUpdate)
         {
-            throw new NotImplementedException();
+            EstadoHabitacionUpdateResponse estadoHabitacionUpdate1 = new EstadoHabitacionUpdateResponse();
+
+            try
+            {
+                using (var httpClient = this.httpClientFactory.CreateClient())
+                {
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(estadoHabitacionUpdate1), Encoding.UTF8, "application/json");
+
+
+                    using (var response = httpClient.PostAsync($" {baseUrl}Update", content).Result)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string apiResponse = response.Content.ReadAsStringAsync().Result;
+
+                            estadoHabitacionUpdate1 = JsonConvert.DeserializeObject<EstadoHabitacionUpdateResponse>(apiResponse);
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                estadoHabitacionUpdate1.success = false;
+                estadoHabitacionUpdate1.message = "Error Al Editar El Estado.";
+                this.logger.LogError($"{estadoHabitacionUpdate1.message}", ex.ToString());
+            }
+            return estadoHabitacionUpdate1;
         }
     }
+    
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
 using Hotel.web.Servicios_Api;
+using Hotel.web.Servicios_Http;
 
 namespace Hotel.web.Controllers
 {

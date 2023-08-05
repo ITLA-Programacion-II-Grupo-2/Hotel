@@ -1,6 +1,6 @@
 ﻿namespace Hotel.web.Models.Response.Habitacion
 {
-    public class HabitacionUpdateReponse : HabitacionReponse
+    public class HabitacionUpdateReponse : BaseReponse
     {
 
     }

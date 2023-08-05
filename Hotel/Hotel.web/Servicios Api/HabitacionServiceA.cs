@@ -45,7 +45,7 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 habitacionList.success = false;
-                habitacionList.message = "Error obteniendo los Los Estados";
+                habitacionList.message = "Error obteniendo las habitaciones";
                 this.logger.LogError($"{habitacionList.message}", ex.ToString());
 
             }
@@ -75,7 +75,7 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 habitacionDetail.success = false;
-                habitacionDetail.message = "Error obteniendo los Estados";
+                habitacionDetail.message = "Error al obtener la Habitacion";
                 this.logger.LogError($"{habitacionDetail.message}", ex.ToString());
 
             }
@@ -103,7 +103,7 @@ namespace Hotel.web.Servicios_Api
             catch (Exception ex)
             {
                 habitacionAdd1.success = false;
-                habitacionAdd1.message = "Error guardando el curso.";
+                habitacionAdd1.message = "Error al guardar La Habitacion.";
                 this.logger.LogError($"{habitacionAdd1.message}", ex.ToString());
             }
             return habitacionAdd1;
@@ -111,7 +111,30 @@ namespace Hotel.web.Servicios_Api
 
         public HabitacionUpdateReponse Update(HabitacionUpdateDto habitacionUpdate)
         {
-            throw new NotImplementedException();
+            HabitacionUpdateReponse habitacionUpdate1 = new HabitacionUpdateReponse();
+
+            try
+            {
+                using (var httpClient = new HttpClient(this.httpClientHandler))
+                {
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(habitacionUpdate1), Encoding.UTF8, "application/json");
+
+                    using (var response = httpClient.PostAsync($" {baseUrl}Update", content).Result)
+                    {
+                        string apiResponse = response.Content.ReadAsStringAsync().Result;
+
+                        habitacionUpdate1 = JsonConvert.DeserializeObject<HabitacionUpdateReponse>(apiResponse);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                habitacionUpdate1.success = false;
+                habitacionUpdate1.message = "Error Editar la Habitacion.";
+                this.logger.LogError($"{habitacionUpdate1.message}", ex.ToString());
+            }
+            return habitacionUpdate1;
         }
     }
 }
