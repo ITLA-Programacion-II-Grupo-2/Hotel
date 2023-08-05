@@ -1,6 +1,6 @@
 ﻿namespace Hotel.web.Models
 {
-    public class HabitacionModel
+    public class HabitacionWModel
     {
         public int IdHabitacion { get; set; }
         public string? Numero { get; set; }

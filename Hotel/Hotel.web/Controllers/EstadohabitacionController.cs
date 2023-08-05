@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Hotel.web.Models;
 using Hotel.Application.Dtos.EstadoHabitacion;
+using Hotel.Infrastructure.Models;
 
 namespace Hotel.web.Controllers
 {
@@ -23,12 +24,12 @@ namespace Hotel.web.Controllers
                 ViewBag.Message = result.Message;
 
             var Estadohabitacions = result.Data;
-            List<EstadohabitacionModel> estadoHabitacionModels = new List<EstadohabitacionModel>();
+            List<EstadohabitacionWModel> estadoHabitacionModels = new List<EstadohabitacionWModel>();
 
             foreach (var estados in Estadohabitacions)
             {
                 {
-                    EstadohabitacionModel estadoHabitacionModel = new EstadohabitacionModel
+                    EstadohabitacionWModel estadoHabitacionModel = new EstadohabitacionWModel
                     {
                         IdEstadoHabitacion = estados.IdEstadoHabitacion,
                         Descripcion = estados.Descripcion
@@ -46,28 +47,27 @@ namespace Hotel.web.Controllers
         // GET: HomeController1/Details/5
         public ActionResult Details(int id)
             {
-                var result = this.estadoHabitacionService.GetById(id);
+            var result = estadoHabitacionService.GetById(id);
 
-                if ((bool)!result.Success)
-                {
-                    ViewBag.Message = result.Message;
-                    return View();
-                }
-                var Estadohabitacions = result.Data;
+            if ((bool)!result.Success)
+                ViewBag.Message = result.Message;
 
-              EstadohabitacionModel estadoHabitacionModel = new Models.EstadohabitacionModel
-              {
-                    IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
-                    Descripcion = Estadohabitacions.Descripcion
-                };
+            var Estadohabitacions = result.Data;
+
+            EstadohabitacionWModel estadoHabitacionModel = new Models.EstadohabitacionWModel
+            {
+                IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
+                Descripcion = Estadohabitacions.Descripcion
+
+            };
 
 
-                return View(estadoHabitacionModel);
-
+            return View(estadoHabitacionModel);
 
 
 
-            }
+
+        }
             
 
         // GET: HomeController1/Create
@@ -118,7 +118,7 @@ namespace Hotel.web.Controllers
 
                 var Estadohabitacions = result.Data;
 
-            EstadohabitacionModel estadoHabitacionModel = new Models.EstadohabitacionModel
+            EstadohabitacionWModel estadoHabitacionModel = new Models.EstadohabitacionWModel
             {
                     IdEstadoHabitacion = Estadohabitacions.IdEstadoHabitacion,
                     Descripcion = Estadohabitacions.Descripcion
@@ -132,7 +132,7 @@ namespace Hotel.web.Controllers
             // POST: HomeController1/Edit/5
             [HttpPost]
             [ValidateAntiForgeryToken]
-            public ActionResult Edit(int id, EstadohabitacionModel estadoHabitacionModel)
+            public ActionResult Edit(int id, EstadohabitacionWModel estadoHabitacionModel)
             {
                 try
                 {

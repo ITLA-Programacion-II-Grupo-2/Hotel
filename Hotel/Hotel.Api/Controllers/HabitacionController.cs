@@ -18,9 +18,9 @@ namespace Hotel.Api.Controllers
                 this.habitacionService = habitacionService;
             }
 
-            // GET: 
-            [HttpGet]
-            public IActionResult Get()
+        // GET: 
+        [HttpGet("Get")]
+        public IActionResult Get()
             {
                 var habitacions = this.habitacionService.Get();
                  return Ok(habitacions);
@@ -35,7 +35,7 @@ namespace Hotel.Api.Controllers
             }
 
             // POST 
-            [HttpPost]
+            [HttpPost("Post")]
             public IActionResult Post([FromBody] HabitacionAddDto habitacionAdd)
             {
                 var result = this.habitacionService.Add(habitacionAdd);
@@ -43,7 +43,7 @@ namespace Hotel.Api.Controllers
             }
 
             // PUT
-            [HttpPut]
+            [HttpPut("Put")]
             public IActionResult Put([FromBody] HabitacionUpdateDto habitacionUpdate)
             {
             var result = this.habitacionService.Update(habitacionUpdate);

@@ -23,7 +23,7 @@ namespace Hotel.Api.Controllers
         }
 
         // GET:
-        [HttpGet]
+        [HttpGet("Get")]
         public IActionResult Get()
         {
             var result = this.estadoHabitacionService.Get();
@@ -39,7 +39,7 @@ namespace Hotel.Api.Controllers
         }
 
         // ADD:  
-        [HttpPost]
+        [HttpPost("Add")]
         public IActionResult Post([FromBody] EstadoHabitacionAddDto estadoHabitacionAdd)
         {
             this.estadoHabitacionService.Add(estadoHabitacionAdd);
@@ -47,7 +47,7 @@ namespace Hotel.Api.Controllers
         }
 
         // UPDATE 
-        [HttpPut]
+        [HttpPut("Update")]
         public IActionResult Put([FromBody] EstadoHabitacionUpdateDto estadoHabitacionUpdate)
         {
             var result = this.estadoHabitacionService.Update(estadoHabitacionUpdate);

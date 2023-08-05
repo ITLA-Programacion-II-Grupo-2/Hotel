@@ -2,5 +2,6 @@
 {
     public class HabitacionDetailReponse : BaseReponse
     {
+        public HabitacionWModel? data { get; set; }
     }
 }

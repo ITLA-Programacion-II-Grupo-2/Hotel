@@ -2,9 +2,7 @@
 using Hotel.Application.Dtos.Habitacion;
 using Hotel.Application.Services;
 using Hotel.Domain.Entities;
-using Hotel.web.Controllers.Extenciones;
 using Hotel.web.Models;
-using Hotel.web.Models.Response.Habitacion;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,13 +24,29 @@ namespace Hotel.web.Controllers
             if ((bool)!result.Success)
                 ViewBag.Message = result.Message;
 
-            var habitacions = result.Data as List<HabitacionModel>;
+            var habitacions = result.Data;
 
-            List<HabitacionReponse> habitacionReponses = habitacions.Select(h => h.ConvertModelToResponse()).ToList();
+            List<HabitacionWModel> habitacionModels = new List<HabitacionWModel>();
 
+            foreach (var habitacion in habitacions)
+            {
+                {
+                    HabitacionWModel habitacionModel = new HabitacionWModel
+                    {
+                        IdHabitacion = habitacion.IdHabitacion,
+                        Numero = habitacion.Numero,
+                        Detalle = habitacion.Detalle,
+                        Precio = habitacion.Precio,
+                        IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
+                        IdCategoria = habitacion.IdCategoria,
+                        IdPiso = habitacion.IdPiso
+                    };
 
+                    habitacionModels.Add(habitacionModel);
+                }
+            }
 
-            return View(habitacionReponses);
+            return View(habitacionModels);
         }
 
         // GET: HabitacionController/Details/5
@@ -45,12 +59,21 @@ namespace Hotel.web.Controllers
                 ViewBag.Message = result.Message;
                 return View();
             }
-            var habitacions = result.Data as List<HabitacionModel>;
+            var habitacion = result.Data;
 
-            List<HabitacionReponse> habitacionReponses = habitacions.Select(h => h.ConvertModelToResponse()).ToList();
+            HabitacionWModel habitacionModel = new Models.HabitacionWModel
+            {
+                IdHabitacion = habitacion.IdHabitacion,
+                Numero = habitacion.Numero,
+                Detalle = habitacion.Detalle,
+                Precio = habitacion.Precio,
+                IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
+                IdCategoria = habitacion.IdCategoria,
+                IdPiso = habitacion.IdPiso
+            };
 
 
-            return View(habitacionReponses);
+            return View(habitacionModel);
         }
 
         // GET: HabitacionController/Create
@@ -62,11 +85,22 @@ namespace Hotel.web.Controllers
         // POST: HabitacionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HabitacionAddReponse habitacionAdd)
+        public ActionResult Create(HabitacionAddDto habitacionAddDto)
         {
             try
             {
-                var habitacion = habitacionAdd.ConvertRequestToDto();
+                var habitacion = new HabitacionAddDto()
+                {
+                    Numero = habitacionAddDto.Numero,
+                    Detalle = habitacionAddDto.Detalle,
+                    Precio = habitacionAddDto.Precio,
+                    IdEstadoHabitacion = habitacionAddDto.IdEstadoHabitacion,
+                    IdCategoria = habitacionAddDto.IdCategoria,
+                    IdPiso = habitacionAddDto.IdPiso,
+                    CambioUsuario = 1,
+                    CambioFecha = DateTime.Now
+
+                };
 
                 var result = this.habitacionService.Add(habitacion);
 
@@ -75,7 +109,6 @@ namespace Hotel.web.Controllers
                     ViewBag.Message = result.Message;
                     return View();
                 }
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -94,36 +127,46 @@ namespace Hotel.web.Controllers
                 ViewBag.Message = result.Message;
                 return View();
             }
-            var habitacion = result.Data as HabitacionModel;
+            var habitacion = result.Data;
 
-           
+            HabitacionWModel habitacionModel = new Models.HabitacionWModel
+            {
+                IdHabitacion = habitacion.IdHabitacion,
+                Numero = habitacion.Numero,
+                Detalle = habitacion.Detalle,
+                Precio = habitacion.Precio,
+                IdEstadoHabitacion = habitacion.IdEstadoHabitacion,
+                IdCategoria = habitacion.IdCategoria,
+                IdPiso = habitacion.IdPiso
+            };
 
-            HabitacionUpdateReponse habitacionUpdate = habitacion.ConvertModelToRequest();
 
-
-
-            return View(habitacionUpdate);
-
-
+            return View(habitacionModel);
         }
 
         // POST: HabitacionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, HabitacionUpdateReponse habitacionUpdate)
+        public ActionResult Edit(int id, HabitacionWModel habitacionModel)
         {
             try
             {
 
-                var habitacion = habitacionUpdate.ConvertRequestToDto();
+                var habitacion = new HabitacionUpdateDto()
+                {
+                    IdHabitacionId = habitacionModel.IdHabitacion,
+                    Numero = habitacionModel.Numero,
+                    Detalle = habitacionModel.Detalle,
+                    Precio = habitacionModel.Precio,
+                    IdEstadoHabitacion = habitacionModel.IdEstadoHabitacion,
+                    IdCategoria = habitacionModel.IdCategoria,
+                    IdPiso = habitacionModel.IdPiso,
+                    CambioUsuario = 1,
+                    CambioFecha = DateTime.Now
+
+                };
 
                 var result = this.habitacionService.Update(habitacion);
-
-                if ((bool)!result.Success)
-                {
-                    ViewBag.Message = result.Message;
-                    return View();
-                }
                 return RedirectToAction(nameof(Index));
             }
             catch

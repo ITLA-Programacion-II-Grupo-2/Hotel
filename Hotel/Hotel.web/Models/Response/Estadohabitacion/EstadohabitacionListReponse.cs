@@ -2,7 +2,7 @@
 {
     public class EstadohabitacionListReponse : BaseReponse
     {
-        public List<EstadohabitacionModel>? data { get; set; }
+        public List<EstadohabitacionWModel> data { get; set; }
 
     }
 }

@@ -2,6 +2,8 @@
 using Hotel.Application.Dtos.EstadoHabitacion;
 using Hotel.web.Models.Response;
 using Hotel.web.Models.Response.Estadohabitacion;
+using Hotel.web.Models.Response.Habitacion;
+using Hotel.web.Servicios_Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,28 +14,19 @@ namespace Hotel.web.Controllers
     public class EstadohabitacionApiController : Controller
     {
         HttpClientHandler httpClientHandler = new HttpClientHandler();
-        public EstadohabitacionApiController(IConfiguration configuration)
+        private string baseUrl = "http://localhost:5068/api/EstadoHabitacion/";
+        private readonly EstadoHabitacionA estadoHabitacionA;
+
+        public EstadohabitacionApiController(IConfiguration configuration, EstadoHabitacionA estadoHabitacionA)
         {
             this.httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyError) => { return true; };
-
+            this.estadoHabitacionA = estadoHabitacionA;
         }
         // GET: EstadohabitacionApiController
         public ActionResult Index()
         {
             EstadohabitacionListReponse estadohabitacionList = new EstadohabitacionListReponse();
-
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-
-                using (var response = httpClient.GetAsync("http://localhost:5068/api/EstadoHabitacion/GetEstados").Result)
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = response.Content.ReadAsStringAsync().Result;
-                        estadohabitacionList = JsonConvert.DeserializeObject<EstadohabitacionListReponse>(apiResponse);
-                    }
-                }
-            }
+            estadohabitacionList = this.estadoHabitacionA.GetEntities();
 
             return View(estadohabitacionList.data);
         }
@@ -41,24 +34,11 @@ namespace Hotel.web.Controllers
         // GET: EstadohabitacionApiController/Details/5
         public ActionResult Details(int id)
         {
-            EstadohabitacionDetailReponse estadohabitacionDetail = new EstadohabitacionDetailReponse();
+            EstadoHabitacionDetailResponse estadoHabitacionDetail = new EstadoHabitacionDetailResponse();
 
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
+            estadoHabitacionDetail = this.estadoHabitacionA.GetEntity(id);
 
-                using (var response = httpClient.GetAsync("http://localhost:5068/api/EstadoHabitacion/GetEstadosById?"+id).Result)
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = response.Content.ReadAsStringAsync().Result;
-                        estadohabitacionDetail = JsonConvert.DeserializeObject<EstadohabitacionDetailReponse>(apiResponse);
-                    }
-
-                }
-            }
-
-
-            return View(estadohabitacionDetail);
+            return View(estadoHabitacionDetail.Data);
         }
 
         // GET: EstadohabitacionApiController/Create
@@ -72,22 +52,11 @@ namespace Hotel.web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(EstadoHabitacionAddDto estadoHabitacionAdd)
         {
-            EstadoHabitacionAddDto estadoHabitacionAddd = new EstadoHabitacionAddDto();
+            EstadoHabitacionAddResponse? estadoHabitacionAdd1 = new EstadoHabitacionAddResponse();
 
             try
             {
-                using (var httpClient = new HttpClient(this.httpClientHandler))
-                {
-                    StringContent content = new StringContent(JsonConvert.SerializeObject(estadoHabitacionAddd), Encoding.UTF8, "application/json");
-
-                    using (var response = httpClient.PostAsync("http://localhost:5068/api/EstadoHabitacion/ADD", content).Result)
-                    {
-                        string apiResponse = response.Content.ReadAsStringAsync().Result;
-
-                        estadoHabitacionAddd = JsonConvert.DeserializeObject<EstadoHabitacionAddDto>(apiResponse);
-                        
-                    }
-                }
+                estadoHabitacionAdd1 = this.estadoHabitacionA.Add(estadoHabitacionAdd);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -99,23 +68,11 @@ namespace Hotel.web.Controllers
         // GET: EstadohabitacionApiController/Edit/5
         public ActionResult Edit(int id)
         {
-            EstadohabitacionDetailReponse estadohabitacionDetail = new EstadohabitacionDetailReponse();
+            EstadoHabitacionDetailResponse estadohabitacionDetail = new EstadoHabitacionDetailResponse();
 
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
+            estadohabitacionDetail = this.estadoHabitacionA.GetEntity(id);
 
-                using (var response = httpClient.GetAsync("http://localhost:5068/api/EstadoHabitacion/GetEstadosById?" + id).Result)
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = response.Content.ReadAsStringAsync().Result;
-                        estadohabitacionDetail = JsonConvert.DeserializeObject<EstadohabitacionDetailReponse>(apiResponse);
-                    }
-
-                }
-            }
-
-            return View(estadohabitacionDetail);
+            return View(estadohabitacionDetail.Data);
         }
 
         // POST: EstadohabitacionApiController/Edit/5
@@ -125,24 +82,9 @@ namespace Hotel.web.Controllers
         {
             try
             {
-                var estadoHabitacionUpdateDto = new EstadoHabitacionUpdateDto();
+                var estadoHabitacionUpdate1 = new EstadoHabitacionUpdateResponse();
 
-                using (var httpClient = new HttpClient(this.httpClientHandler))
-                {
-
-                    StringContent content = new StringContent(JsonConvert.SerializeObject(estadoHabitacionUpdateDto), Encoding.UTF8, "application/json");
-
-                    using (var response = httpClient.PostAsync("http://localhost:5037/api/Department/Update", content).Result)
-                    {
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string apiResponse = response.Content.ReadAsStringAsync().Result;
-
-                            var result = JsonConvert.DeserializeObject<EstadoHabitacionUpdateDto>(apiResponse);
-                        }
-
-                    }
-                }
+                estadoHabitacionUpdate1 = this.estadoHabitacionA.Update(estadoHabitacionUpdate);
 
 
                 return RedirectToAction(nameof(Index));
